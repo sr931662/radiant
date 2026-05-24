@@ -1,0 +1,112 @@
+.section {
+  padding: var(--sp-24) 0;
+  background: var(--clr-white);
+}
+
+.header { text-align: center; margin-bottom: var(--sp-12); }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  background: var(--clr-slate-50);
+  border: 1px solid var(--clr-slate-100);
+  border-radius: var(--r-xl);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--clr-primary-border);
+}
+
+.iconBox {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon_indigo { background: var(--clr-primary-bg); color: var(--clr-primary); }
+.icon_green  { background: var(--clr-green-100);  color: #16a34a; }
+.icon_amber  { background: var(--clr-amber-100);  color: var(--clr-accent-dark); }
+.icon_rose   { background: var(--clr-rose-100);   color: var(--clr-rose-500); }
+
+.cardTitle {
+  font-weight: 700;
+  color: var(--clr-slate-900);
+}
+
+.cardDesc {
+  color: var(--clr-slate-500);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+/* CTA strip */
+.ctaStrip {
+  background: var(--clr-primary-bg);
+  border: 1px solid var(--clr-primary-border);
+  border-radius: var(--r-2xl);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ctaTitle {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--clr-slate-900);
+  margin-bottom: 0.25rem;
+}
+
+.ctaSub {
+  color: var(--clr-slate-500);
+  font-size: 0.875rem;
+}
+
+.ctaBtns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.ctaPrimary {
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.ctaPrimary:hover { background: var(--clr-primary-dark); }
+
+.ctaOutline {
+  background: var(--clr-white);
+  border: 2px solid var(--clr-primary-border);
+  color: var(--clr-primary-dark);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.ctaOutline:hover { background: var(--clr-primary-bg); }
+
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+  .ctaStrip { flex-direction: row; align-items: center; justify-content: space-between; }
+}

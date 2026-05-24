@@ -1,0 +1,45 @@
+.topBar {
+  background-color: var(--clr-slate-900);
+  color: var(--clr-slate-400);
+  font-size: 0.75rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 50;
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--clr-slate-400);
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.link:hover { color: var(--clr-white); }
+
+.adminLink {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--clr-primary-light);
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.adminLink:hover { color: #a5b4fc; }
+
+@media (max-width: 640px) {
+  .hideMobile { display: none; }
+  .topBar { padding: 0.5rem 1rem; }
+}

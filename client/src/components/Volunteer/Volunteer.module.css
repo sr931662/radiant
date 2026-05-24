@@ -1,0 +1,118 @@
+.section {
+  padding: var(--sp-24) 0;
+  background: var(--clr-white);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--sp-12);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Card base */
+.card {
+  border-radius: var(--r-2xl);
+  padding: 2rem;
+  border: 2px solid var(--clr-slate-100);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: border-color 0.2s;
+}
+
+.card_outline { background: var(--clr-white); }
+.card_outline:hover { border-color: var(--clr-primary-border); }
+
+.card_dark {
+  background: var(--clr-slate-900);
+  border-color: var(--clr-slate-900);
+  box-shadow: var(--shadow-2xl);
+}
+
+.card_indigo {
+  background: var(--clr-primary-bg);
+  border-color: var(--clr-primary-border);
+}
+
+.featured { transform: none; }
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--clr-accent);
+  color: var(--clr-white);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0 var(--r-xl) 0 0.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--clr-slate-900);
+}
+
+.titleWhite { color: var(--clr-white); }
+
+.sub { color: var(--clr-slate-500); font-size: 0.875rem; }
+.subLight { color: var(--clr-slate-400); }
+
+.list { display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--clr-white);
+}
+
+.itemText { color: var(--clr-slate-700); }
+
+.btn {
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  margin-top: auto;
+}
+
+.btn_outline {
+  background: var(--clr-slate-100);
+  color: var(--clr-slate-800);
+}
+.btn_outline:hover { background: var(--clr-slate-200); }
+
+.btn_dark {
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  box-shadow: 0 4px 16px rgb(79 70 229 / 0.3);
+}
+.btn_dark:hover { background: var(--clr-primary-dark); }
+
+.btn_indigo {
+  background: var(--clr-white);
+  color: var(--clr-primary-dark);
+  border: 2px solid var(--clr-primary-border);
+}
+.btn_indigo:hover { background: var(--clr-primary-bg); }
+
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .featured { transform: translateY(-1rem); }
+}

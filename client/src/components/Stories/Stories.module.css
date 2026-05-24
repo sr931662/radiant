@@ -1,0 +1,123 @@
+.section {
+  padding: var(--sp-24) 0;
+  background: var(--clr-white);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--sp-12);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Story card */
+.card {
+  background: var(--clr-slate-50);
+  border: 1px solid var(--clr-slate-100);
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  transition: box-shadow 0.25s;
+}
+
+.card:hover { box-shadow: var(--shadow-xl); }
+
+.imageWrapper { overflow: hidden; }
+
+.img {
+  width: 100%;
+  height: 13rem;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .img { transform: scale(1.05); }
+
+.body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--r-full);
+}
+
+.tag_indigo {
+  background: var(--clr-primary-bg);
+  color: var(--clr-primary-dark);
+}
+
+.tag_amber {
+  background: var(--clr-amber-100);
+  color: #92400e;
+}
+
+.quote {
+  color: var(--clr-slate-800);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.readMore {
+  color: var(--clr-primary);
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.readMore:hover {
+  color: var(--clr-primary-dark);
+  text-decoration: underline;
+}
+
+/* Philosophy card */
+.philosophyCard {
+  background: var(--clr-primary);
+  border-color: var(--clr-primary);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.quoteIcon { flex-shrink: 0; }
+
+.philosophyText {
+  color: var(--clr-white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.philosophyAttrib {
+  color: #c7d2fe;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.viewAllBtn {
+  background: var(--clr-white);
+  color: var(--clr-primary-dark);
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.viewAllBtn:hover { background: var(--clr-primary-bg); }
+
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}

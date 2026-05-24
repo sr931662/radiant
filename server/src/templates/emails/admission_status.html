@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body>
+    <div class="container">
+        <h2>Admission Application Update</h2>
+        <p>Dear {{ name }},</p>
+        <p>Your application for <strong>{{ course_name }}</strong> has been <strong>{{ status }}</strong>.</p>
+        {% if remarks %}<p>Remarks: {{ remarks }}</p>{% endif %}
+    </div>
+</body>
+</html>

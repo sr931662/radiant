@@ -1,0 +1,49 @@
+.ticker {
+  background-color: var(--clr-primary);
+  color: var(--clr-white);
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.icon {
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+.text {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 56rem;
+}
+
+.badge {
+  background-color: #3730a3;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+
+.cta {
+  color: var(--clr-white);
+  text-decoration: underline;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
