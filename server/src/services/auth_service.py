@@ -5,7 +5,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.security import hash_password, verify_password, create_access_token, create_refresh_token, verify_token
-from src.core.redis import get_redis
 from src.models import User, UserRole, Role, RefreshToken, OTP
 from src.utils.otp import generate_otp, verify_otp
 from src.utils.exceptions import AppException, UnauthorizedException, NotFoundException, BadRequestException

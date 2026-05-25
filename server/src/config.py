@@ -18,8 +18,8 @@ class Settings(BaseSettings):
     db_max_overflow: int = 10
     db_echo: bool = False
 
-    # ── Redis ──
-    redis_url: str = "redis://localhost:6379/0"
+    # ── Redis (optional — leave unset to disable Redis and Celery) ──
+    redis_url: Optional[str] = None
     redis_max_connections: int = 50
 
     # ── JWT ──
@@ -49,9 +49,9 @@ class Settings(BaseSettings):
     cloudinary_api_secret: Optional[str] = None
     cloudinary_folder: str = "radiant-trust"
 
-    # ── Celery ──
-    celery_broker_url: str = "redis://localhost:6379/1"
-    celery_result_backend: str = "redis://localhost:6379/2"
+    # ── Celery (auto-derived from redis_url when not explicitly set) ──
+    celery_broker_url: Optional[str] = None
+    celery_result_backend: Optional[str] = None
 
     # ── CORS ──
     cors_origins: list[str] = ["https://radianttrust.sr931662.workers.dev", "http://localhost:3000"]
