@@ -28,3 +28,6 @@ steps:
 
 images:
   - 'asia-south2-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/radiant/radianttrust:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
