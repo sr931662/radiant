@@ -1,4 +1,4 @@
-import api from '../lib/api'
+import api, { getApiBaseUrl } from '../lib/api'
 
 export async function getDownloads() {
   const { data } = await api.get('/api/v1/downloads')
@@ -6,5 +6,5 @@ export async function getDownloads() {
 }
 
 export function getDownloadUrl(itemId) {
-  return `${import.meta.env.VITE_API_URL}/api/v1/downloads/${itemId}`
+  return `${getApiBaseUrl()}/api/v1/downloads/${itemId}`
 }

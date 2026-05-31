@@ -2,9 +2,10 @@ import axios from 'axios'
 
 const ACCESS_KEY = 'radiant_access_token'
 const REFRESH_KEY = 'radiant_refresh_token'
+const API_BASE_URL = resolveApiBaseUrl()
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: false,
 })
@@ -52,7 +53,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/v1/auth/refresh`,
+          `${API_BASE_URL}/api/v1/auth/refresh`,
           { refresh_token: refreshToken }
         )
         const newAccess = data.data?.access_token || data.access_token
@@ -93,4 +94,15 @@ export function getRefreshToken() {
   return localStorage.getItem(REFRESH_KEY)
 }
 
+export function getApiBaseUrl() {
+  return API_BASE_URL
+}
+
 export default api
+
+function resolveApiBaseUrl() {
+  if (import.meta.env.DEV) return ''
+
+  const configured = (import.meta.env.VITE_API_URL || '').trim()
+  return configured.replace(/\/+$/, '')
+}
