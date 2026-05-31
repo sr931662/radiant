@@ -1,26 +1,25 @@
 import { Quote } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
+import { getPosts } from '../../services/blogService'
+import Spinner from '../ui/Spinner'
 import styles from './Stories.module.css'
 
-const STORY_CARDS = [
-  {
-    img:   'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80',
-    tag:   'Girls Education · Rajasthan',
-    tagColor: 'indigo',
-    quote: 'Amina walked 9 km daily to study. Today she teaches science to 40 children in her village.',
-    link:  '#',
-    name:  'Amina',
-  },
-  {
-    img:   'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80',
-    tag:   'Digital Literacy · Bihar',
-    tagColor: 'amber',
-    quote: 'Rajan had never touched a keyboard. Six months later, he built a website for his father\'s small business.',
-    link:  '#',
-    name:  'Rajan',
-  },
+const FALLBACK = [
+  { id: 1, slug: '#', featured_image: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80', category: 'Girls Education · Rajasthan', excerpt: 'Amina walked 9 km daily to study. Today she teaches science to 40 children in her village.', title: 'Amina' },
+  { id: 2, slug: '#', featured_image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80', category: 'Digital Literacy · Bihar', excerpt: "Rajan had never touched a keyboard. Six months later, he built a website for his father's small business.", title: 'Rajan' },
 ]
 
+const TAG_COLORS = ['indigo', 'amber', 'green', 'rose', 'purple']
+
 export default function Stories() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['blog-posts', 1, 4],
+    queryFn: () => getPosts(1, 4),
+  })
+
+  const posts = data?.items?.length > 0 ? data.items.slice(0, 2) : FALLBACK
+
   return (
     <section className={styles.section}>
       <div className="container">
@@ -33,33 +32,42 @@ export default function Stories() {
           </p>
         </div>
 
-        <div className={styles.grid}>
-          {STORY_CARDS.map((s) => (
-            <div key={s.name} className={styles.card}>
-              <div className={styles.imageWrapper}>
-                <img src={s.img} alt={s.name} className={styles.img} />
-              </div>
-              <div className={styles.body}>
-                <span className={`${styles.tag} ${styles['tag_' + s.tagColor]}`}>{s.tag}</span>
-                <blockquote className={styles.quote}>"{s.quote}"</blockquote>
-                <a href={s.link} className={styles.readMore}>
-                  Read {s.name}'s Full Story →
-                </a>
-              </div>
-            </div>
-          ))}
+        {isLoading && <Spinner center />}
 
-          {/* Philosophy card */}
-          <div className={`${styles.card} ${styles.philosophyCard}`}>
-            <Quote size={36} color="var(--clr-accent)" fill="var(--clr-accent)" className={styles.quoteIcon} />
-            <p className={styles.philosophyText}>
-              "Donors give to people, not organisations. Every story we tell is a direct
-              line between a supporter's heart and a child's future."
-            </p>
-            <p className={styles.philosophyAttrib}>— Mission Philosophy, Radiant Education Trust</p>
-            <button className={styles.viewAllBtn}>View All Stories →</button>
+        {!isLoading && (
+          <div className={styles.grid}>
+            {posts.map((s, i) => (
+              <div key={s.id} className={styles.card}>
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={s.featured_image || `https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80`}
+                    alt={s.title}
+                    className={styles.img}
+                  />
+                </div>
+                <div className={styles.body}>
+                  <span className={`${styles.tag} ${styles['tag_' + TAG_COLORS[i % TAG_COLORS.length]]}`}>
+                    {s.category || 'Impact Story'}
+                  </span>
+                  <blockquote className={styles.quote}>"{s.excerpt || s.title}"</blockquote>
+                  <Link to={`/blog/${s.slug}`} className={styles.readMore}>
+                    Read Full Story →
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            <div className={`${styles.card} ${styles.philosophyCard}`}>
+              <Quote size={36} color="var(--clr-accent)" fill="var(--clr-accent)" className={styles.quoteIcon} />
+              <p className={styles.philosophyText}>
+                "Donors give to people, not organisations. Every story we tell is a direct
+                line between a supporter's heart and a child's future."
+              </p>
+              <p className={styles.philosophyAttrib}>— Mission Philosophy, Radiant Education Trust</p>
+              <Link to="/blog" className={styles.viewAllBtn}>View All Stories →</Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )

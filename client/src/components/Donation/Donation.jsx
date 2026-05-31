@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { Heart, ShieldCheck, Globe2, QrCode } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
+import { createOrder, verifyPayment, getReceipt } from '../../services/donationService'
 import styles from './Donation.module.css'
 
 const TABS = [
@@ -23,28 +26,87 @@ const IMPACT_LABELS = [
   { amt: '₹50,000', desc: 'Sponsors a classroom for an entire year' },
 ]
 
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return }
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+}
+
 export default function Donation() {
-  const [activeTab, setActiveTab] = useState('once')
+  const [activeTab, setActiveTab]   = useState('once')
   const [selectedAmt, setSelectedAmt] = useState(2000)
-  const [customAmt, setCustomAmt] = useState(2000)
+  const [customAmt, setCustomAmt]   = useState(2000)
 
-  const handlePreset = (amt) => {
-    setSelectedAmt(amt)
-    setCustomAmt(amt)
-  }
+  const handlePreset = (amt) => { setSelectedAmt(amt); setCustomAmt(amt) }
+  const handleCustom = (e) => { const v = Number(e.target.value); setCustomAmt(v); setSelectedAmt(null) }
 
-  const handleCustom = (e) => {
-    const v = Number(e.target.value)
-    setCustomAmt(v)
-    setSelectedAmt(null)
-  }
+  const verifyMutation = useMutation({
+    mutationFn: verifyPayment,
+    onSuccess: async (data) => {
+      toast.success('Donation successful! Your 80G receipt has been sent to your email.')
+      if (data?.receipt_url) {
+        window.open(data.receipt_url, '_blank')
+        return
+      }
+
+      if (data?.id) {
+        try {
+          const receipt = await getReceipt(data.id)
+          const url = receipt?.receipt_url ?? receipt
+          if (url) window.open(url, '_blank')
+        } catch {
+          // Receipt delivery can lag slightly behind payment verification.
+        }
+      }
+    },
+    onError: () => toast.error('Payment verification failed. Contact support if amount was deducted.'),
+  })
+
+  const orderMutation = useMutation({
+    mutationFn: () => createOrder(customAmt || selectedAmt),
+    onSuccess: async (order) => {
+      const loaded = await loadRazorpayScript()
+      if (!loaded) { toast.error('Razorpay failed to load. Check your connection.'); return }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency || 'INR',
+        order_id: order.id,
+        name: 'Radiant Education Trust',
+        description: 'Donation — Education for Every Child',
+        image: '/logo.png',
+        handler: (response) => {
+          verifyMutation.mutate({
+            razorpay_order_id:   response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature:  response.razorpay_signature,
+          })
+        },
+        prefill: { name: '', email: '', contact: '' },
+        theme: { color: '#2563eb' },
+        modal: { ondismiss: () => toast('Payment cancelled.', { icon: 'ℹ️' }) },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    },
+    onError: (err) => toast.error(err?.response?.data?.message || 'Could not initiate payment. Please try again.'),
+  })
+
+  const isLoading = orderMutation.isPending || verifyMutation.isPending
 
   return (
     <section id="donate-section" className={styles.section}>
       <div className={styles.glow} />
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className={styles.card}>
-          {/* Left – Impact messaging */}
+          {/* Left */}
           <div className={styles.left}>
             <Heart size={56} fill="var(--clr-accent)" color="var(--clr-accent)" className={styles.heartIcon} />
             <h2 className={styles.leftHeading}>Your Donation Funds Real Children</h2>
@@ -52,7 +114,6 @@ export default function Donation() {
               Every rupee raised goes directly to programs. We publish audited fund utilisation
               reports so you can see exactly where your money reaches.
             </p>
-
             <div className={styles.impactList}>
               {IMPACT_LABELS.map(({ amt, desc }) => (
                 <div key={amt} className={styles.impactItem}>
@@ -61,7 +122,6 @@ export default function Donation() {
                 </div>
               ))}
             </div>
-
             <div className={styles.certRow}>
               <div className={styles.cert}><span className={styles.certNum}>80G</span><span className={styles.certLabel}>Tax Exempt</span></div>
               <div className={styles.certDivider} />
@@ -71,16 +131,11 @@ export default function Donation() {
             </div>
           </div>
 
-          {/* Right – Donation form */}
+          {/* Right */}
           <div className={styles.right}>
-            {/* Tabs */}
             <div className={styles.tabs}>
               {TABS.map(({ id, label }) => (
-                <button
-                  key={id}
-                  className={`${styles.tab} ${activeTab === id ? styles.tabActive : ''}`}
-                  onClick={() => setActiveTab(id)}
-                >
+                <button key={id} className={`${styles.tab} ${activeTab === id ? styles.tabActive : ''}`} onClick={() => setActiveTab(id)}>
                   {label}
                 </button>
               ))}
@@ -88,33 +143,19 @@ export default function Donation() {
             <p className={styles.tabDesc}>{TAB_LABELS[activeTab]}</p>
 
             <h3 className={styles.amtHeading}>Select Amount</h3>
-
-            {/* Preset amounts */}
             <div className={styles.presets}>
               {PRESET_AMOUNTS.map((amt) => (
-                <button
-                  key={amt}
-                  className={`${styles.presetBtn} ${selectedAmt === amt ? styles.presetActive : ''}`}
-                  onClick={() => handlePreset(amt)}
-                >
+                <button key={amt} className={`${styles.presetBtn} ${selectedAmt === amt ? styles.presetActive : ''}`} onClick={() => handlePreset(amt)}>
                   ₹{amt.toLocaleString('en-IN')}
                 </button>
               ))}
             </div>
 
-            {/* Custom input */}
             <div className={styles.inputWrapper}>
               <span className={styles.rupeeSign}>₹</span>
-              <input
-                type="number"
-                className={styles.amtInput}
-                value={customAmt}
-                onChange={handleCustom}
-                placeholder="Custom Amount"
-              />
+              <input type="number" className={styles.amtInput} value={customAmt} onChange={handleCustom} placeholder="Custom Amount" min={1} />
             </div>
 
-            {/* Progress bar */}
             <div className={styles.progressCard}>
               <div className={styles.progressHeader}>
                 <span>Campaign: Education for Flood-Affected Children</span>
@@ -126,18 +167,17 @@ export default function Donation() {
               <p className={styles.progressMeta}>₹7.3L raised of ₹10L goal · 842 donors · 8 days left</p>
             </div>
 
-            {/* Payment options */}
             <p className={styles.payLabel}>Payment Method</p>
             <div className={styles.payOptions}>
-              <button className={styles.payRazorpay}>
+              <button className={styles.payRazorpay} onClick={() => orderMutation.mutate()} disabled={isLoading || !customAmt}>
                 <ShieldCheck size={16} />
-                Donate via Razorpay (UPI / Cards / Net Banking)
+                {isLoading ? 'Processing…' : 'Donate via Razorpay (UPI / Cards / Net Banking)'}
               </button>
               <div className={styles.payRow2}>
-                <button className={styles.payAlt}><Globe2 size={15} /> Stripe</button>
-                <button className={styles.payAlt}>PayPal</button>
+                <button className={styles.payAlt} disabled><Globe2 size={15} /> Stripe</button>
+                <button className={styles.payAlt} disabled>PayPal</button>
               </div>
-              <button className={styles.payAltFull}>
+              <button className={styles.payAltFull} disabled>
                 <QrCode size={15} /> Show UPI QR Code
               </button>
             </div>

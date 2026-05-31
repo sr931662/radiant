@@ -1,0 +1,13 @@
+.wrap { display: flex; align-items: center; gap: 4px; justify-content: center; padding: 1.5rem 0; }
+.btn {
+  min-width: 34px; height: 34px; padding: 0 6px;
+  border: 1px solid #e2e8f0; border-radius: 6px;
+  background: white; cursor: pointer; font-size: 0.875rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.btn:hover:not(:disabled) { border-color: var(--clr-primary); color: var(--clr-primary); }
+.btn:disabled { opacity: 0.4; cursor: default; }
+.active { background: var(--clr-primary); color: white; border-color: var(--clr-primary); }
+.active:hover { color: white; }
+.dots { padding: 0 4px; color: #94a3b8; }

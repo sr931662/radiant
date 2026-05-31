@@ -1,52 +1,46 @@
-import { FileCheck2, Landmark, PieChart, ScrollText, Shield, UsersRound } from 'lucide-react'
+import { FileCheck2, Landmark, PieChart, ScrollText, Shield, UsersRound, Download } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getDownloads, getDownloadUrl } from '../../services/downloadService'
+import Spinner from '../ui/Spinner'
 import styles from './Transparency.module.css'
 
-const DOCS = [
-  {
-    icon:    <FileCheck2 size={22} />,
-    color:   'green',
-    title:   'Annual Reports',
-    desc:    'Comprehensive yearly reports on programs, financials, and impact. Required by institutional donors.',
-    link:    'Download FY 2023–24 →',
-  },
-  {
-    icon:    <Landmark size={22} />,
-    color:   'blue',
-    title:   'Audited Financial Statements',
-    desc:    'External audit reports confirming financial integrity — the gold standard of NGO credibility.',
-    link:    'View Audit Reports →',
-  },
-  {
-    icon:    <PieChart size={22} />,
-    color:   'amber',
-    title:   'Fund Utilisation Reports',
-    desc:    'Detailed breakdown of how every rupee was spent. Answers: "Does my money actually reach children?"',
-    link:    'View Fund Reports →',
-  },
-  {
-    icon:    <ScrollText size={22} />,
-    color:   'indigo',
-    title:   'Legal Registrations',
-    desc:    'NGO certificate, FCRA approval, 80G certification — required by donors for tax benefits and due diligence.',
-    link:    'View Certificates →',
-  },
-  {
-    icon:    <Shield size={22} />,
-    color:   'rose',
-    title:   'Child Protection Policy',
-    desc:    'Formal safeguarding policy for all programs. Non-negotiable for any organisation working with minors.',
-    link:    'Read Policy →',
-  },
-  {
-    icon:    <UsersRound size={22} />,
-    color:   'purple',
-    title:   'Governance Documents',
-    desc:    'Board constitution, conflict of interest policy, whistleblower policy — audited by institutional funders.',
-    link:    'View Governance →',
-  },
+const ICON_MAP = {
+  annual:      <FileCheck2 size={22} />,
+  audit:       <Landmark size={22} />,
+  fund:        <PieChart size={22} />,
+  legal:       <ScrollText size={22} />,
+  child:       <Shield size={22} />,
+  governance:  <UsersRound size={22} />,
+}
+
+const COLOR_MAP = ['green', 'blue', 'amber', 'indigo', 'rose', 'purple']
+
+const STATIC_DOCS = [
+  { color: 'green',  icon: <FileCheck2 size={22} />, title: 'Annual Reports',            desc: 'Comprehensive yearly reports on programs, financials, and impact.' },
+  { color: 'blue',   icon: <Landmark size={22} />,   title: 'Audited Financial Statements', desc: 'External audit reports confirming financial integrity.' },
+  { color: 'amber',  icon: <PieChart size={22} />,   title: 'Fund Utilisation Reports',  desc: 'Detailed breakdown of how every rupee was spent.' },
+  { color: 'indigo', icon: <ScrollText size={22} />, title: 'Legal Registrations',       desc: 'NGO certificate, FCRA approval, 80G certification.' },
+  { color: 'rose',   icon: <Shield size={22} />,     title: 'Child Protection Policy',   desc: 'Formal safeguarding policy for all programs.' },
+  { color: 'purple', icon: <UsersRound size={22} />, title: 'Governance Documents',      desc: 'Board constitution, conflict of interest policy, whistleblower policy.' },
 ]
 
 export default function Transparency() {
+  const { data: downloads = [], isLoading } = useQuery({
+    queryKey: ['downloads'],
+    queryFn: getDownloads,
+  })
+
+  const docs = downloads.length > 0
+    ? downloads.map((d, i) => ({
+        color:  COLOR_MAP[i % COLOR_MAP.length],
+        icon:   ICON_MAP[Object.keys(ICON_MAP).find((k) => d.title?.toLowerCase().includes(k))] || <FileCheck2 size={22} />,
+        title:  d.title,
+        desc:   d.description || 'Download this document from Radiant Education Trust.',
+        href:   getDownloadUrl(d.id),
+        link:   'Download →',
+      }))
+    : STATIC_DOCS.map((d) => ({ ...d, href: '#', link: 'Coming soon' }))
+
   return (
     <section id="transparency" className={styles.section}>
       <div className="container">
@@ -59,20 +53,31 @@ export default function Transparency() {
           </p>
         </div>
 
-        <div className={styles.grid}>
-          {DOCS.map((doc) => (
-            <div key={doc.title} className={styles.card}>
-              <div className={`${styles.iconBox} ${styles['icon_' + doc.color]}`}>
-                {doc.icon}
+        {isLoading && <Spinner center />}
+
+        {!isLoading && (
+          <div className={styles.grid}>
+            {docs.map((doc) => (
+              <div key={doc.title} className={styles.card}>
+                <div className={`${styles.iconBox} ${styles['icon_' + doc.color]}`}>
+                  {doc.icon}
+                </div>
+                <div className={styles.cardContent}>
+                  <h3 className={styles.cardTitle}>{doc.title}</h3>
+                  <p className={styles.cardDesc}>{doc.desc}</p>
+                  <a
+                    href={doc.href}
+                    className={styles.cardLink}
+                    target={doc.href !== '#' ? '_blank' : undefined}
+                    rel="noreferrer"
+                  >
+                    <Download size={14} /> {doc.link}
+                  </a>
+                </div>
               </div>
-              <div className={styles.cardContent}>
-                <h3 className={styles.cardTitle}>{doc.title}</h3>
-                <p className={styles.cardDesc}>{doc.desc}</p>
-                <a href="#" className={styles.cardLink}>{doc.link}</a>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

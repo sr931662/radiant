@@ -4,7 +4,7 @@ from fastapi import Depends, Request, Body, Query, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
-from src.dependencies import get_current_user, get_current_admin_user
+from src.dependencies import get_current_user, get_current_user_optional, get_current_admin_user
 from src.schemas.donation import (
     CreateOrderRequest, VerifyPaymentRequest, DonationResponse, DonationListResponse, DonationStatsResponse,
 )
@@ -15,7 +15,7 @@ from src.services.donation_service import DonationService
 async def create_order(
     data: CreateOrderRequest = Body(...),
     db: AsyncSession = Depends(get_db),
-    current_user: dict | None = Depends(get_current_user),
+    current_user: dict | None = Depends(get_current_user_optional),
 ) -> dict:
     user_id = current_user["sub"] if current_user else None
     order = await DonationService.create_order(db, user_id, data.amount, data.anonymous)

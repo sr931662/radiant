@@ -23,6 +23,22 @@ class BlogService:
         return posts, total
 
     @staticmethod
+    async def list_all_posts(db: AsyncSession, page: int, size: int) -> tuple[list[BlogPost], int]:
+        query = select(BlogPost).where(BlogPost.deleted_at == None).order_by(BlogPost.created_at.desc())
+        count_query = select(func.count(BlogPost.id)).where(BlogPost.deleted_at == None)
+        total = await db.scalar(count_query) or 0
+        query = query.offset((page - 1) * size).limit(size)
+        result = await db.execute(query)
+        posts = list(result.scalars().all())
+        for post in posts:
+            comment_count_stmt = select(func.count(BlogComment.id)).where(
+                BlogComment.post_id == post.id,
+                BlogComment.status == "APPROVED",
+            )
+            setattr(post, "comment_count", await db.scalar(comment_count_stmt) or 0)
+        return posts, total
+
+    @staticmethod
     async def get_post_by_slug(db: AsyncSession, slug: str) -> BlogPost:
         stmt = select(BlogPost).where(BlogPost.slug == slug, BlogPost.deleted_at == None, BlogPost.status == "PUBLISHED")
         result = await db.execute(stmt)

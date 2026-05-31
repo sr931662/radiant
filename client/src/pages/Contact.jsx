@@ -1,10 +1,26 @@
 import { MapPin, Phone, Clock, Globe, MessageCircle, Send } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
+import { submitContact } from '../services/contactService'
 import styles from './Contact.module.css'
 
 export default function Contact() {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+
+  const mutation = useMutation({
+    mutationFn: (d) => submitContact(d),
+    onSuccess: () => {
+      toast.success("Message sent! We'll get back to you within 24 hours.")
+      reset()
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.message || 'Failed to send message. Please try again.')
+    },
+  })
+
   return (
     <div className={styles.page}>
-      {/* Page hero */}
       <div className={styles.hero}>
         <div className="container">
           <p className="section-label">Get In Touch</p>
@@ -18,7 +34,6 @@ export default function Contact() {
 
       <div className="container">
         <div className={styles.grid}>
-          {/* Info cards */}
           <div className={styles.infoCol}>
             <div className={styles.infoCard}>
               <div className={styles.infoIcon}><MapPin size={22} /></div>
@@ -48,34 +63,58 @@ export default function Contact() {
                 <p className={styles.infoText}>Monday – Saturday<br />10:00 AM – 6:00 PM IST</p>
               </div>
             </div>
-            <button className={styles.waBtn}>
+            <a href="https://wa.me/911800000000" target="_blank" rel="noreferrer" className={styles.waBtn}>
               <MessageCircle size={18} /> Chat on WhatsApp
-            </button>
+            </a>
           </div>
 
-          {/* Contact form */}
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+          <form className={styles.form} onSubmit={handleSubmit((d) => mutation.mutate(d))}>
             <h2 className={styles.formTitle}>Send a Message</h2>
             <div className={styles.row}>
               <div className={styles.field}>
                 <label className={styles.label}>Full Name</label>
-                <input className={styles.input} type="text" placeholder="Your full name" />
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder="Your full name"
+                  {...register('name', { required: 'Name is required', minLength: { value: 2, message: 'Min 2 chars' } })}
+                />
+                {errors.name && <p className={styles.err}>{errors.name.message}</p>}
               </div>
               <div className={styles.field}>
                 <label className={styles.label}>Email Address</label>
-                <input className={styles.input} type="email" placeholder="you@example.com" />
+                <input
+                  className={styles.input}
+                  type="email"
+                  placeholder="you@example.com"
+                  {...register('email', { required: 'Email is required', pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' } })}
+                />
+                {errors.email && <p className={styles.err}>{errors.email.message}</p>}
               </div>
             </div>
             <div className={styles.field}>
               <label className={styles.label}>Subject</label>
-              <input className={styles.input} type="text" placeholder="How can we help?" />
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="How can we help?"
+                {...register('subject', { required: 'Subject is required', minLength: { value: 5, message: 'Min 5 chars' } })}
+              />
+              {errors.subject && <p className={styles.err}>{errors.subject.message}</p>}
             </div>
             <div className={styles.field}>
               <label className={styles.label}>Message</label>
-              <textarea className={styles.textarea} rows={6} placeholder="Write your message here..." />
+              <textarea
+                className={styles.textarea}
+                rows={6}
+                placeholder="Write your message here..."
+                {...register('message', { required: 'Message is required', minLength: { value: 10, message: 'Min 10 chars' } })}
+              />
+              {errors.message && <p className={styles.err}>{errors.message.message}</p>}
             </div>
-            <button type="submit" className={styles.submitBtn}>
-              <Send size={16} /> Send Message
+            <button type="submit" className={styles.submitBtn} disabled={mutation.isPending}>
+              <Send size={16} />
+              {mutation.isPending ? 'Sending…' : 'Send Message'}
             </button>
           </form>
         </div>

@@ -17,16 +17,27 @@ from src.routes import (
     auth_router,
     user_router,
     membership_router,
+    admin_membership_router,
     fdp_router,
+    admin_fdp_router,
     admission_router,
+    admin_admission_router,
     donation_router,
+    admin_donation_router,
     course_router,
+    admin_course_router,
     certificate_router,
+    admin_certificate_router,
     gallery_router,
+    admin_gallery_router,
     volunteer_router,
+    admin_volunteer_router,
     blog_router,
+    admin_blog_router,
     contact_router,
+    admin_contact_router,
     download_router,
+    admin_download_router,
     dashboard_router,
 )
 from src.utils.exceptions import AppException
@@ -103,20 +114,28 @@ def create_app() -> FastAPI:
     # ── Routers ──
     app.include_router(auth_router)
     app.include_router(user_router)
-    app.include_router(membership_router)  # contains both public and admin sub-routers
-    # The membership_router is actually the public_router; we need to include both public and admin
-    # We'll restructure: import individual routers and include them.
-    # For brevity, we include all routers from the routes/__init__.py
+    app.include_router(membership_router)
+    app.include_router(admin_membership_router)
     app.include_router(fdp_router)
+    app.include_router(admin_fdp_router)
     app.include_router(admission_router)
+    app.include_router(admin_admission_router)
     app.include_router(donation_router)
+    app.include_router(admin_donation_router)
     app.include_router(course_router)
+    app.include_router(admin_course_router)
     app.include_router(certificate_router)
+    app.include_router(admin_certificate_router)
     app.include_router(gallery_router)
+    app.include_router(admin_gallery_router)
     app.include_router(volunteer_router)
+    app.include_router(admin_volunteer_router)
     app.include_router(blog_router)
+    app.include_router(admin_blog_router)
     app.include_router(contact_router)
+    app.include_router(admin_contact_router)
     app.include_router(download_router)
+    app.include_router(admin_download_router)
     app.include_router(dashboard_router)
 
     # Health check

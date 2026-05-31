@@ -31,6 +31,7 @@ class PostResponse(BaseModel):
     id: uuid.UUID
     title: str
     slug: str
+    content: str
     excerpt: str | None
     featured_image: str | None
     category: str | None

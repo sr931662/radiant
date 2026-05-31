@@ -54,7 +54,11 @@ class Settings(BaseSettings):
     celery_result_backend: Optional[str] = None
 
     # ── CORS ──
-    cors_origins: list[str] = ["https://radianttrust.sr931662.workers.dev", "http://localhost:3000"]
+    cors_origins: list[str] = [
+        "https://radianttrust.sr931662.workers.dev",
+        "http://localhost:3000",
+        "http://localhost:5173",
+    ]
 
     # ── Rate Limiting ──
     rate_limit_global: str = "100/minute"

@@ -3,7 +3,7 @@ from fastapi import Depends, Query, Path, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
-from src.dependencies import get_current_admin_user, get_current_user
+from src.dependencies import get_current_admin_user, get_current_user_optional
 from src.schemas.contact import ContactFormRequest, InquiryResponse, InquiryListResponse, InquiryReplyRequest
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.contact_service import ContactService
@@ -12,7 +12,7 @@ from src.services.contact_service import ContactService
 async def submit_inquiry(
     data: ContactFormRequest = Body(...),
     db: AsyncSession = Depends(get_db),
-    current_user: dict | None = Depends(get_current_user),
+    current_user: dict | None = Depends(get_current_user_optional),
 ) -> APIResponse:
     user_id = current_user["sub"] if current_user else None
     await ContactService.submit_inquiry(db, data.model_dump(), user_id)

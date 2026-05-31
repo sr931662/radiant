@@ -1,0 +1,21 @@
+.backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 1rem;
+}
+.dialog {
+  background: white; border-radius: 12px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
+}
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0;
+}
+.title { font-size: 1.05rem; font-weight: 600; margin: 0; }
+.close {
+  background: none; border: none; cursor: pointer; color: #64748b;
+  display: flex; align-items: center; padding: 4px;
+  border-radius: 4px;
+}
+.close:hover { background: #f1f5f9; }
+.body { padding: 1.5rem; }

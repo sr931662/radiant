@@ -1,52 +1,24 @@
+import { useState } from 'react'
 import { Image, Video, Play } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getAlbums } from '../services/galleryService'
+import Spinner from '../components/ui/Spinner'
 import styles from './Gallery.module.css'
 
-const ALBUMS = [
-  {
-    title: 'Annual Day 2025',
-    count: 42,
-    type: 'photo',
-    cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
-    tag: 'Events',
-  },
-  {
-    title: 'Digital Literacy Camp',
-    count: 28,
-    type: 'photo',
-    cover: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80',
-    tag: 'Programs',
-  },
-  {
-    title: 'Girls Education Drive',
-    count: 15,
-    type: 'video',
-    cover: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80',
-    tag: 'Field Stories',
-  },
-  {
-    title: 'Scholarship Ceremony',
-    count: 56,
-    type: 'photo',
-    cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80',
-    tag: 'Events',
-  },
-  {
-    title: 'FDP Workshop — July 2025',
-    count: 33,
-    type: 'photo',
-    cover: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80',
-    tag: 'Training',
-  },
-  {
-    title: 'Village Outreach',
-    count: 7,
-    type: 'video',
-    cover: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80',
-    tag: 'Field Stories',
-  },
-]
+const FILTERS = ['All', 'Events', 'Programs', 'Field Stories', 'Training']
 
 export default function Gallery() {
+  const [activeFilter, setActiveFilter] = useState('All')
+
+  const { data: albums = [], isLoading, isError } = useQuery({
+    queryKey: ['gallery-albums'],
+    queryFn: getAlbums,
+  })
+
+  const filtered = activeFilter === 'All'
+    ? albums
+    : albums.filter((a) => a.tag === activeFilter || a.album_type === activeFilter.toLowerCase())
+
   return (
     <div className={styles.page}>
       <div className={styles.hero}>
@@ -62,36 +34,54 @@ export default function Gallery() {
 
       <div className="container">
         <div className={styles.filters}>
-          {['All', 'Events', 'Programs', 'Field Stories', 'Training'].map((f) => (
-            <button key={f} className={`${styles.filterBtn} ${f === 'All' ? styles.filterActive : ''}`}>
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              className={`${styles.filterBtn} ${activeFilter === f ? styles.filterActive : ''}`}
+              onClick={() => setActiveFilter(f)}
+            >
               {f}
             </button>
           ))}
         </div>
 
-        <div className={styles.grid}>
-          {ALBUMS.map((album) => (
-            <div key={album.title} className={styles.card}>
-              <div className={styles.coverWrapper}>
-                <img src={album.cover} alt={album.title} className={styles.cover} />
-                <div className={styles.overlay}>
-                  {album.type === 'video'
-                    ? <div className={styles.playBtn}><Play size={28} fill="white" /></div>
-                    : <div className={styles.viewBtn}><Image size={20} /> View Album</div>
-                  }
+        {isLoading && <Spinner center size="lg" />}
+        {isError && <p style={{ textAlign: 'center', color: '#ef4444', padding: '2rem' }}>Failed to load gallery. Please try again.</p>}
+
+        {!isLoading && !isError && (
+          <div className={styles.grid}>
+            {filtered.length === 0 && (
+              <p style={{ gridColumn: '1/-1', textAlign: 'center', color: '#64748b', padding: '2rem' }}>
+                No albums found.
+              </p>
+            )}
+            {filtered.map((album) => {
+              const isVideo = album.album_type === 'video' || album.type === 'video'
+              const cover = album.cover_image || album.cover || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80'
+              return (
+                <div key={album.id || album.title} className={styles.card}>
+                  <div className={styles.coverWrapper}>
+                    <img src={cover} alt={album.title} className={styles.cover} />
+                    <div className={styles.overlay}>
+                      {isVideo
+                        ? <div className={styles.playBtn}><Play size={28} fill="white" /></div>
+                        : <div className={styles.viewBtn}><Image size={20} /> View Album</div>
+                      }
+                    </div>
+                    {album.tag && <span className={styles.tag}>{album.tag}</span>}
+                  </div>
+                  <div className={styles.cardBody}>
+                    <h3 className={styles.cardTitle}>{album.title}</h3>
+                    <p className={styles.cardMeta}>
+                      {isVideo ? <Video size={14} /> : <Image size={14} />}
+                      {album.media_count ?? album.count ?? 0} {isVideo ? 'videos' : 'photos'}
+                    </p>
+                  </div>
                 </div>
-                <span className={styles.tag}>{album.tag}</span>
-              </div>
-              <div className={styles.cardBody}>
-                <h3 className={styles.cardTitle}>{album.title}</h3>
-                <p className={styles.cardMeta}>
-                  {album.type === 'video' ? <Video size={14} /> : <Image size={14} />}
-                  {album.count} {album.type === 'video' ? 'videos' : 'photos'}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

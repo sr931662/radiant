@@ -6,8 +6,9 @@ from src.core.database import get_db
 from src.core.security import verify_token
 from src.models import User, UserRole, Role, RolePermission, Permission
 
-# Token scheme for Swagger UI
+# Token schemes for Swagger UI
 security_scheme = HTTPBearer()
+optional_security_scheme = HTTPBearer(auto_error=False)
 
 
 async def get_current_user_payload(
@@ -27,6 +28,17 @@ async def get_current_user_payload(
     return payload
 
 
+async def get_current_user_payload_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(optional_security_scheme),
+) -> dict | None:
+    """
+    Best-effort token parsing for endpoints that support anonymous access.
+    """
+    if credentials is None:
+        return None
+    return verify_token(credentials.credentials, token_type="access")
+
+
 async def get_current_user(
     payload: dict = Depends(get_current_user_payload),
     db: AsyncSession = Depends(get_db),
@@ -43,6 +55,30 @@ async def get_current_user(
             detail="User not found or banned",
         )
     # Merge payload with user details if needed
+    return {
+        "sub": str(user.id),
+        "email": user.email,
+        "name": user.name,
+        "roles": payload.get("roles", []),
+        "permissions": payload.get("permissions", []),
+    }
+
+
+async def get_current_user_optional(
+    payload: dict | None = Depends(get_current_user_payload_optional),
+    db: AsyncSession = Depends(get_db),
+) -> dict | None:
+    """
+    Returns the current user when a valid access token is present, otherwise None.
+    """
+    if payload is None:
+        return None
+
+    user_id = payload.get("sub")
+    user = await db.get(User, user_id)
+    if not user or user.is_banned:
+        return None
+
     return {
         "sub": str(user.id),
         "email": user.email,

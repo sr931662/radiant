@@ -27,6 +27,21 @@ async def list_posts(
     )
 
 
+async def list_all_posts(
+    pagination: PaginationQuery = Depends(),
+    db: AsyncSession = Depends(get_db),
+    _: dict = Depends(get_current_admin_user),
+) -> PostListResponse:
+    posts, total = await BlogService.list_all_posts(db, pagination.page, pagination.size)
+    return PostListResponse(
+        items=[PostResponse.model_validate(p) for p in posts],
+        total=total,
+        page=pagination.page,
+        size=pagination.size,
+        pages=(total + pagination.size - 1) // pagination.size,
+    )
+
+
 async def get_post(
     slug: str = Path(...),
     db: AsyncSession = Depends(get_db),
