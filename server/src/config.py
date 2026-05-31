@@ -1,4 +1,6 @@
 from typing import Optional
+
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -63,6 +65,19 @@ class Settings(BaseSettings):
     # ── Rate Limiting ──
     rate_limit_global: str = "100/minute"
     rate_limit_auth: str = "5/minute"
+
+    @field_validator("debug", mode="before")
+    @classmethod
+    def parse_debug(cls, value):
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"1", "true", "yes", "on", "debug", "development", "dev"}:
+                return True
+            if normalized in {"0", "false", "no", "off", "release", "production", "prod"}:
+                return False
+        return value
 
 
 settings = Settings()  # type: ignore[call-arg]
