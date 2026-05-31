@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = False
     environment: str = "production"  # development, staging, production
-    frontend_url: str = "https://radianttrust.sr931662.workers.dev"
+    frontend_url: str = "https://radiant.sr931662.workers.dev"
 
     # ── Database ──
     database_url: str  # postgresql+asyncpg://user:pass@localhost:5432/ngo_db
@@ -57,7 +57,7 @@ class Settings(BaseSettings):
 
     # ── CORS ──
     cors_origins: list[str] = [
-        "https://radianttrust.sr931662.workers.dev",
+        "https://radiant.sr931662.workers.dev",
         "http://localhost:3000",
         "http://localhost:5173",
     ]
