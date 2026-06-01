@@ -5,15 +5,24 @@ const REFRESH_KEY = 'radiant_refresh_token'
 
 // Determine API base URL
 function resolveApiBaseUrl() {
-  // In development: /api requests are proxied to http://localhost:8000 via vite
-  // In production on Cloudflare: /api requests are proxied to backend via _worker.js
-  // In Cloudflare preview mode: same as production
-  
-  if (typeof window === 'undefined') {
-    return 'http://localhost:8000'
+  if (import.meta?.env?.DEV) return ''
+
+  const configured = (import.meta.env.VITE_API_URL || '').trim()
+  if (!configured) return ''
+
+  // Prefer same-origin API calls in production so the Worker can proxy `/api/*`
+  // without requiring direct browser-to-Cloud Run CORS.
+  if (configured.startsWith('/')) return configured.replace(/\/+$/, '')
+
+  try {
+    const configuredUrl = new URL(configured)
+    if (typeof window !== 'undefined' && configuredUrl.origin === window.location.origin) {
+      return configuredUrl.origin
+    }
+  } catch {
+    return configured.replace(/\/+$/, '')
   }
 
-  // For browser environments, use relative URLs so proxying works
   return ''
 }
 
@@ -115,24 +124,3 @@ export function getApiBaseUrl() {
 
 export default api
 
-function resolveApiBaseUrl() {
-  if (import.meta.env.DEV) return ''
-
-  const configured = (import.meta.env.VITE_API_URL || '').trim()
-  if (!configured) return ''
-
-  // Prefer same-origin API calls in production so the Worker can proxy `/api/*`
-  // without requiring direct browser-to-Cloud Run CORS.
-  if (configured.startsWith('/')) return configured.replace(/\/+$/, '')
-
-  try {
-    const configuredUrl = new URL(configured)
-    if (typeof window !== 'undefined' && configuredUrl.origin === window.location.origin) {
-      return configuredUrl.origin
-    }
-  } catch {
-    return configured.replace(/\/+$/, '')
-  }
-
-  return ''
-}
