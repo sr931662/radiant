@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
@@ -7,8 +6,6 @@ from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-
-_startup_logger = logging.getLogger("startup")
 
 from src.config import settings
 from src.core.database import engine, validate_database_connection
@@ -46,32 +43,35 @@ from src.routes import (
 )
 from src.utils.exceptions import AppException
 
-
-async def _background_startup():
-    """Run slow startup checks after the server is already listening."""
-    try:
-        await validate_database_connection()
-        _startup_logger.info("Database connection validated.")
-    except Exception as exc:
-        _startup_logger.error("Database validation failed: %s", exc)
-
-    await init_redis()
-
-    if settings.cloudinary_cloud_name:
-        import cloudinary
-        cloudinary.config(
-            cloud_name=settings.cloudinary_cloud_name,
-            api_key=settings.cloudinary_api_key,
-            api_secret=settings.cloudinary_api_secret,
-        )
+_logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Fire slow checks in the background so the port binds immediately.
-    asyncio.create_task(_background_startup())
+    # Best-effort startup checks — catch all errors so the server always starts.
+    try:
+        await validate_database_connection()
+    except Exception as exc:
+        _logger.error("Database startup check failed (server starting anyway): %s", exc)
+
+    try:
+        await init_redis()
+    except Exception as exc:
+        _logger.warning("Redis unavailable at startup: %s", exc)
+
+    if settings.cloudinary_cloud_name:
+        try:
+            import cloudinary
+            cloudinary.config(
+                cloud_name=settings.cloudinary_cloud_name,
+                api_key=settings.cloudinary_api_key,
+                api_secret=settings.cloudinary_api_secret,
+            )
+        except Exception as exc:
+            _logger.warning("Cloudinary config failed: %s", exc)
+
     yield
-    # Shutdown
+
     await close_redis()
     await engine.dispose()
 
