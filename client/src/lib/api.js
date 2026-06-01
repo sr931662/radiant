@@ -16,14 +16,10 @@ function resolveApiBaseUrl() {
 
   try {
     const configuredUrl = new URL(configured)
-    if (typeof window !== 'undefined' && configuredUrl.origin === window.location.origin) {
-      return configuredUrl.origin
-    }
+    return configuredUrl.origin
   } catch {
     return configured.replace(/\/+$/, '')
   }
-
-  return ''
 }
 
 const API_BASE_URL = resolveApiBaseUrl()
