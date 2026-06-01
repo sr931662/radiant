@@ -28,5 +28,5 @@ class Membership(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     approved_by: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("users.id"), nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship(back_populates="memberships", foreign_keys=[user_id])
+    user: Mapped["User"] = relationship(back_populates="memberships", foreign_keys="[Membership.user_id]")
     plan: Mapped["MembershipPlan"] = relationship(back_populates="memberships")

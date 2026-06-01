@@ -44,7 +44,7 @@ class User(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     roles: Mapped[List["UserRole"]] = relationship(back_populates="user", lazy="selectin")
     refresh_tokens: Mapped[List["RefreshToken"]] = relationship(back_populates="user", lazy="selectin")
     otps: Mapped[List["OTP"]] = relationship(back_populates="user", lazy="selectin")
-    memberships: Mapped[List["Membership"]] = relationship(back_populates="user", lazy="selectin")
+    memberships: Mapped[List["Membership"]] = relationship(back_populates="user", lazy="selectin", foreign_keys="[Membership.user_id]")
     fdp_registrations: Mapped[List["FdpRegistration"]] = relationship(back_populates="user", lazy="selectin")
     attendances: Mapped[List["Attendance"]] = relationship(back_populates="user", lazy="selectin")
     admissions: Mapped[List["Admission"]] = relationship(back_populates="user", lazy="selectin")
