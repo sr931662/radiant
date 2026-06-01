@@ -45,17 +45,28 @@ from src.utils.exceptions import AppException
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
-    await validate_database_connection()
-    await init_redis()
-    # Cloudinary config (if using)
+    # Startup — wrap each check so a single failure never prevents the server from binding
+    import logging as _log
+    try:
+        await validate_database_connection()
+    except Exception as _e:
+        _log.getLogger(__name__).error("DB startup check failed (server starting anyway): %s", _e)
+
+    try:
+        await init_redis()
+    except Exception as _e:
+        _log.getLogger(__name__).warning("Redis unavailable at startup: %s", _e)
+
     if settings.cloudinary_cloud_name:
-        import cloudinary
-        cloudinary.config(
-            cloud_name=settings.cloudinary_cloud_name,
-            api_key=settings.cloudinary_api_key,
-            api_secret=settings.cloudinary_api_secret,
-        )
+        try:
+            import cloudinary
+            cloudinary.config(
+                cloud_name=settings.cloudinary_cloud_name,
+                api_key=settings.cloudinary_api_key,
+                api_secret=settings.cloudinary_api_secret,
+            )
+        except Exception as _e:
+            _log.getLogger(__name__).warning("Cloudinary config failed: %s", _e)
     yield
     # Shutdown
     await close_redis()
