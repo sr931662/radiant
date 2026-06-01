@@ -1,4 +1,5 @@
 import { Phone, Mail, LayoutDashboard } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import styles from './TopBar.module.css'
 
 export default function TopBar() {
@@ -15,13 +16,13 @@ export default function TopBar() {
         </a>
       </div>
       <div className={styles.right}>
-        <a href="#transparency" className={`${styles.link} ${styles.hideMobile}`}>
+        <Link to="/transparency" className={`${styles.link} ${styles.hideMobile}`}>
           Transparency Centre
-        </a>
-        <a href="#admin" className={styles.adminLink}>
+        </Link>
+        <Link to="/admin" className={styles.adminLink}>
           <LayoutDashboard size={14} />
           Admin Portal
-        </a>
+        </Link>
       </div>
     </div>
   )
