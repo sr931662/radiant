@@ -22,5 +22,5 @@ class RolePermission(Base, UUIDMixin):
     permission_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("permissions.id", ondelete="CASCADE"))
 
     # Relationships
-    role: Mapped["Role"] = relationship(back_populates="permissions")
-    permission: Mapped["Permission"] = relationship(back_populates="roles")
+    role: Mapped["Role"] = relationship(back_populates="permissions", lazy="selectin")
+    permission: Mapped["Permission"] = relationship(back_populates="roles", lazy="selectin")

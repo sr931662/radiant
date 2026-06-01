@@ -22,5 +22,5 @@ class UserRole(Base, UUIDMixin):
     role_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("roles.id", ondelete="CASCADE"))
 
     # Relationships
-    user: Mapped["User"] = relationship(back_populates="roles")
-    role: Mapped["Role"] = relationship(back_populates="users")
+    user: Mapped["User"] = relationship(back_populates="roles", lazy="selectin")
+    role: Mapped["Role"] = relationship(back_populates="users", lazy="selectin")
