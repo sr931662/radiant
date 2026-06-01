@@ -47,8 +47,11 @@ class AuthService:
         db.add(otp)
         await db.commit()
 
-        # Send verification email (background task friendly)
-        await EmailService.send_verification_email(user.email, otp_code)
+        # Send verification email — non-fatal if email service is not configured
+        try:
+            await EmailService.send_verification_email(user.email, otp_code)
+        except Exception:
+            pass
 
         # Generate tokens
         return await AuthService._generate_tokens(db, user)

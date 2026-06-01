@@ -104,5 +104,20 @@ function resolveApiBaseUrl() {
   if (import.meta.env.DEV) return ''
 
   const configured = (import.meta.env.VITE_API_URL || '').trim()
-  return configured.replace(/\/+$/, '')
+  if (!configured) return ''
+
+  // Prefer same-origin API calls in production so the Worker can proxy `/api/*`
+  // without requiring direct browser-to-Cloud Run CORS.
+  if (configured.startsWith('/')) return configured.replace(/\/+$/, '')
+
+  try {
+    const configuredUrl = new URL(configured)
+    if (typeof window !== 'undefined' && configuredUrl.origin === window.location.origin) {
+      return configuredUrl.origin
+    }
+  } catch {
+    return configured.replace(/\/+$/, '')
+  }
+
+  return ''
 }
