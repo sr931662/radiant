@@ -2,6 +2,21 @@ import axios from 'axios'
 
 const ACCESS_KEY = 'radiant_access_token'
 const REFRESH_KEY = 'radiant_refresh_token'
+
+// Determine API base URL
+function resolveApiBaseUrl() {
+  // In development: /api requests are proxied to http://localhost:8000 via vite
+  // In production on Cloudflare: /api requests are proxied to backend via _worker.js
+  // In Cloudflare preview mode: same as production
+  
+  if (typeof window === 'undefined') {
+    return 'http://localhost:8000'
+  }
+
+  // For browser environments, use relative URLs so proxying works
+  return ''
+}
+
 const API_BASE_URL = resolveApiBaseUrl()
 
 const api = axios.create({
