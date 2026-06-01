@@ -7,6 +7,8 @@ from src.config import settings
 
 
 def _normalize_async_database_url(database_url: str) -> str:
+    # asyncpg uses ?ssl=require, not the libpq ?sslmode=require
+    database_url = database_url.replace("sslmode=require", "ssl=require")
     if database_url.startswith("postgresql+asyncpg://"):
         return database_url
     if database_url.startswith("postgresql://"):
@@ -35,13 +37,20 @@ async_session_factory = async_sessionmaker(
 
 async def validate_database_connection() -> None:
     """Verify the configured PostgreSQL database exists and is reachable."""
+    import logging
+    logger = logging.getLogger(__name__)
     try:
         async with engine.connect():
-            return
+            logger.info("Database connection verified.")
     except asyncpg.InvalidCatalogNameError as exc:
         raise RuntimeError(
             "Database does not exist. Verify DATABASE_URL references an existing PostgreSQL database. "
             f"Current value: {settings.database_url}"
+        ) from exc
+    except Exception as exc:
+        raise RuntimeError(
+            f"Could not connect to the database: {exc}. "
+            f"Check DATABASE_URL and network connectivity."
         ) from exc
 
 
