@@ -1,4 +1,3 @@
-import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -43,35 +42,22 @@ from src.routes import (
 )
 from src.utils.exceptions import AppException
 
-_logger = logging.getLogger(__name__)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Best-effort startup checks — catch all errors so the server always starts.
-    try:
-        await validate_database_connection()
-    except Exception as exc:
-        _logger.error("Database startup check failed (server starting anyway): %s", exc)
-
-    try:
-        await init_redis()
-    except Exception as exc:
-        _logger.warning("Redis unavailable at startup: %s", exc)
-
+    # Startup
+    await validate_database_connection()
+    await init_redis()
+    # Cloudinary config (if using)
     if settings.cloudinary_cloud_name:
-        try:
-            import cloudinary
-            cloudinary.config(
-                cloud_name=settings.cloudinary_cloud_name,
-                api_key=settings.cloudinary_api_key,
-                api_secret=settings.cloudinary_api_secret,
-            )
-        except Exception as exc:
-            _logger.warning("Cloudinary config failed: %s", exc)
-
+        import cloudinary
+        cloudinary.config(
+            cloud_name=settings.cloudinary_cloud_name,
+            api_key=settings.cloudinary_api_key,
+            api_secret=settings.cloudinary_api_secret,
+        )
     yield
-
+    # Shutdown
     await close_redis()
     await engine.dispose()
 
