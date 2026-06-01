@@ -59,9 +59,9 @@ function ProgramCard({ icon, title, desc, accent }) {
       </div>
       <h3 className={styles.cardTitle}>{title}</h3>
       <p className={styles.cardDesc}>{desc}</p>
-      <a href="#" className={`${styles.learnMore} ${accent ? styles.learnMoreAccent : ''}`}>
+      <button type="button" className={`${styles.learnMore} ${accent ? styles.learnMoreAccent : ''}`}>
         Learn More →
-      </a>
+      </button>
     </div>
   )
 }

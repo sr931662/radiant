@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+import asyncpg
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
@@ -30,6 +31,18 @@ async_session_factory = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
+
+async def validate_database_connection() -> None:
+    """Verify the configured PostgreSQL database exists and is reachable."""
+    try:
+        async with engine.connect():
+            return
+    except asyncpg.InvalidCatalogNameError as exc:
+        raise RuntimeError(
+            "Database does not exist. Verify DATABASE_URL references an existing PostgreSQL database. "
+            f"Current value: {settings.database_url}"
+        ) from exc
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:

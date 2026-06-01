@@ -7,7 +7,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from src.config import settings
-from src.core.database import engine
+from src.core.database import engine, validate_database_connection
 from src.core.redis import init_redis, close_redis
 from src.middleware.rate_limiter import limiter
 from src.middleware.security_headers import SecurityHeadersMiddleware
@@ -46,6 +46,7 @@ from src.utils.exceptions import AppException
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    await validate_database_connection()
     await init_redis()
     # Cloudinary config (if using)
     if settings.cloudinary_cloud_name:

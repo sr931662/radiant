@@ -5,7 +5,7 @@ import styles from './Footer.module.css'
 const EXPLORE_LINKS = [
   { to: '/about',        label: 'About Us' },
   { to: '/programs',     label: 'Programs' },
-  { to: '/#impact',      label: 'Live Impact' },
+  { to: '/about#impact', label: 'Live Impact' },
   { to: '/volunteer',    label: 'Sponsor a Child' },
   { to: '/volunteer',    label: 'Volunteer / Careers' },
   { to: '/contact',      label: 'Partner With Us' },
@@ -17,7 +17,7 @@ const RESOURCE_LINKS = [
   { to: '/transparency', label: 'Fund Utilisation' },
   { to: '/transparency', label: 'Legal Certificates' },
   { to: '/gallery',      label: 'Media Hub' },
-  { to: '/contact',      label: 'Admin Panel', highlight: true },
+  { to: '/admin',        label: 'Admin Panel', highlight: true },
 ]
 
 export default function Footer() {
@@ -111,7 +111,9 @@ export default function Footer() {
           </p>
           <div className={styles.legalLinks}>
             {['Privacy Policy', 'Terms of Service', 'Refund Policy', 'Child Safety'].map((l) => (
-              <a key={l} href="#" className={styles.legalLink}>{l}</a>
+              <button key={l} type="button" className={styles.legalLink}>
+                {l}
+              </button>
             ))}
           </div>
         </div>
