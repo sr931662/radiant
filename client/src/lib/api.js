@@ -78,8 +78,10 @@ api.interceptors.response.use(
         )
         const newAccess = data.data?.access_token || data.access_token
         const newRefresh = data.data?.refresh_token || data.refresh_token
-        localStorage.setItem(ACCESS_KEY, newAccess)
-        if (newRefresh) localStorage.setItem(REFRESH_KEY, newRefresh)
+        // Preserve whichever storage the token was originally saved to
+        const store = localStorage.getItem(REFRESH_KEY) ? localStorage : sessionStorage
+        store.setItem(ACCESS_KEY, newAccess)
+        if (newRefresh) store.setItem(REFRESH_KEY, newRefresh)
         processQueue(null, newAccess)
         original.headers.Authorization = `Bearer ${newAccess}`
         return api(original)
@@ -99,19 +101,22 @@ api.interceptors.response.use(
 export function clearTokens() {
   localStorage.removeItem(ACCESS_KEY)
   localStorage.removeItem(REFRESH_KEY)
+  sessionStorage.removeItem(ACCESS_KEY)
+  sessionStorage.removeItem(REFRESH_KEY)
 }
 
-export function setTokens(access, refresh) {
-  localStorage.setItem(ACCESS_KEY, access)
-  if (refresh) localStorage.setItem(REFRESH_KEY, refresh)
+export function setTokens(access, refresh, remember = true) {
+  const store = remember ? localStorage : sessionStorage
+  store.setItem(ACCESS_KEY, access)
+  if (refresh) store.setItem(REFRESH_KEY, refresh)
 }
 
 export function getAccessToken() {
-  return localStorage.getItem(ACCESS_KEY)
+  return localStorage.getItem(ACCESS_KEY) ?? sessionStorage.getItem(ACCESS_KEY)
 }
 
 export function getRefreshToken() {
-  return localStorage.getItem(REFRESH_KEY)
+  return localStorage.getItem(REFRESH_KEY) ?? sessionStorage.getItem(REFRESH_KEY)
 }
 
 export function getApiBaseUrl() {

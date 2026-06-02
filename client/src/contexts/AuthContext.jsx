@@ -33,16 +33,16 @@ export function AuthProvider({ children }) {
     restoreSession()
   }, [restoreSession])
 
-  async function login(email, password) {
+  async function login(email, password, remember = true) {
     const data = await authService.login(email, password)
-    setTokens(data.access_token, data.refresh_token)
+    setTokens(data.access_token, data.refresh_token, remember)
     setUser(parseJwtPayload(data.access_token))
     return data
   }
 
   async function register(payload) {
     const data = await authService.register(payload)
-    setTokens(data.access_token, data.refresh_token)
+    setTokens(data.access_token, data.refresh_token, true)
     setUser(parseJwtPayload(data.access_token))
     return data
   }

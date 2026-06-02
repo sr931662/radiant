@@ -14,7 +14,7 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   const mutation = useMutation({
-    mutationFn: ({ email, password }) => login(email, password),
+    mutationFn: ({ email, password, remember }) => login(email, password, remember),
     onSuccess: () => { toast.success('Welcome back!'); navigate(from, { replace: true }) },
     onError: (err) => toast.error(err?.response?.data?.message || 'Invalid email or password.'),
   })
@@ -47,7 +47,11 @@ export default function Login() {
             />
             {errors.password && <p className={styles.err}>{errors.password.message}</p>}
           </div>
-          <div className={styles.forgotRow}>
+          <div className={styles.rememberRow}>
+            <label className={styles.rememberLabel}>
+              <input type="checkbox" defaultChecked {...register('remember')} />
+              Keep me signed in
+            </label>
             <Link to="/auth/forgot-password" className={styles.forgotLink}>Forgot password?</Link>
           </div>
           <button type="submit" className={styles.btn} disabled={mutation.isPending}>
