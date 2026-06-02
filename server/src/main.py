@@ -82,12 +82,19 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # ── Middleware (order matters!) ──
+    # ── Middleware (order matters — last added = outermost = first to run) ──
+
+    # Innermost: security, logging, audit (run close to the route handler)
     app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(RequestLoggerMiddleware)
     app.add_middleware(AuditLoggerMiddleware)
 
-    # CORS
+    # Rate limiting — runs before CORS so OPTIONS preflights are not rate-limited
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
+    app.add_middleware(SlowAPIMiddleware)
+
+    # CORS must be outermost so it handles OPTIONS preflights first
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -95,11 +102,6 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    # Rate Limiting (Slowapi)
-    app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
-    app.add_middleware(SlowAPIMiddleware)
 
     # ── Global Exception Handler ──
     @app.exception_handler(AppException)

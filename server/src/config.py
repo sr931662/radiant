@@ -64,6 +64,20 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
+    @field_validator("cors_origins", mode="after")
+    @classmethod
+    def ensure_required_origins(cls, v: list[str]) -> list[str]:
+        """Always include production origins even if CORS_ORIGINS env var overrides defaults."""
+        required = [
+            "https://radiant-54m.pages.dev",
+            "https://radiant.sr931662.workers.dev",
+            "https://radianttrust.sr931662.workers.dev",
+        ]
+        for origin in required:
+            if origin not in v:
+                v.append(origin)
+        return v
+
     # ── Rate Limiting ──
     rate_limit_global: str = "100/minute"
     rate_limit_auth: str = "5/minute"
