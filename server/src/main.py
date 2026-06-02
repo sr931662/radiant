@@ -94,10 +94,13 @@ def create_app() -> FastAPI:
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
     app.add_middleware(SlowAPIMiddleware)
 
-    # CORS must be outermost so it handles OPTIONS preflights first
+    # CORS must be outermost so it handles OPTIONS preflights first.
+    # allow_origin_regex covers any *.pages.dev / *.workers.dev deployment
+    # so CORS works even when VITE_API_URL points directly at Cloud Run.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
+        allow_origin_regex=r"https?://(localhost(:\d+)?|[\w-]+\.(pages\.dev|workers\.dev))",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
