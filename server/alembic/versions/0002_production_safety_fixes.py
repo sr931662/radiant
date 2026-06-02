@@ -6,11 +6,24 @@ Create Date: 2026-06-02
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import inspect, text
 
 revision = "0002_production_safety_fixes"
 down_revision = "0001_baseline"
 branch_labels = None
 depends_on = None
+
+
+def _column_exists(table: str, column: str) -> bool:
+    bind = op.get_bind()
+    result = bind.execute(
+        text(
+            "SELECT 1 FROM information_schema.columns "
+            "WHERE table_name = :t AND column_name = :c"
+        ),
+        {"t": table, "c": column},
+    )
+    return result.fetchone() is not None
 
 
 def upgrade() -> None:
@@ -36,42 +49,47 @@ def upgrade() -> None:
         existing_nullable=False,
     )
 
-    # ── OTP: add created_at and failed_attempts columns ──────────────────────
-    op.add_column(
-        "otps",
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-    )
-    op.add_column(
-        "otps",
-        sa.Column("failed_attempts", sa.Integer(), nullable=False, server_default="0"),
-    )
+    # ── OTP: add created_at and failed_attempts (only if missing) ────────────
+    if not _column_exists("otps", "created_at"):
+        op.add_column(
+            "otps",
+            sa.Column(
+                "created_at",
+                sa.DateTime(timezone=True),
+                server_default=sa.text("now()"),
+                nullable=False,
+            ),
+        )
 
-    # ── Missing indexes ───────────────────────────────────────────────────────
-    op.create_index("ix_otps_email", "otps", ["email"])
-    op.create_index("ix_otps_purpose", "otps", ["purpose"])
-    op.create_index("ix_otps_used", "otps", ["used"])
-    op.create_index("ix_donations_user_id", "donations", ["user_id"])
-    op.create_index("ix_donations_status", "donations", ["status"])
-    op.create_index("ix_memberships_user_id", "memberships", ["user_id"])
-    op.create_index("ix_memberships_status", "memberships", ["status"])
+    if not _column_exists("otps", "failed_attempts"):
+        op.add_column(
+            "otps",
+            sa.Column("failed_attempts", sa.Integer(), nullable=False, server_default="0"),
+        )
+
+    # ── Missing indexes (skip if already present) ─────────────────────────────
+    op.create_index("ix_otps_email", "otps", ["email"], if_not_exists=True)
+    op.create_index("ix_otps_purpose", "otps", ["purpose"], if_not_exists=True)
+    op.create_index("ix_otps_used", "otps", ["used"], if_not_exists=True)
+    op.create_index("ix_donations_user_id", "donations", ["user_id"], if_not_exists=True)
+    op.create_index("ix_donations_status", "donations", ["status"], if_not_exists=True)
+    op.create_index("ix_memberships_user_id", "memberships", ["user_id"], if_not_exists=True)
+    op.create_index("ix_memberships_status", "memberships", ["status"], if_not_exists=True)
 
 
 def downgrade() -> None:
-    op.drop_index("ix_memberships_status", "memberships")
-    op.drop_index("ix_memberships_user_id", "memberships")
-    op.drop_index("ix_donations_status", "donations")
-    op.drop_index("ix_donations_user_id", "donations")
-    op.drop_index("ix_otps_used", "otps")
-    op.drop_index("ix_otps_purpose", "otps")
-    op.drop_index("ix_otps_email", "otps")
+    op.drop_index("ix_memberships_status", "memberships", if_exists=True)
+    op.drop_index("ix_memberships_user_id", "memberships", if_exists=True)
+    op.drop_index("ix_donations_status", "donations", if_exists=True)
+    op.drop_index("ix_donations_user_id", "donations", if_exists=True)
+    op.drop_index("ix_otps_used", "otps", if_exists=True)
+    op.drop_index("ix_otps_purpose", "otps", if_exists=True)
+    op.drop_index("ix_otps_email", "otps", if_exists=True)
 
-    op.drop_column("otps", "failed_attempts")
-    op.drop_column("otps", "created_at")
+    if _column_exists("otps", "failed_attempts"):
+        op.drop_column("otps", "failed_attempts")
+    if _column_exists("otps", "created_at"):
+        op.drop_column("otps", "created_at")
 
     op.alter_column("users", "password", existing_type=sa.String(500), type_=sa.String(255), existing_nullable=False)
     op.alter_column("membership_plans", "price", existing_type=sa.Numeric(10, 2), type_=sa.Float(), existing_nullable=False)

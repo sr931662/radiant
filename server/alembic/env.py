@@ -12,16 +12,32 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from src.config import settings  # noqa: E402
-from src.models import Base  # noqa: E402, F401 – import all models
+from src.models import Base  # noqa: E402, F401 – import all models so autogenerate sees them
 
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
+def _get_url() -> str:
+    url = settings.database_url  # lowercase, matches the Settings field name
+    # Alembic's async engine needs postgresql+asyncpg:// prefix
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+asyncpg://", 1)
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
+
+
+config.set_main_option("sqlalchemy.url", _get_url())
 
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
-    context.configure(url=url, target_metadata=target_metadata, literal_binds=True)
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
     with context.begin_transaction():
         context.run_migrations()
 
