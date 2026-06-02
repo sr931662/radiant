@@ -39,6 +39,7 @@ from src.routes import (
     download_router,
     admin_download_router,
     dashboard_router,
+    public_router,
 )
 from src.utils.exceptions import AppException
 
@@ -191,6 +192,7 @@ def create_app() -> FastAPI:
     app.include_router(download_router)
     app.include_router(admin_download_router)
     app.include_router(dashboard_router)
+    app.include_router(public_router)
 
     # Health check — verifies DB and Redis connectivity, not just "am I alive"
     @app.get("/health", tags=["Health"])

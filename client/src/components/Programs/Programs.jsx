@@ -1,109 +1,121 @@
-import { BookOpen, GraduationCap, Users, Baby, UserCheck, Laptop, FlaskConical, Presentation, Sparkles } from 'lucide-react'
+import { BookOpen, IndianRupee, Sparkles } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
+import { getCourses } from '../../services/coursesService'
+import Spinner from '../ui/Spinner'
 import styles from './Programs.module.css'
 
-const CORE_PROGRAMS = [
-  {
-    icon: <BookOpen size={22} />,
-    title: 'Primary Education',
-    desc: 'Foundational literacy & numeracy in underserved communities — the highest-return investment in a child\'s future.',
-  },
-  {
-    icon: <GraduationCap size={22} />,
-    title: 'Secondary Education',
-    desc: 'Pathways to complete secondary schooling — stipends, materials, and mentoring to prevent dropout.',
-  },
-  {
-    icon: <Users size={22} />,
-    title: 'Adult Literacy',
-    desc: 'Evening and weekend programs for adults — empowering parents directly improves children\'s educational outcomes.',
-  },
-  {
-    icon: <Baby size={22} />,
-    title: 'Early Childhood',
-    desc: 'Pre-school & kindergarten support for ages 3–6. The earliest years shape lifelong learning capacity.',
-  },
-]
+const LEVEL_COLORS = {
+  BEGINNER: { bg: '#dcfce7', text: '#166534' },
+  INTERMEDIATE: { bg: '#dbeafe', text: '#1e40af' },
+  ADVANCED: { bg: '#fce7f3', text: '#9d174d' },
+}
 
-const SPECIAL_PROGRAMS = [
-  {
-    icon: <UserCheck size={22} />,
-    title: 'Girls Education',
-    desc: 'Scholarships, safe transport, and female teacher recruitment to close the gender gap in education access.',
-    accent: true,
-  },
-  {
-    icon: <Laptop size={22} />,
-    title: 'Digital Literacy',
-    desc: 'Computer labs, tablet programs, and coding curricula in rural schools — closing the urban/rural technology divide.',
-    accent: true,
-  },
-  {
-    icon: <FlaskConical size={22} />,
-    title: 'STEM Education',
-    desc: 'Science, tech, engineering, and maths programs for secondary students — building tomorrow\'s problem-solvers.',
-    accent: true,
-  },
-  {
-    icon: <Presentation size={22} />,
-    title: 'Teacher Training',
-    desc: 'The highest-leverage intervention — a great teacher changes hundreds of lives. Professional certification & mentoring.',
-    accent: true,
-  },
-]
+function CourseCard({ course }) {
+  const level = course.level || 'BEGINNER'
+  const colors = LEVEL_COLORS[level] || LEVEL_COLORS.BEGINNER
 
-function ProgramCard({ icon, title, desc, accent }) {
   return (
-    <div className={`${styles.card} ${accent ? styles.cardAccent : ''}`}>
-      <div className={`${styles.iconBox} ${accent ? styles.iconBoxAccent : ''}`}>
-        {icon}
+    <Link to={`/courses/${course.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <div className={styles.card}>
+        <div className={styles.iconBox}>
+          {course.thumbnail
+            ? <img src={course.thumbnail} alt={course.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.75rem' }} />
+            : <BookOpen size={22} />}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <span style={{
+            fontSize: '0.7rem', fontWeight: 700, padding: '2px 8px', borderRadius: '99px',
+            background: colors.bg, color: colors.text, textTransform: 'uppercase', letterSpacing: '0.05em',
+          }}>
+            {level}
+          </span>
+          {course.mode && (
+            <span style={{ fontSize: '0.7rem', color: '#64748b', background: '#f1f5f9', padding: '2px 8px', borderRadius: '99px' }}>
+              {course.mode}
+            </span>
+          )}
+        </div>
+        <h3 className={styles.cardTitle}>{course.title}</h3>
+        {course.description && (
+          <p className={styles.cardDesc} style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {course.description}
+          </p>
+        )}
+        <button type="button" className={styles.learnMore}>
+          {course.price === 0
+            ? 'Enroll Free →'
+            : <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}><IndianRupee size={12} />{course.price?.toLocaleString('en-IN')} · Enroll →</span>}
+        </button>
       </div>
-      <h3 className={styles.cardTitle}>{title}</h3>
-      <p className={styles.cardDesc}>{desc}</p>
-      <button type="button" className={`${styles.learnMore} ${accent ? styles.learnMoreAccent : ''}`}>
-        Learn More →
-      </button>
-    </div>
+    </Link>
   )
 }
 
 export default function Programs() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['courses', 1],
+    queryFn: () => getCourses(1, 8),
+    staleTime: 2 * 60 * 1000,
+  })
+
+  const courses = data?.items || []
+  const beginner = courses.filter((c) => c.level === 'BEGINNER' || !c.level)
+  const advanced = courses.filter((c) => c.level === 'INTERMEDIATE' || c.level === 'ADVANCED')
+
   return (
     <section id="programs" className={styles.section}>
       <div className="container">
-        {/* Header row */}
         <div className={styles.headerRow}>
           <div>
-            <p className="section-label">Core Initiatives</p>
-            <h2 className="section-heading">Comprehensive Programs for Every Child</h2>
+            <p className="section-label">Our Courses</p>
+            <h2 className="section-heading">Programs For Every Learner</h2>
             <p className="section-sub">
-              Each program has its own dedicated page, statistics, stories, and donation pathway
-              — fully managed from our admin panel.
+              All courses are managed through our admin panel — enroll and start learning today.
             </p>
           </div>
-          <button className={styles.viewAllBtn}>View All Programs →</button>
+          <Link to="/courses">
+            <button className={styles.viewAllBtn}>View All Courses →</button>
+          </Link>
         </div>
 
-        {/* Core programs */}
-        <div className={styles.categoryLabel}>
-          <BookOpen size={18} color="var(--clr-primary)" />
-          Core Education Programs
-        </div>
-        <div className={styles.grid}>
-          {CORE_PROGRAMS.map((p) => (
-            <ProgramCard key={p.title} {...p} />
-          ))}
-        </div>
+        {isLoading && <Spinner center />}
 
-        {/* Specialised programs */}
-        <div className={`${styles.categoryLabel} ${styles.categoryLabelAmber}`}>
-          <Sparkles size={18} color="var(--clr-accent)" />
-          Specialised Programs
-        </div>
-        <div className={styles.grid}>
-          {SPECIAL_PROGRAMS.map((p) => (
-            <ProgramCard key={p.title} {...p} />
-          ))}
-        </div>
+        {isError && (
+          <p style={{ textAlign: 'center', color: '#ef4444', padding: '2rem' }}>
+            Failed to load courses.
+          </p>
+        )}
+
+        {!isLoading && !isError && courses.length === 0 && (
+          <p style={{ textAlign: 'center', color: '#64748b', padding: '3rem 0' }}>
+            No courses published yet. Check back soon!
+          </p>
+        )}
+
+        {!isLoading && beginner.length > 0 && (
+          <>
+            <div className={styles.categoryLabel}>
+              <BookOpen size={18} color="var(--clr-primary)" />
+              Beginner &amp; Foundational
+            </div>
+            <div className={styles.grid}>
+              {beginner.map((c) => <CourseCard key={c.id} course={c} />)}
+            </div>
+          </>
+        )}
+
+        {!isLoading && advanced.length > 0 && (
+          <>
+            <div className={`${styles.categoryLabel} ${styles.categoryLabelAmber}`}>
+              <Sparkles size={18} color="var(--clr-accent)" />
+              Intermediate &amp; Advanced
+            </div>
+            <div className={styles.grid}>
+              {advanced.map((c) => <CourseCard key={c.id} course={c} />)}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

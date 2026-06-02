@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import api from '../../lib/api'
 import styles from './ImpactCounter.module.css'
 
-const STATS = [
-  { target: 120000, label: 'Children Educated',    format: (n) => n.toLocaleString('en-IN') },
-  { target: 340,    label: 'Schools Built',         format: (n) => n.toLocaleString('en-IN') },
-  { target: 18,     label: 'Countries Reached',     format: (n) => n.toString() },
-  { target: 8500,   label: 'Scholarships Awarded',  format: (n) => n.toLocaleString('en-IN') },
-  { target: 2400,   label: 'Volunteers Active',     format: (n) => n.toLocaleString('en-IN') },
-]
+async function getPublicStats() {
+  const { data } = await api.get('/api/v1/public/stats')
+  return data.data ?? data
+}
 
 function Counter({ target, format }) {
   const [count, setCount] = useState(0)
@@ -15,6 +14,12 @@ function Counter({ target, format }) {
   const animated = useRef(false)
 
   useEffect(() => {
+    animated.current = false
+    setCount(0)
+  }, [target])
+
+  useEffect(() => {
+    if (target === 0) return
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !animated.current) {
@@ -44,6 +49,42 @@ function Counter({ target, format }) {
 }
 
 export default function ImpactCounter() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['public-stats'],
+    queryFn: getPublicStats,
+    staleTime: 5 * 60 * 1000,
+  })
+
+  const stats = data
+    ? [
+        {
+          target: data.total_students || 0,
+          label: 'Students Enrolled',
+          format: (n) => n.toLocaleString('en-IN'),
+        },
+        {
+          target: data.total_courses || 0,
+          label: 'Courses Available',
+          format: (n) => n.toLocaleString('en-IN'),
+        },
+        {
+          target: data.total_enrollments || 0,
+          label: 'Total Enrollments',
+          format: (n) => n.toLocaleString('en-IN'),
+        },
+        {
+          target: data.total_volunteers || 0,
+          label: 'Volunteers Active',
+          format: (n) => n.toLocaleString('en-IN'),
+        },
+        {
+          target: Math.round((data.total_donations || 0) / 1000),
+          label: 'Donations (₹ thousands)',
+          format: (n) => `₹${n.toLocaleString('en-IN')}K`,
+        },
+      ]
+    : Array(5).fill({ target: 0, label: '—', format: () => '—' })
+
   return (
     <section id="impact" className={styles.section}>
       <div className={styles.glow} />
@@ -51,16 +92,23 @@ export default function ImpactCounter() {
         <div className={styles.header}>
           <h2 className={styles.title}>Live Impact — Right Now</h2>
           <p className={styles.sub}>
-            Numbers in motion. Every counter reflects real children, real schools, real change.
+            Numbers in motion. Every counter reflects real students, real courses, real change.
           </p>
         </div>
         <div className={styles.grid}>
-          {STATS.map(({ target, label, format }) => (
-            <div key={label} className={styles.card}>
-              <Counter target={target} format={format} />
-              <p className={styles.statLabel}>{label}</p>
-            </div>
-          ))}
+          {isLoading
+            ? Array(5).fill(null).map((_, i) => (
+                <div key={i} className={styles.card}>
+                  <p className={styles.statNum} style={{ opacity: 0.3 }}>—</p>
+                  <p className={styles.statLabel}>Loading…</p>
+                </div>
+              ))
+            : stats.map(({ target, label, format }) => (
+                <div key={label} className={styles.card}>
+                  <Counter target={target} format={format} />
+                  <p className={styles.statLabel}>{label}</p>
+                </div>
+              ))}
         </div>
       </div>
     </section>

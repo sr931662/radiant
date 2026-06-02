@@ -12,3 +12,4 @@ from .blog_routes import public_router as blog_router, admin_router as admin_blo
 from .contact_routes import public_router as contact_router, admin_router as admin_contact_router
 from .download_routes import public_router as download_router, admin_router as admin_download_router
 from .dashboard_routes import router as dashboard_router
+from .public_routes import router as public_router

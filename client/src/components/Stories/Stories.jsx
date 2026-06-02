@@ -5,11 +5,6 @@ import { getPosts } from '../../services/blogService'
 import Spinner from '../ui/Spinner'
 import styles from './Stories.module.css'
 
-const FALLBACK = [
-  { id: 1, slug: '#', featured_image: 'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80', category: 'Girls Education · Rajasthan', excerpt: 'Amina walked 9 km daily to study. Today she teaches science to 40 children in her village.', title: 'Amina' },
-  { id: 2, slug: '#', featured_image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80', category: 'Digital Literacy · Bihar', excerpt: "Rajan had never touched a keyboard. Six months later, he built a website for his father's small business.", title: 'Rajan' },
-]
-
 const TAG_COLORS = ['indigo', 'amber', 'green', 'rose', 'purple']
 
 export default function Stories() {
@@ -18,7 +13,7 @@ export default function Stories() {
     queryFn: () => getPosts(1, 4),
   })
 
-  const posts = data?.items?.length > 0 ? data.items.slice(0, 2) : FALLBACK
+  const posts = data?.items?.slice(0, 2) || []
 
   return (
     <section className={styles.section}>
@@ -34,13 +29,20 @@ export default function Stories() {
 
         {isLoading && <Spinner center />}
 
-        {!isLoading && (
+        {!isLoading && posts.length === 0 && (
+          <p style={{ textAlign: 'center', color: '#64748b', padding: '2rem 0' }}>
+            No stories published yet.{' '}
+            <Link to="/blog" style={{ color: 'var(--clr-primary)', fontWeight: 600 }}>Visit our blog →</Link>
+          </p>
+        )}
+
+        {!isLoading && posts.length > 0 && (
           <div className={styles.grid}>
             {posts.map((s, i) => (
               <div key={s.id} className={styles.card}>
                 <div className={styles.imageWrapper}>
                   <img
-                    src={s.featured_image || `https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600&q=80`}
+                    src={s.featured_image || ''}
                     alt={s.title}
                     className={styles.img}
                   />

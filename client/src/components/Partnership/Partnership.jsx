@@ -1,4 +1,5 @@
 import { Building, Landmark, GraduationCap, School } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import styles from './Partnership.module.css'
 
 const PARTNER_TYPES = [
@@ -60,8 +61,12 @@ export default function Partnership() {
             </p>
           </div>
           <div className={styles.ctaBtns}>
-            <button className={styles.ctaPrimary}>Submit Proposal →</button>
-            <button className={styles.ctaOutline}>Download Sponsorship Deck</button>
+            <Link to="/contact">
+              <button className={styles.ctaPrimary}>Submit Proposal →</button>
+            </Link>
+            <Link to="/downloads">
+              <button className={styles.ctaOutline}>Download Sponsorship Deck</button>
+            </Link>
           </div>
         </div>
       </div>
