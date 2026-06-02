@@ -1,5 +1,50 @@
-import { Telescope, Target, ShieldCheck, CheckCircle2 } from 'lucide-react'
+import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar } from 'lucide-react'
 import styles from './About.module.css'
+
+const CERTIFICATIONS = [
+  {
+    id: 'iso',
+    badge: 'ISO 9001:2015',
+    title: 'Quality Management Systems',
+    body: 'UNIQ International Certifications Limited',
+    certNo: '923504/2026/U',
+    issued: '28 May 2026',
+    expiry: '27 May 2029',
+    scope: 'Providing Education and Community Development Services',
+    pdf: '/certificates/iso-9001-2015.pdf',
+    color: '#1d4ed8',
+    bg: '#eff6ff',
+    border: '#bfdbfe',
+  },
+  {
+    id: '80g',
+    badge: '80G',
+    title: 'Tax Exemption Certificate',
+    body: 'Income Tax Department, Government of India',
+    certNo: null,
+    issued: null,
+    expiry: null,
+    scope: 'Donations eligible for 80G tax deduction under the Income Tax Act',
+    pdf: null,
+    color: '#059669',
+    bg: '#f0fdf4',
+    border: '#bbf7d0',
+  },
+  {
+    id: 'fcra',
+    badge: 'FCRA',
+    title: 'Foreign Contribution Regulated',
+    body: 'Ministry of Home Affairs, Government of India',
+    certNo: null,
+    issued: null,
+    expiry: null,
+    scope: 'Authorised to receive foreign contributions for educational purposes',
+    pdf: null,
+    color: '#7c3aed',
+    bg: '#faf5ff',
+    border: '#e9d5ff',
+  },
+]
 
 const VALUES = [
   'Radical transparency in finances',
@@ -75,6 +120,89 @@ export default function About() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* Accreditations & Certifications */}
+        <div className={styles.certsSection}>
+          <div className={styles.certsHeader}>
+            <div className={styles.certsSectionLabel}>
+              <Award size={15} />
+              Accreditations &amp; Certifications
+            </div>
+            <h3 className={styles.certsSectionTitle}>
+              Independently Verified, Officially Recognised
+            </h3>
+            <p className={styles.certsSectionSub}>
+              Our quality systems, tax compliance and international standards are all independently certified.
+            </p>
+          </div>
+
+          <div className={styles.certCards}>
+            {CERTIFICATIONS.map((cert) => (
+              <div
+                key={cert.id}
+                className={styles.certCard}
+                style={{ borderColor: cert.border, '--cert-color': cert.color, '--cert-bg': cert.bg }}
+              >
+                <div className={styles.certCardTop}>
+                  <span className={styles.certBadge} style={{ background: cert.bg, color: cert.color, borderColor: cert.border }}>
+                    <BadgeCheck size={13} /> {cert.badge}
+                  </span>
+                  {cert.pdf && (
+                    <a
+                      href={cert.pdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.certViewBtn}
+                      style={{ color: cert.color }}
+                      title="View Certificate"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
+
+                <h4 className={styles.certTitle}>{cert.title}</h4>
+                <p className={styles.certBody}>{cert.body}</p>
+
+                {cert.certNo && (
+                  <div className={styles.certMeta}>
+                    <span className={styles.certMetaItem}>
+                      <Award size={12} /> Cert No: {cert.certNo}
+                    </span>
+                  </div>
+                )}
+
+                {(cert.issued || cert.expiry) && (
+                  <div className={styles.certMeta}>
+                    {cert.issued && (
+                      <span className={styles.certMetaItem}>
+                        <Calendar size={12} /> Issued: {cert.issued}
+                      </span>
+                    )}
+                    {cert.expiry && (
+                      <span className={styles.certMetaItem}>
+                        <Calendar size={12} /> Valid till: {cert.expiry}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <p className={styles.certScope}>{cert.scope}</p>
+
+                {cert.pdf && (
+                  <a
+                    href={cert.pdf}
+                    download
+                    className={styles.certDownloadBtn}
+                    style={{ background: cert.bg, color: cert.color, borderColor: cert.border }}
+                  >
+                    <Download size={13} /> Download Certificate
+                  </a>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 

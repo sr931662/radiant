@@ -76,7 +76,7 @@ class DashboardService:
             },
             "donations": {
                 "total_donations": float(total_donations or 0),
-                "donation_count": donation_count,
+                "total_count": donation_count,
                 "average_donation": float(average_donation),
                 "monthly_breakdown": monthly_breakdown,
             },
