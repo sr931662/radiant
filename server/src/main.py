@@ -167,10 +167,34 @@ def create_app() -> FastAPI:
     app.include_router(admin_download_router)
     app.include_router(dashboard_router)
 
-    # Health check
+    # Health check — verifies DB and Redis connectivity, not just "am I alive"
     @app.get("/health", tags=["Health"])
     async def health():
-        return {"status": "ok", "version": settings.app_version}
+        import time
+        checks: dict[str, str] = {}
+
+        # Database check
+        try:
+            async with engine.connect() as conn:
+                await conn.execute(__import__("sqlalchemy", fromlist=["text"]).text("SELECT 1"))
+            checks["database"] = "ok"
+        except Exception as e:
+            checks["database"] = f"error: {e}"
+
+        # Redis check
+        try:
+            from src.core.redis import get_redis
+            r = await get_redis()
+            if r:
+                await r.ping()
+                checks["redis"] = "ok"
+            else:
+                checks["redis"] = "not_configured"
+        except Exception as e:
+            checks["redis"] = f"error: {e}"
+
+        overall = "ok" if all(v in ("ok", "not_configured") for v in checks.values()) else "degraded"
+        return {"status": overall, "version": settings.app_version, "checks": checks}
 
     return app
 

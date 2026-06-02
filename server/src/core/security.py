@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from jose import jwt, JWTError, ExpiredSignatureError
 from passlib.context import CryptContext
@@ -25,9 +25,8 @@ def create_access_token(
     data: dict,
     expires_delta: timedelta | None = None,
 ) -> str:
-    """Create a short-lived JWT access token."""
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
     to_encode.update({"exp": expire, "type": "access"})
     return jwt.encode(to_encode, settings.jwt_access_secret, algorithm=ALGORITHM)
 
@@ -37,9 +36,8 @@ def create_refresh_token(
     data: dict,
     expires_delta: timedelta | None = None,
 ) -> str:
-    """Create a long-lived JWT refresh token."""
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(days=settings.refresh_token_expire_days))
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(days=settings.refresh_token_expire_days))
     to_encode.update({"exp": expire, "type": "refresh"})
     return jwt.encode(to_encode, settings.jwt_refresh_secret, algorithm=ALGORITHM)
 

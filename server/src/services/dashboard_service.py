@@ -1,6 +1,6 @@
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from src.models import User, UserRole, Role, Donation, Admission, AuditLog, Membership
 
@@ -28,7 +28,7 @@ class DashboardService:
         total_donations = await db.scalar(select(func.coalesce(func.sum(Donation.amount), 0)).where(Donation.status == "SUCCESS"))
         donation_count = await db.scalar(select(func.count(Donation.id)).where(Donation.status == "SUCCESS"))
         average_donation = (total_donations or 0) / donation_count if donation_count else 0
-        this_month_start = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        this_month_start = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         this_month_donations = await db.scalar(
             select(func.coalesce(func.sum(Donation.amount), 0)).where(Donation.status == "SUCCESS", Donation.created_at >= this_month_start)
         )

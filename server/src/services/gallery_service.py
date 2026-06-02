@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -46,7 +46,7 @@ class GalleryService:
     @staticmethod
     async def delete_album(db: AsyncSession, album_id: uuid.UUID) -> None:
         album = await GalleryService.get_album(db, album_id)
-        album.deleted_at = datetime.utcnow()
+        album.deleted_at = datetime.now(timezone.utc)
         await db.commit()
 
     @staticmethod

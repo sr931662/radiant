@@ -60,6 +60,11 @@ class UserService:
         result = await db.execute(role_stmt)
         roles = result.scalars().all()
 
+        found_names = {r.name for r in roles}
+        missing = [name for name in role_names if name not in found_names]
+        if missing:
+            raise BadRequestException(f"Unknown roles: {', '.join(missing)}")
+
         for role in roles:
             user_role = UserRole(user_id=user.id, role_id=role.id)
             db.add(user_role)

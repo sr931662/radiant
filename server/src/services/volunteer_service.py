@@ -34,17 +34,48 @@ class VolunteerService:
     # Admin
     @staticmethod
     async def list_all(db: AsyncSession, page: int, size: int) -> tuple[list, int]:
-        volunteer_query = select(VolunteerApplication).where(VolunteerApplication.deleted_at == None)
-        internship_query = select(InternshipApplication).where(InternshipApplication.deleted_at == None)
-        # Combine? We'll treat them as separate collections. For simplicity, return both but can be refined.
-        volunteer_result = await db.execute(volunteer_query)
-        internship_result = await db.execute(internship_query)
-        all_apps = list(volunteer_result.scalars().all()) + list(internship_result.scalars().all())
-        total = len(all_apps)
-        # Pagination manually
-        start = (page - 1) * size
-        end = start + size
-        return all_apps[start:end], total
+        v_count = await db.scalar(
+            select(func.count(VolunteerApplication.id)).where(VolunteerApplication.deleted_at == None)
+        ) or 0
+        i_count = await db.scalar(
+            select(func.count(InternshipApplication.id)).where(InternshipApplication.deleted_at == None)
+        ) or 0
+        total = v_count + i_count
+
+        # Fetch each set with offset/limit proportionally, or simply paginate volunteers first then internships
+        offset = (page - 1) * size
+        remaining = size
+
+        apps: list = []
+
+        if offset < v_count:
+            v_query = (
+                select(VolunteerApplication)
+                .where(VolunteerApplication.deleted_at == None)
+                .order_by(VolunteerApplication.created_at.desc())
+                .offset(offset)
+                .limit(remaining)
+            )
+            v_result = await db.execute(v_query)
+            v_apps = list(v_result.scalars().all())
+            apps.extend(v_apps)
+            remaining -= len(v_apps)
+            i_offset = 0
+        else:
+            i_offset = offset - v_count
+
+        if remaining > 0:
+            i_query = (
+                select(InternshipApplication)
+                .where(InternshipApplication.deleted_at == None)
+                .order_by(InternshipApplication.created_at.desc())
+                .offset(i_offset)
+                .limit(remaining)
+            )
+            i_result = await db.execute(i_query)
+            apps.extend(i_result.scalars().all())
+
+        return apps, total
 
     @staticmethod
     async def update_status(db: AsyncSession, application_id: uuid.UUID, app_type: str, status: str, remarks: str | None = None):

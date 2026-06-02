@@ -1,7 +1,15 @@
 from typing import Optional
 
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_PLACEHOLDER_SECRETS = {
+    "super-secret-access-key-change-me",
+    "super-secret-refresh-key-change-me",
+    "changeme",
+    "secret",
+    "your-secret-here",
+}
 
 
 class Settings(BaseSettings):
@@ -15,7 +23,7 @@ class Settings(BaseSettings):
     frontend_url: str = "https://radiant.sr931662.workers.dev"
 
     # ── Database ──
-    database_url: str  # postgresql+asyncpg://user:pass@localhost:5432/ngo_db
+    database_url: str
     db_pool_size: int = 20
     db_max_overflow: int = 10
     db_echo: bool = False
@@ -64,10 +72,13 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
+    # ── Rate Limiting ──
+    rate_limit_global: str = "100/minute"
+    rate_limit_auth: str = "5/minute"
+
     @field_validator("cors_origins", mode="after")
     @classmethod
     def ensure_required_origins(cls, v: list[str]) -> list[str]:
-        """Always include production origins even if CORS_ORIGINS env var overrides defaults."""
         required = [
             "https://radiant-54m.pages.dev",
             "https://radiant.sr931662.workers.dev",
@@ -77,10 +88,6 @@ class Settings(BaseSettings):
             if origin not in v:
                 v.append(origin)
         return v
-
-    # ── Rate Limiting ──
-    rate_limit_global: str = "100/minute"
-    rate_limit_auth: str = "5/minute"
 
     @field_validator("debug", mode="before")
     @classmethod
@@ -94,6 +101,19 @@ class Settings(BaseSettings):
             if normalized in {"0", "false", "no", "off", "release", "production", "prod"}:
                 return False
         return value
+
+    @model_validator(mode="after")
+    def validate_secrets_in_production(self) -> "Settings":
+        if self.environment == "production":
+            import logging
+            _log = logging.getLogger(__name__)
+            if self.jwt_access_secret in _PLACEHOLDER_SECRETS:
+                raise ValueError("JWT_ACCESS_SECRET must be changed from the placeholder before deploying to production")
+            if self.jwt_refresh_secret in _PLACEHOLDER_SECRETS:
+                raise ValueError("JWT_REFRESH_SECRET must be changed from the placeholder before deploying to production")
+            if len(self.jwt_access_secret) < 32:
+                _log.warning("JWT_ACCESS_SECRET is shorter than 32 characters — consider using secrets.token_hex(32)")
+        return self
 
 
 settings = Settings()  # type: ignore[call-arg]

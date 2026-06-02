@@ -1,7 +1,7 @@
 ﻿import uuid
 import hmac
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -77,8 +77,8 @@ class DonationService:
         return donation
 
     @staticmethod
-    async def webhook_handler(db: AsyncSession, payload: dict, signature: str) -> None:
-        if not PaymentService.verify_webhook_signature(payload, signature):
+    async def webhook_handler(db: AsyncSession, raw_body: bytes, signature: str, payload: dict) -> None:
+        if not PaymentService.verify_webhook_signature(raw_body, signature):
             raise ForbiddenException("Invalid webhook signature")
 
         order_id = payload.get("payload", {}).get("payment", {}).get("entity", {}).get("order_id")
@@ -108,12 +108,16 @@ class DonationService:
         return donations, total
 
     @staticmethod
-    async def get_receipt(db: AsyncSession, donation_id: uuid.UUID) -> str | None:
+    async def get_receipt(db: AsyncSession, donation_id: uuid.UUID, requesting_user_id: str | None = None) -> str | None:
+        from fastapi import HTTPException, status as http_status
         donation = await db.get(Donation, donation_id)
         if not donation:
             raise NotFoundException("Donation not found")
         if donation.status != "SUCCESS":
             raise BadRequestException("Donation not completed")
+        # Enforce ownership: only the donor (or admins via their own endpoint) can download
+        if requesting_user_id and donation.user_id and str(donation.user_id) != str(requesting_user_id):
+            raise HTTPException(status_code=http_status.HTTP_403_FORBIDDEN, detail="Access denied")
         return donation.receipt_url
 
     @staticmethod
@@ -155,7 +159,7 @@ class DonationService:
         total_count = await db.scalar(select(func.count(Donation.id)).where(Donation.status == "SUCCESS"))
         average = (total_donations or 0) / total_count if total_count else 0
         # This month
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         this_month = await db.scalar(
             select(func.coalesce(func.sum(Donation.amount), 0)).where(

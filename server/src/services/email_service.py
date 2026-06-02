@@ -6,7 +6,6 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-# Absolute path so it works regardless of CWD (local, Docker, Cloud Run)
 _TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "emails"
 templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
 
@@ -19,13 +18,15 @@ class EmailService:
                 await EmailService._send_via_resend(to_email, subject, html_content)
             else:
                 await EmailService._send_via_smtp(to_email, subject, html_content)
-            logger.info(f"[EMAIL] Sent → {to_email} | {subject}")
+            logger.info("[EMAIL] Sent → %s | %s", to_email, subject)
         except Exception as exc:
-            logger.error(f"[EMAIL] FAILED → {to_email} | {subject} | {type(exc).__name__}: {exc}")
+            logger.error("[EMAIL] FAILED → %s | %s | %s: %s", to_email, subject, type(exc).__name__, exc)
             raise
 
     @staticmethod
     async def _send_via_resend(to_email: str, subject: str, html_content: str) -> None:
+        if not settings.resend_api_key:
+            raise RuntimeError("RESEND_API_KEY is not configured")
         async with httpx.AsyncClient(timeout=15) as client:
             response = await client.post(
                 "https://api.resend.com/emails",
@@ -56,9 +57,6 @@ class EmailService:
         message.attach(MIMEText(html_content, "html", "utf-8"))
 
         port = settings.smtp_port or 587
-
-        # Port 465 → implicit SSL/TLS (use_tls=True)
-        # Port 587 → STARTTLS (start_tls=True, use_tls=False)
         use_tls   = (port == 465)
         start_tls = (port == 587)
 
@@ -77,13 +75,13 @@ class EmailService:
 
     @staticmethod
     async def send_verification_email(email: str, otp: str) -> None:
-        logger.info(f"[OTP] Verification code for {email}: {otp}")
+        # OTP is NOT logged to prevent credential exposure via log aggregators
         html = templates.get_template("verify_email.html").render({"otp": otp, "email": email})
         await EmailService.send_email(email, "Verify your email — Radiant Education Trust", html)
 
     @staticmethod
     async def send_password_reset_email(email: str, otp: str) -> None:
-        logger.info(f"[OTP] Password reset code for {email}: {otp}")
+        # OTP is NOT logged to prevent credential exposure via log aggregators
         html = templates.get_template("password_reset.html").render({"otp": otp, "email": email})
         await EmailService.send_email(email, "Reset your password — Radiant Education Trust", html)
 

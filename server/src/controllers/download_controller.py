@@ -1,5 +1,6 @@
 import uuid
-from fastapi import Depends, Path, Body, Response
+from urllib.parse import urlparse
+from fastapi import Depends, Path, Body, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
@@ -8,6 +9,28 @@ from src.schemas.download import DownloadItemCreateRequest, DownloadItemResponse
 from src.schemas.common import APIResponse
 from src.services.download_service import DownloadService
 from starlette.responses import RedirectResponse
+
+# Only allow redirects to trusted domains
+_ALLOWED_REDIRECT_HOSTS = {
+    "res.cloudinary.com",
+    "storage.googleapis.com",
+    "s3.amazonaws.com",
+}
+
+
+def _validate_redirect_url(url: str) -> str:
+    """Raise 400 if the redirect target is not on an allowlisted host."""
+    try:
+        parsed = urlparse(url)
+        host = parsed.hostname or ""
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file URL")
+    if not any(host == allowed or host.endswith(f".{allowed}") for allowed in _ALLOWED_REDIRECT_HOSTS):
+        raise HTTPException(
+            status_code=400,
+            detail="File URL host is not permitted",
+        )
+    return url
 
 
 async def list_items(
@@ -22,7 +45,8 @@ async def download_file(
     db: AsyncSession = Depends(get_db),
 ) -> RedirectResponse:
     item = await DownloadService.get_item(db, item_id)
-    return RedirectResponse(url=item.file_url)
+    safe_url = _validate_redirect_url(item.file_url)
+    return RedirectResponse(url=safe_url)
 
 
 async def create_item(

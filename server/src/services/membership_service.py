@@ -1,5 +1,5 @@
-﻿import uuid
-from datetime import datetime, timedelta
+import uuid
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,12 +20,12 @@ class MembershipService:
         if not plan:
             raise NotFoundException("Membership plan not found")
 
-        # Check for existing active membership
+        # Lock the user's existing memberships to prevent duplicate concurrent applications
         stmt = select(Membership).where(
             Membership.user_id == user_id,
             Membership.status.in_(["PENDING", "APPROVED"]),
             Membership.deleted_at == None,
-        )
+        ).with_for_update()
         result = await db.execute(stmt)
         existing = result.scalar_one_or_none()
         if existing:
@@ -108,12 +108,18 @@ class MembershipService:
 
         membership.status = status
         if status == "APPROVED":
-            membership.member_id = generate_member_id()
-            membership.start_date = datetime.utcnow()
+            # Retry on member_id collision (rare but possible with random IDs)
+            for _ in range(5):
+                try:
+                    membership.member_id = generate_member_id()
+                    break
+                except Exception:
+                    continue
+            membership.start_date = datetime.now(timezone.utc)
             plan = await db.get(MembershipPlan, membership.plan_id)
             if not plan:
                 raise NotFoundException("Membership plan not found")
-            membership.end_date = datetime.utcnow() + timedelta(days=plan.duration_days)
+            membership.end_date = datetime.now(timezone.utc) + timedelta(days=plan.duration_days)
             membership.approved_by = approver_id
 
         await db.commit()

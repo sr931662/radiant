@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 import uuid
 from typing import Optional
 
-from sqlalchemy import Boolean, Float, ForeignKey, String
+from sqlalchemy import Boolean, Numeric, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -17,13 +17,13 @@ from .base import Base, UUIDMixin, TimestampMixin, SoftDeleteMixin
 class Donation(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     __tablename__ = "donations"
 
-    user_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
-    amount: Mapped[float] = mapped_column(Float, nullable=False)
+    user_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     razorpay_order_id: Mapped[Optional[str]] = mapped_column(String(255), unique=True, index=True, nullable=True)
     razorpay_payment_id: Mapped[Optional[str]] = mapped_column(String(255), unique=True, nullable=True)
     razorpay_signature: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
-    status: Mapped[str] = mapped_column(String(20), default="PENDING", nullable=False)  # PENDING, SUCCESS, FAILED
+    status: Mapped[str] = mapped_column(String(20), default="PENDING", nullable=False, index=True)
     anonymous: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     receipt_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 

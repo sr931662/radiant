@@ -75,6 +75,8 @@ export function useAuth() {
 function parseJwtPayload(token) {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]))
+    // Reject tokens that are already expired on the client side
+    if (payload.exp && Math.floor(Date.now() / 1000) > payload.exp) return null
     return {
       id: payload.sub,
       roles: payload.roles || [],

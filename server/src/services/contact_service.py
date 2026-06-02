@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,7 +34,7 @@ class ContactService:
             raise NotFoundException("Inquiry not found")
         inquiry.reply = reply
         inquiry.status = "REPLIED"
-        inquiry.replied_at = datetime.utcnow()
+        inquiry.replied_at = datetime.now(timezone.utc)
         await db.commit()
         await db.refresh(inquiry)
         # Send reply email

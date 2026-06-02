@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from src.models.membership import Membership
 
 from typing import Optional
-from sqlalchemy import Float, Integer, String, Text
+from sqlalchemy import Numeric, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -18,7 +18,7 @@ class MembershipPlan(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
 
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     type: Mapped[str] = mapped_column(String(20), nullable=False)  # STUDENT, TEACHER
-    price: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
+    price: Mapped[float] = mapped_column(Numeric(10, 2), default=0.0, nullable=False)
     duration_days: Mapped[int] = mapped_column(Integer, nullable=False)
     benefits: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
 

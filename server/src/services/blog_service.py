@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -60,11 +60,27 @@ class BlogService:
 
     # Admin
     @staticmethod
+    async def _unique_slug(db: AsyncSession, base_slug: str, exclude_id: uuid.UUID | None = None) -> str:
+        """Return a slug that doesn't collide with any existing post."""
+        slug = base_slug
+        counter = 1
+        while True:
+            stmt = select(func.count(BlogPost.id)).where(BlogPost.slug == slug, BlogPost.deleted_at == None)
+            if exclude_id:
+                stmt = stmt.where(BlogPost.id != exclude_id)
+            count = await db.scalar(stmt) or 0
+            if count == 0:
+                return slug
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+    @staticmethod
     async def create_post(db: AsyncSession, data: dict) -> BlogPost:
-        slug = generate_slug(data["title"])
+        base_slug = generate_slug(data["title"])
+        slug = await BlogService._unique_slug(db, base_slug)
         post = BlogPost(**data, slug=slug)
         if data.get("status") == "PUBLISHED":
-            post.published_at = datetime.utcnow()
+            post.published_at = datetime.now(timezone.utc)
         db.add(post)
         await db.commit()
         await db.refresh(post)
@@ -76,12 +92,13 @@ class BlogService:
         if not post:
             raise NotFoundException("Post not found")
         if "title" in data and data["title"]:
-            post.slug = generate_slug(data["title"])
+            base_slug = generate_slug(data["title"])
+            post.slug = await BlogService._unique_slug(db, base_slug, exclude_id=post_id)
         for key, value in data.items():
             if value is not None and hasattr(post, key):
                 setattr(post, key, value)
         if data.get("status") == "PUBLISHED" and not post.published_at:
-            post.published_at = datetime.utcnow()
+            post.published_at = datetime.now(timezone.utc)
         await db.commit()
         await db.refresh(post)
         return post
@@ -91,7 +108,7 @@ class BlogService:
         post = await db.get(BlogPost, post_id)
         if not post:
             raise NotFoundException("Post not found")
-        post.deleted_at = datetime.utcnow()
+        post.deleted_at = datetime.now(timezone.utc)
         await db.commit()
 
     @staticmethod

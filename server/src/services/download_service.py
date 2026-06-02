@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+﻿from datetime import datetime, timezone
 import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,5 +33,5 @@ class DownloadService:
     @staticmethod
     async def delete_item(db: AsyncSession, item_id: uuid.UUID) -> None:
         item = await DownloadService.get_item(db, item_id)
-        item.deleted_at = datetime.utcnow()
+        item.deleted_at = datetime.now(timezone.utc)
         await db.commit()

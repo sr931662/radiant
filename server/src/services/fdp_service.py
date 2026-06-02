@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,25 +24,26 @@ class FdpService:
         fdp = await db.get(Fdp, fdp_id)
         if not fdp:
             raise NotFoundException("FDP not found")
-        # Count registrations to compute seats_remaining
-        reg_count_stmt = select(func.count(FdpRegistration.id)).where(FdpRegistration.fdp_id == fdp_id, FdpRegistration.status != "CANCELLED")
+        reg_count_stmt = select(func.count(FdpRegistration.id)).where(
+            FdpRegistration.fdp_id == fdp_id, FdpRegistration.status != "CANCELLED"
+        )
         reg_count = await db.scalar(reg_count_stmt) or 0
         setattr(fdp, "seats_remaining", max(0, fdp.max_seats - reg_count))
         return fdp
 
     @staticmethod
     async def register(db: AsyncSession, user_id: uuid.UUID, fdp_id: uuid.UUID) -> FdpRegistration:
-        fdp = await FdpService.get_fdp(db, fdp_id)
+        # Lock the FDP row first to prevent concurrent overbooking
+        fdp_result = await db.execute(
+            select(Fdp).where(Fdp.id == fdp_id, Fdp.deleted_at == None).with_for_update()
+        )
+        fdp = fdp_result.scalar_one_or_none()
+        if not fdp:
+            raise NotFoundException("FDP not found")
         if not fdp.is_active:
             raise BadRequestException("FDP is not active")
 
-        # Check seat limit
-        reg_count_stmt = select(func.count(FdpRegistration.id)).where(FdpRegistration.fdp_id == fdp_id, FdpRegistration.status != "CANCELLED")
-        reg_count = await db.scalar(reg_count_stmt) or 0
-        if reg_count >= fdp.max_seats:
-            raise ForbiddenException("No seats available")
-
-        # Check duplicate registration
+        # Check duplicate registration (inside the lock)
         existing_stmt = select(FdpRegistration).where(
             FdpRegistration.user_id == user_id,
             FdpRegistration.fdp_id == fdp_id,
@@ -52,10 +53,18 @@ class FdpService:
         if existing:
             raise BadRequestException("You are already registered for this FDP")
 
+        # Check seat limit (inside the lock — consistent read)
+        reg_count_stmt = select(func.count(FdpRegistration.id)).where(
+            FdpRegistration.fdp_id == fdp_id, FdpRegistration.status != "CANCELLED"
+        )
+        reg_count = await db.scalar(reg_count_stmt) or 0
+        if reg_count >= fdp.max_seats:
+            raise ForbiddenException("No seats available")
+
         registration = FdpRegistration(
             fdp_id=fdp_id,
             user_id=user_id,
-            status="CONFIRMED",  # Auto-confirm; set to PENDING if admin approval needed
+            status="CONFIRMED",
         )
         db.add(registration)
         await db.commit()
@@ -91,7 +100,7 @@ class FdpService:
     @staticmethod
     async def delete_fdp(db: AsyncSession, fdp_id: uuid.UUID) -> None:
         fdp = await FdpService.get_fdp(db, fdp_id)
-        fdp.deleted_at = datetime.utcnow()
+        fdp.deleted_at = datetime.now(timezone.utc)
         await db.commit()
 
     @staticmethod
@@ -113,7 +122,6 @@ class FdpService:
 
     @staticmethod
     async def mark_attendance(db: AsyncSession, fdp_id: uuid.UUID, attendance_records: list[dict]) -> list:
-        # attendance_records: [{"user_id": ..., "date": ..., "status": "PRESENT|ABSENT"}]
         from src.models import Attendance
         attendance_list = []
         for rec in attendance_records:
@@ -125,14 +133,12 @@ class FdpService:
 
     @staticmethod
     async def generate_certificates(db: AsyncSession, fdp_id: uuid.UUID) -> list[Certificate]:
-        # Only for confirmed registrations that don't have a certificate yet
         regs_stmt = select(FdpRegistration).where(FdpRegistration.fdp_id == fdp_id, FdpRegistration.status == "CONFIRMED")
         result = await db.execute(regs_stmt)
         registrations = result.scalars().all()
 
         certs = []
         for reg in registrations:
-            # Check if certificate already exists
             existing_cert_stmt = select(Certificate).where(
                 Certificate.user_id == reg.user_id,
                 Certificate.type == "FDP",

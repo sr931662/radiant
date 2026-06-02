@@ -29,11 +29,11 @@ async def dev_get_otp(email: str = Query(...), db: AsyncSession = Depends(get_db
     if settings.environment == "production":
         raise HTTPException(status_code=403, detail="Not available in production.")
     from src.models.otp import OTP
-    from datetime import datetime
+    from datetime import datetime, timezone
     stmt = (
         select(OTP)
-        .where(OTP.email == email, OTP.used == False, OTP.expires_at > datetime.utcnow())
-        .order_by(OTP.created_at.desc())
+        .where(OTP.email == email, OTP.used == False, OTP.expires_at > datetime.now(timezone.utc))
+        .order_by(OTP.expires_at.desc())
     )
     result = await db.execute(stmt)
     otp = result.scalar_one_or_none()

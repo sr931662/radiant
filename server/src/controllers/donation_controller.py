@@ -1,6 +1,6 @@
 import json
 import uuid
-from fastapi import Depends, Request, Body, Query, Path
+from fastapi import Depends, Request, Body, Query, Path, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
@@ -25,9 +25,11 @@ async def create_order(
 async def verify_payment(
     data: VerifyPaymentRequest = Body(...),
     db: AsyncSession = Depends(get_db),
+    current_user: dict | None = Depends(get_current_user_optional),
 ) -> DonationResponse:
     donation = await DonationService.verify_payment(
-        db, data.razorpay_order_id, data.razorpay_payment_id, data.razorpay_signature
+        db, data.razorpay_order_id, data.razorpay_payment_id, data.razorpay_signature,
+        user_id=current_user["sub"] if current_user else None,
     )
     return DonationResponse.model_validate(donation)
 
@@ -39,7 +41,6 @@ async def simulate_payment(
 ) -> DonationResponse:
     from src.config import settings
     if settings.environment == "production":
-        from fastapi import HTTPException
         raise HTTPException(status_code=403, detail="Simulate endpoint is disabled in production.")
     user_id = current_user["sub"] if current_user else None
     donation = await DonationService.simulate_payment(db, user_id, data.amount, data.anonymous)
@@ -50,9 +51,14 @@ async def webhook(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    payload = await request.json()
+    # Read raw bytes BEFORE json parsing — Razorpay signature is over the raw body
+    raw_body = await request.body()
     signature = request.headers.get("x-razorpay-signature", "")
-    await DonationService.webhook_handler(db, payload, signature)
+    try:
+        payload = json.loads(raw_body)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+    await DonationService.webhook_handler(db, raw_body, signature, payload)
     return {"status": "ok"}
 
 
@@ -74,8 +80,9 @@ async def my_history(
 async def download_receipt(
     donation_id: uuid.UUID = Path(...),
     db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ) -> dict:
-    url = await DonationService.get_receipt(db, donation_id)
+    url = await DonationService.get_receipt(db, donation_id, requesting_user_id=current_user["sub"])
     return {"receipt_url": url}
 
 
@@ -100,8 +107,8 @@ async def stats(
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> DonationStatsResponse:
-    stats = await DonationService.stats(db)
-    return DonationStatsResponse(**stats)
+    result = await DonationService.stats(db)
+    return DonationStatsResponse(**result)
 
 
 async def export_data(

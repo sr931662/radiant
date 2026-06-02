@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -81,7 +81,7 @@ class CourseService:
     @staticmethod
     async def delete_course(db: AsyncSession, course_id: uuid.UUID) -> None:
         course = await CourseService.get_course(db, course_id)
-        course.deleted_at = datetime.utcnow()
+        course.deleted_at = datetime.now(timezone.utc)
         await db.commit()
 
     @staticmethod
