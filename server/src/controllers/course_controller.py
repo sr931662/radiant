@@ -11,6 +11,7 @@ from src.schemas.course import (
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.course_service import CourseService
+from src.core.cache import cache_get, cache_set
 
 
 # ── Public ──
@@ -18,14 +19,21 @@ async def list_courses(
     pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
 ) -> CourseListResponse:
+    cache_key = f"courses:list:{pagination.page}:{pagination.size}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return CourseListResponse(**cached)
+
     courses, total = await CourseService.list_courses(db, pagination.page, pagination.size)
-    return CourseListResponse(
+    response = CourseListResponse(
         items=[CourseResponse.model_validate(c) for c in courses],
         total=total,
         page=pagination.page,
         size=pagination.size,
         pages=(total + pagination.size - 1) // pagination.size,
     )
+    await cache_set(cache_key, response.model_dump(), ttl=120)
+    return response
 
 
 async def get_course(
@@ -88,6 +96,7 @@ async def create_course(
     _: dict = Depends(get_current_admin_user),
 ) -> CourseResponse:
     course = await CourseService.create_course(db, data.to_model_dict())
+    await cache_delete("courses:list:*")
     return CourseResponse.model_validate(course)
 
 
@@ -98,6 +107,7 @@ async def update_course(
     _: dict = Depends(get_current_admin_user),
 ) -> CourseResponse:
     course = await CourseService.update_course(db, course_id, data.to_model_dict())
+    await cache_delete("courses:list:*")
     return CourseResponse.model_validate(course)
 
 
@@ -107,6 +117,7 @@ async def delete_course(
     _: dict = Depends(get_current_admin_user),
 ) -> APIResponse:
     await CourseService.delete_course(db, course_id)
+    await cache_delete("courses:list:*")
     return APIResponse(message="Course deleted")
 
 

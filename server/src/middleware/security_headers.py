@@ -3,14 +3,34 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 
+_PUBLIC_CACHE_PATHS = (
+    "/api/v1/courses",
+    "/api/v1/blog",
+    "/api/v1/gallery",
+    "/api/v1/fdp",
+    "/api/v1/memberships/plans",
+    "/api/v1/downloads",
+    "/api/v1/public/stats",
+)
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """
-    Adds Helmet-like security headers to every response.
+    Adds Helmet-like security headers + Cache-Control to every response.
     """
     async def dispatch(self, request: Request, call_next) -> Response:
         response: Response = await call_next(request)
 
         headers = response.headers
+
+        # Cache public GET endpoints at the CDN/browser level
+        if (
+            request.method == "GET"
+            and any(request.url.path.startswith(p) for p in _PUBLIC_CACHE_PATHS)
+            and "Cache-Control" not in headers
+        ):
+            headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=120"
+
         headers["X-Content-Type-Options"] = "nosniff"
         headers["X-Frame-Options"] = "DENY"
         headers["X-XSS-Protection"] = "1; mode=block"

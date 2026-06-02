@@ -10,6 +10,7 @@ from src.schemas.fdp import (
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.fdp_service import FdpService
+from src.core.cache import cache_get, cache_set, cache_delete
 
 
 # ── Public ──
@@ -17,14 +18,21 @@ async def list_fdps(
     pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
 ) -> FdpListResponse:
+    cache_key = f"fdp:list:{pagination.page}:{pagination.size}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return FdpListResponse(**cached)
+
     fdps, total = await FdpService.list_fdps(db, pagination.page, pagination.size)
-    return FdpListResponse(
+    response = FdpListResponse(
         items=[FdpResponse.model_validate(f) for f in fdps],
         total=total,
         page=pagination.page,
         size=pagination.size,
         pages=(total + pagination.size - 1) // pagination.size,
     )
+    await cache_set(cache_key, response.model_dump(), ttl=60)
+    return response
 
 
 async def get_fdp(
@@ -59,6 +67,7 @@ async def create_fdp(
     _: dict = Depends(get_current_admin_user),
 ) -> FdpResponse:
     fdp = await FdpService.create_fdp(db, data.model_dump())
+    await cache_delete("fdp:list:*")
     return FdpResponse.model_validate(fdp)
 
 
@@ -69,6 +78,7 @@ async def update_fdp(
     _: dict = Depends(get_current_admin_user),
 ) -> FdpResponse:
     fdp = await FdpService.update_fdp(db, fdp_id, data.model_dump(exclude_none=True))
+    await cache_delete("fdp:list:*")
     return FdpResponse.model_validate(fdp)
 
 
@@ -78,6 +88,7 @@ async def delete_fdp(
     _: dict = Depends(get_current_admin_user),
 ) -> APIResponse:
     await FdpService.delete_fdp(db, fdp_id)
+    await cache_delete("fdp:list:*")
     return APIResponse(message="FDP deleted")
 
 

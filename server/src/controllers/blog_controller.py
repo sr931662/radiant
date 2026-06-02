@@ -10,6 +10,7 @@ from src.schemas.blog import (
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.blog_service import BlogService
+from src.core.cache import cache_get, cache_set
 
 
 # ── Public ──
@@ -17,14 +18,21 @@ async def list_posts(
     pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
 ) -> PostListResponse:
+    cache_key = f"blog:list:{pagination.page}:{pagination.size}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return PostListResponse(**cached)
+
     posts, total = await BlogService.list_posts(db, pagination.page, pagination.size)
-    return PostListResponse(
+    response = PostListResponse(
         items=[PostResponse.model_validate(p) for p in posts],
         total=total,
         page=pagination.page,
         size=pagination.size,
         pages=(total + pagination.size - 1) // pagination.size,
     )
+    await cache_set(cache_key, response.model_dump(), ttl=180)
+    return response
 
 
 async def list_all_posts(

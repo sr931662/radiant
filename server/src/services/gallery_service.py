@@ -13,9 +13,21 @@ class GalleryService:
     async def list_albums(db: AsyncSession) -> list[GalleryAlbum]:
         result = await db.execute(select(GalleryAlbum).where(GalleryAlbum.deleted_at == None).order_by(GalleryAlbum.created_at.desc()))
         albums = list(result.scalars().all())
+
+        if not albums:
+            return albums
+
+        # Single query to get all media counts instead of N separate queries
+        album_ids = [a.id for a in albums]
+        counts_result = await db.execute(
+            select(GalleryMedia.album_id, func.count(GalleryMedia.id))
+            .where(GalleryMedia.album_id.in_(album_ids), GalleryMedia.deleted_at == None)
+            .group_by(GalleryMedia.album_id)
+        )
+        counts = {row[0]: row[1] for row in counts_result.all()}
         for album in albums:
-            count_stmt = select(func.count(GalleryMedia.id)).where(GalleryMedia.album_id == album.id, GalleryMedia.deleted_at == None)
-            setattr(album, "media_count", await db.scalar(count_stmt) or 0)
+            setattr(album, "media_count", counts.get(album.id, 0))
+
         return albums
 
     @staticmethod

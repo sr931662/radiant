@@ -7,13 +7,21 @@ from src.dependencies import get_current_admin_user
 from src.schemas.gallery import AlbumCreateRequest, AlbumUpdateRequest, AlbumResponse, MediaUploadResponse
 from src.schemas.common import APIResponse
 from src.services.gallery_service import GalleryService
+from src.core.cache import cache_get, cache_set, cache_delete
 
 
 async def list_albums(
     db: AsyncSession = Depends(get_db),
 ) -> list[AlbumResponse]:
+    cache_key = "gallery:albums"
+    cached = await cache_get(cache_key)
+    if cached:
+        return [AlbumResponse(**a) for a in cached]
+
     albums = await GalleryService.list_albums(db)
-    return [AlbumResponse.model_validate(a) for a in albums]
+    response = [AlbumResponse.model_validate(a) for a in albums]
+    await cache_set(cache_key, [r.model_dump() for r in response], ttl=300)
+    return response
 
 
 async def get_album(
@@ -30,6 +38,7 @@ async def create_album(
     _: dict = Depends(get_current_admin_user),
 ) -> AlbumResponse:
     album = await GalleryService.create_album(db, data.model_dump())
+    await cache_delete("gallery:albums")
     return AlbumResponse.model_validate(album)
 
 
@@ -40,6 +49,7 @@ async def update_album(
     _: dict = Depends(get_current_admin_user),
 ) -> AlbumResponse:
     album = await GalleryService.update_album(db, album_id, data.model_dump(exclude_none=True))
+    await cache_delete("gallery:albums")
     return AlbumResponse.model_validate(album)
 
 
@@ -49,6 +59,7 @@ async def delete_album(
     _: dict = Depends(get_current_admin_user),
 ) -> APIResponse:
     await GalleryService.delete_album(db, album_id)
+    await cache_delete("gallery:albums")
     return APIResponse(message="Album deleted")
 
 
