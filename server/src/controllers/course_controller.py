@@ -8,6 +8,7 @@ from src.schemas.course import (
     CourseCreateRequest, CourseUpdateRequest, CourseResponse, CourseDetailResponse,
     CourseListResponse, ModuleCreateRequest, ModuleResponse, LessonCreateRequest,
     LessonResponse, EnrollmentResponse, EnrollmentListResponse,
+    CoursePaymentOrderResponse, CoursePaymentVerifyRequest,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.course_service import CourseService
@@ -49,6 +50,44 @@ async def enroll(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ) -> EnrollmentResponse:
+    enrollment = await CourseService.enroll(db, current_user["sub"], course_id)
+    return EnrollmentResponse.model_validate(enrollment)
+
+
+async def create_payment_order(
+    course_id: uuid.UUID = Path(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+) -> CoursePaymentOrderResponse:
+    from src.services.payment_service import PaymentService
+    course = await CourseService.get_course(db, course_id)
+    if course.price <= 0:
+        from src.utils.exceptions import BadRequestException
+        raise BadRequestException("This course is free — enroll directly.")
+    receipt = f"course_{course_id}_{current_user['sub'][:8]}"
+    order = await PaymentService.create_razorpay_order(course.price, receipt)
+    return CoursePaymentOrderResponse(
+        order_id=order["id"],
+        amount=order["amount"],
+        currency=order["currency"],
+        course_id=course_id,
+        course_title=course.title,
+    )
+
+
+async def verify_course_payment(
+    course_id: uuid.UUID = Path(...),
+    data: CoursePaymentVerifyRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+) -> EnrollmentResponse:
+    from src.services.payment_service import PaymentService
+    from src.utils.exceptions import BadRequestException
+    ok = PaymentService.verify_razorpay_signature(
+        data.razorpay_order_id, data.razorpay_payment_id, data.razorpay_signature
+    )
+    if not ok:
+        raise BadRequestException("Payment verification failed — signature mismatch.")
     enrollment = await CourseService.enroll(db, current_user["sub"], course_id)
     return EnrollmentResponse.model_validate(enrollment)
 

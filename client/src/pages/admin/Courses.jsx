@@ -30,7 +30,13 @@ export default function AdminCourses() {
   })
 
   const saveMutation = useMutation({
-    mutationFn: (d) => isNew ? createCourse(d) : updateCourse(modal.id, d),
+    mutationFn: (d) => {
+      // Convert what_you_learn textarea (newline-separated) to array
+      if (typeof d.what_you_learn === 'string') {
+        d.what_you_learn = d.what_you_learn.split('\n').map(s => s.trim()).filter(Boolean)
+      }
+      return isNew ? createCourse(d) : updateCourse(modal.id, d)
+    },
     onSuccess: () => { toast.success(isNew ? 'Course created!' : 'Course updated!'); qc.invalidateQueries({ queryKey: ['admin-courses'] }); setModal(null); reset() },
     onError: (err) => toast.error(err?.response?.data?.message || 'Save failed.'),
   })
@@ -43,11 +49,15 @@ export default function AdminCourses() {
 
   function openEdit(c) {
     setIsNew(false); setModal(c)
-    ;['title', 'description', 'thumbnail', 'level', 'mode', 'duration_weeks', 'price', 'max_seats'].forEach((f) => setValue(f, c[f] ?? ''))
+    ;['title', 'description', 'thumbnail', 'level', 'mode', 'duration_weeks', 'price', 'max_seats',
+      'instructor', 'instructor_bio', 'prerequisites', 'target_audience', 'language',
+    ].forEach((f) => setValue(f, c[f] ?? ''))
     setValue('is_active', c.is_published ?? false)
+    setValue('certificate_offered', c.certificate_offered ?? true)
+    setValue('what_you_learn', (c.what_you_learn || []).join('\n'))
   }
 
-  function openNew() { setIsNew(true); setModal({}); reset({ level: 'BEGINNER', mode: 'ONLINE', is_active: false, price: 0 }) }
+  function openNew() { setIsNew(true); setModal({}); reset({ level: 'BEGINNER', mode: 'ONLINE', is_active: false, price: 0, certificate_offered: true, language: 'Hindi / English' }) }
 
   const courses = data?.items || []
 
@@ -139,19 +149,32 @@ export default function AdminCourses() {
         </div>
       )}
 
-      <Modal open={!!modal} onClose={() => { setModal(null); reset() }} title={isNew ? 'New Course' : 'Edit Course'} width={660}>
+      <Modal open={!!modal} onClose={() => { setModal(null); reset() }} title={isNew ? 'New Course' : 'Edit Course'} width={700}>
         <form onSubmit={handleSubmit((d) => saveMutation.mutate(d))}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.06em', marginBottom: '0.75rem', textTransform: 'uppercase' }}>Basic Info</p>
           <div className={s.formGroup}><label className={s.formLabel}>Title *</label><input {...register('title', { required: true })} className={s.formInput} /></div>
           <div className={s.formGroup}><label className={s.formLabel}>Description</label><textarea {...register('description')} className={s.formTextarea} rows={3} /></div>
-          <div className={s.formGroup}><label className={s.formLabel}>Thumbnail URL</label><input {...register('thumbnail')} className={s.formInput} /></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Thumbnail URL</label><input {...register('thumbnail')} className={s.formInput} placeholder="https://…" /></div>
           <div className={s.formRow}>
             <div className={s.formGroup}><label className={s.formLabel}>Level</label><select {...register('level')} className={s.formSelect}>{LEVELS.map((l) => <option key={l}>{l}</option>)}</select></div>
             <div className={s.formGroup}><label className={s.formLabel}>Mode</label><select {...register('mode')} className={s.formSelect}>{MODES.map((m) => <option key={m}>{m}</option>)}</select></div>
             <div className={s.formGroup}><label className={s.formLabel}>Duration (weeks)</label><input type="number" {...register('duration_weeks')} className={s.formInput} /></div>
-            <div className={s.formGroup}><label className={s.formLabel}>Price (₹)</label><input type="number" {...register('price')} className={s.formInput} /></div>
+            <div className={s.formGroup}><label className={s.formLabel}>Price (₹) — 0 = Free</label><input type="number" {...register('price')} className={s.formInput} /></div>
             <div className={s.formGroup}><label className={s.formLabel}>Max Seats</label><input type="number" {...register('max_seats')} className={s.formInput} /></div>
           </div>
-          <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('is_active')} /> Published (visible to students)</label></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Language</label><input {...register('language')} className={s.formInput} placeholder="Hindi / English" /></div>
+
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.06em', margin: '1.25rem 0 0.75rem', textTransform: 'uppercase' }}>Rich Content</p>
+          <div className={s.formGroup}><label className={s.formLabel}>Instructor Name</label><input {...register('instructor')} className={s.formInput} /></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Instructor Bio</label><textarea {...register('instructor_bio')} className={s.formTextarea} rows={2} /></div>
+          <div className={s.formGroup}><label className={s.formLabel}>What You'll Learn <span style={{ color: '#94a3b8', fontWeight: 400 }}>(one point per line)</span></label><textarea {...register('what_you_learn')} className={s.formTextarea} rows={4} placeholder={"Understand core concepts\nBuild real projects\nGet certified"} /></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Prerequisites</label><textarea {...register('prerequisites')} className={s.formTextarea} rows={2} placeholder="Basic computer knowledge…" /></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Target Audience</label><textarea {...register('target_audience')} className={s.formTextarea} rows={2} placeholder="Teachers, educators, school administrators…" /></div>
+
+          <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.25rem' }}>
+            <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('is_active')} /> Published</label></div>
+            <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('certificate_offered')} /> Certificate on completion</label></div>
+          </div>
           <button type="submit" className={s.formSubmit} disabled={saveMutation.isPending}>{saveMutation.isPending ? 'Saving…' : isNew ? 'Create Course' : 'Update Course'}</button>
         </form>
       </Modal>

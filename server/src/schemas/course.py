@@ -17,6 +17,13 @@ class CourseCreateRequest(BaseModel):
     duration_weeks: int | None = None
     max_seats: int | None = None
     is_active: bool = False           # frontend uses is_active; we map it to is_published
+    instructor: str | None = None
+    instructor_bio: str | None = None
+    what_you_learn: list[str] | None = None
+    prerequisites: str | None = None
+    target_audience: str | None = None
+    language: str | None = "Hindi / English"
+    certificate_offered: bool = True
 
     def to_model_dict(self) -> dict:
         d = self.model_dump(exclude={"is_active"})
@@ -34,6 +41,13 @@ class CourseUpdateRequest(BaseModel):
     duration_weeks: int | None = None
     max_seats: int | None = None
     is_active: bool | None = None
+    instructor: str | None = None
+    instructor_bio: str | None = None
+    what_you_learn: list[str] | None = None
+    prerequisites: str | None = None
+    target_audience: str | None = None
+    language: str | None = None
+    certificate_offered: bool | None = None
 
     def to_model_dict(self) -> dict:
         d = self.model_dump(exclude_none=True, exclude={"is_active"})
@@ -53,6 +67,14 @@ class CourseResponse(BaseModel):
     mode: str | None = None
     duration_weeks: int | None = None
     max_seats: int | None = None
+    instructor: str | None = None
+    instructor_bio: str | None = None
+    what_you_learn: list[str] | None = None
+    prerequisites: str | None = None
+    target_audience: str | None = None
+    language: str | None = "Hindi / English"
+    certificate_offered: bool = True
+    enrollment_count: int = 0
     created_at: datetime
 
     @property
@@ -60,6 +82,20 @@ class CourseResponse(BaseModel):
         return self.is_published
 
     model_config = {"from_attributes": True}
+
+
+class CoursePaymentOrderResponse(BaseModel):
+    order_id: str
+    amount: int       # paise
+    currency: str
+    course_id: uuid.UUID
+    course_title: str
+
+
+class CoursePaymentVerifyRequest(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
 
 
 class LessonCreateRequest(BaseModel):

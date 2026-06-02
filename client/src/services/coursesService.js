@@ -24,3 +24,13 @@ export async function getLessons(courseId) {
   const { data } = await api.get(`/api/v1/courses/${courseId}/lessons`)
   return data.data ?? data
 }
+
+export async function createCoursePaymentOrder(courseId) {
+  const { data } = await api.post(`/api/v1/courses/${courseId}/create-payment-order`)
+  return data.data ?? data
+}
+
+export async function verifyCoursePayment(courseId, payload) {
+  const { data } = await api.post(`/api/v1/courses/${courseId}/verify-payment`, payload)
+  return data.data ?? data
+}

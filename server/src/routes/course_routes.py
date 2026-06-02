@@ -3,6 +3,7 @@ from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.course import CourseListResponse, CourseResponse, EnrollmentResponse, EnrollmentListResponse, LessonResponse, ModuleResponse
 from src.controllers.course_controller import (
     list_courses, get_course, enroll, my_courses, get_lessons,
+    create_payment_order, verify_course_payment,
     admin_list_courses, create_course, update_course, delete_course,
     create_module, create_lesson, all_enrollments,
 )
@@ -18,6 +19,8 @@ public_router.get("", response_model=CourseListResponse)(list_courses)
 public_router.get("/my-courses", response_model=EnrollmentListResponse)(my_courses)
 public_router.get("/{course_id}", response_model=CourseResponse)(get_course)
 public_router.post("/{course_id}/enroll", response_model=EnrollmentResponse)(enroll)
+public_router.post("/{course_id}/create-payment-order")(create_payment_order)
+public_router.post("/{course_id}/verify-payment", response_model=EnrollmentResponse)(verify_course_payment)
 public_router.get("/{course_id}/lessons", response_model=list[LessonResponse])(get_lessons)
 
 admin_router.get("", response_model=CourseListResponse)(admin_list_courses)
