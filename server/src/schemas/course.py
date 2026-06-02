@@ -10,8 +10,18 @@ from src.schemas.common import PaginatedResponse
 class CourseCreateRequest(BaseModel):
     title: str = Field(..., min_length=3, max_length=255)
     description: str | None = None
+    thumbnail: str | None = None
     price: float = 0.0
-    is_published: bool = False
+    level: str | None = None          # BEGINNER, INTERMEDIATE, ADVANCED
+    mode: str | None = None           # ONLINE, OFFLINE, HYBRID
+    duration_weeks: int | None = None
+    max_seats: int | None = None
+    is_active: bool = False           # frontend uses is_active; we map it to is_published
+
+    def to_model_dict(self) -> dict:
+        d = self.model_dump(exclude={"is_active"})
+        d["is_published"] = self.is_active
+        return d
 
 
 class CourseUpdateRequest(BaseModel):
@@ -19,7 +29,17 @@ class CourseUpdateRequest(BaseModel):
     description: str | None = None
     thumbnail: str | None = None
     price: float | None = None
-    is_published: bool | None = None
+    level: str | None = None
+    mode: str | None = None
+    duration_weeks: int | None = None
+    max_seats: int | None = None
+    is_active: bool | None = None
+
+    def to_model_dict(self) -> dict:
+        d = self.model_dump(exclude_none=True, exclude={"is_active"})
+        if self.is_active is not None:
+            d["is_published"] = self.is_active
+        return d
 
 
 class CourseResponse(BaseModel):
@@ -29,7 +49,15 @@ class CourseResponse(BaseModel):
     thumbnail: str | None
     price: float
     is_published: bool
+    level: str | None = None
+    mode: str | None = None
+    duration_weeks: int | None = None
+    max_seats: int | None = None
     created_at: datetime
+
+    @property
+    def is_active(self) -> bool:
+        return self.is_published
 
     model_config = {"from_attributes": True}
 

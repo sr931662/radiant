@@ -87,7 +87,7 @@ async def create_course(
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> CourseResponse:
-    course = await CourseService.create_course(db, data.model_dump())
+    course = await CourseService.create_course(db, data.to_model_dict())
     return CourseResponse.model_validate(course)
 
 
@@ -97,7 +97,7 @@ async def update_course(
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> CourseResponse:
-    course = await CourseService.update_course(db, course_id, data.model_dump(exclude_none=True))
+    course = await CourseService.update_course(db, course_id, data.to_model_dict())
     return CourseResponse.model_validate(course)
 
 

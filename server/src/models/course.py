@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from src.models.module import Module
 
 from typing import Optional
-from sqlalchemy import Boolean, Float, String, Text
+from sqlalchemy import Boolean, Float, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -21,6 +21,10 @@ class Course(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     thumbnail: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
     price: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    level: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)           # BEGINNER, INTERMEDIATE, ADVANCED
+    mode: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)            # ONLINE, OFFLINE, HYBRID
+    duration_weeks: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    max_seats: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     # Relationships
     modules: Mapped[list["Module"]] = relationship(back_populates="course", lazy="selectin", order_by="Module.order")

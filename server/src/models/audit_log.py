@@ -24,4 +24,4 @@ class AuditLog(Base, UUIDMixin, TimestampMixin):
     ip_address: Mapped[Optional[str]] = mapped_column(String(45), nullable=True)
 
     # Relationships
-    user: Mapped[Optional["User"]] = relationship(back_populates="audit_logs")
+    user: Mapped[Optional["User"]] = relationship(back_populates="audit_logs", lazy="selectin")
