@@ -69,9 +69,10 @@ async def create_payment_order(
     return CoursePaymentOrderResponse(
         order_id=order["id"],
         amount=order["amount"],
-        currency=order["currency"],
+        currency=order.get("currency", "INR"),
         course_id=course_id,
         course_title=course.title,
+        demo=order.get("_demo", False),
     )
 
 

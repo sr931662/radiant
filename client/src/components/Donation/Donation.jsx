@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { createOrder, verifyPayment, getReceipt, simulateDonation } from '../../services/donationService'
 import api from '../../lib/api'
+import DemoPaymentModal from '../ui/DemoPaymentModal'
 import styles from './Donation.module.css'
 
 async function getPublicStats() {
@@ -47,6 +48,7 @@ export default function Donation() {
   const [activeTab, setActiveTab]   = useState('once')
   const [selectedAmt, setSelectedAmt] = useState(2000)
   const [customAmt, setCustomAmt]   = useState(2000)
+  const [demoOrder, setDemoOrder]   = useState(null)
 
   const { data: stats } = useQuery({
     queryKey: ['public-stats'],
@@ -82,6 +84,13 @@ export default function Donation() {
   const orderMutation = useMutation({
     mutationFn: () => createOrder(customAmt || selectedAmt),
     onSuccess: async (order) => {
+      // Demo mode — show our own payment UI
+      if (order.demo || order.id?.startsWith('demo_')) {
+        setDemoOrder(order)
+        return
+      }
+
+      // Real Razorpay
       const loaded = await loadRazorpayScript()
       if (!loaded) { toast.error('Razorpay failed to load. Check your connection.'); return }
 
@@ -104,9 +113,7 @@ export default function Donation() {
         theme: { color: '#2563eb' },
         modal: { ondismiss: () => toast('Payment cancelled.', { icon: 'ℹ️' }) },
       }
-
-      const rzp = new window.Razorpay(options)
-      rzp.open()
+      new window.Razorpay(options).open()
     },
     onError: (err) => toast.error(err?.response?.data?.message || 'Could not initiate payment. Please try again.'),
   })
@@ -118,6 +125,15 @@ export default function Donation() {
     },
     onError: (err) => toast.error(err?.response?.data?.detail || 'Simulate failed.'),
   })
+
+  function handleDemoDonationSuccess() {
+    verifyMutation.mutate({
+      razorpay_order_id:   demoOrder.id,
+      razorpay_payment_id: `demo_pay_${Date.now()}`,
+      razorpay_signature:  'demo_signature',
+    })
+    setDemoOrder(null)
+  }
 
   const isLoading = orderMutation.isPending || verifyMutation.isPending || simulateMutation.isPending
 
@@ -225,6 +241,13 @@ export default function Donation() {
           </div>
         </div>
       </div>
+      <DemoPaymentModal
+        open={!!demoOrder}
+        amount={demoOrder?.amount || 0}
+        description="Donation — Education for Every Child"
+        onSuccess={handleDemoDonationSuccess}
+        onClose={() => setDemoOrder(null)}
+      />
     </section>
   )
 }

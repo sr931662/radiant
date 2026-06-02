@@ -90,6 +90,7 @@ class CoursePaymentOrderResponse(BaseModel):
     currency: str
     course_id: uuid.UUID
     course_title: str
+    demo: bool = False  # True when Razorpay keys are not yet configured
 
 
 class CoursePaymentVerifyRequest(BaseModel):

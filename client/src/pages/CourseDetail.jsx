@@ -10,6 +10,7 @@ import {
 import { getCourse, enrollCourse, createCoursePaymentOrder, verifyCoursePayment } from '../services/coursesService'
 import { useAuth } from '../contexts/AuthContext'
 import Spinner from '../components/ui/Spinner'
+import DemoPaymentModal from '../components/ui/DemoPaymentModal'
 
 const LEVEL_META = {
   BEGINNER:     { label: 'Beginner',     color: '#166534', bg: '#dcfce7' },
@@ -68,6 +69,7 @@ export default function CourseDetail() {
   const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
   const qc = useQueryClient()
+  const [demoOrder, setDemoOrder] = useState(null)
 
   const { data: course, isLoading, isError } = useQuery({
     queryKey: ['course', id],
@@ -84,10 +86,17 @@ export default function CourseDetail() {
     onError: (err) => toast.error(err?.response?.data?.message || 'Enrollment failed.'),
   })
 
-  // Paid enroll via Razorpay
+  // Paid enroll via Razorpay (or demo modal)
   const paymentMutation = useMutation({
     mutationFn: () => createCoursePaymentOrder(id),
     onSuccess: async (order) => {
+      // Demo mode — show our own payment UI
+      if (order.demo || order.order_id?.startsWith('demo_')) {
+        setDemoOrder(order)
+        return
+      }
+
+      // Real Razorpay
       const loaded = await loadRazorpay()
       if (!loaded) { toast.error('Razorpay failed to load.'); return }
 
@@ -119,6 +128,22 @@ export default function CourseDetail() {
     },
     onError: (err) => toast.error(err?.response?.data?.message || 'Could not initiate payment.'),
   })
+
+  async function handleDemoSuccess() {
+    try {
+      await verifyCoursePayment(id, {
+        razorpay_order_id: demoOrder.order_id,
+        razorpay_payment_id: `demo_pay_${Date.now()}`,
+        razorpay_signature: 'demo_signature',
+      })
+      toast.success('Enrolled successfully!')
+      qc.invalidateQueries({ queryKey: ['my-courses'] })
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Enrollment failed.')
+    } finally {
+      setDemoOrder(null)
+    }
+  }
 
   function handleEnroll() {
     if (!isAuthenticated) { navigate('/login'); return }
@@ -384,6 +409,14 @@ export default function CourseDetail() {
           </div>
         </div>
       </div>
+
+      <DemoPaymentModal
+        open={!!demoOrder}
+        amount={demoOrder?.amount || 0}
+        description={demoOrder?.course_title || ''}
+        onSuccess={handleDemoSuccess}
+        onClose={() => setDemoOrder(null)}
+      />
     </div>
   )
 }
