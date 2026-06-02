@@ -1,5 +1,10 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { clearTokens, setTokens, getRefreshToken } from '../lib/api'
+
+function isRemembered() {
+  // If the refresh token lives in localStorage the user chose "remember me"
+  return !!localStorage.getItem('radiant_refresh_token')
+}
 import * as authService from '../services/authService'
 
 const AuthContext = createContext(null)
@@ -20,7 +25,7 @@ export function AuthProvider({ children }) {
     }
     try {
       const data = await authService.refreshToken(refreshToken)
-      setTokens(data.access_token, data.refresh_token)
+      setTokens(data.access_token, data.refresh_token, isRemembered())
       setUser(parseJwtPayload(data.access_token))
     } catch {
       clearTokens()

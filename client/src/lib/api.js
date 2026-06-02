@@ -31,7 +31,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem(ACCESS_KEY)
+  const token = getAccessToken()
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
@@ -49,7 +49,7 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config
     if (error.response?.status === 401 && !original._retry) {
-      const refreshToken = localStorage.getItem(REFRESH_KEY)
+      const refreshToken = getRefreshToken()
       if (!refreshToken) {
         clearTokens()
         window.location.href = '/login'
