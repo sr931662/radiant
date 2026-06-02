@@ -43,10 +43,10 @@ export default function AdminCourses() {
 
   function openEdit(c) {
     setIsNew(false); setModal(c)
-    ;['title', 'description', 'thumbnail', 'level', 'mode', 'duration_weeks', 'price', 'max_seats', 'is_active'].forEach((f) => setValue(f, c[f] ?? ''))
+    ;['title', 'description', 'thumbnail', 'level', 'mode', 'duration_weeks', 'price', 'max_seats', 'is_published'].forEach((f) => setValue(f, c[f] ?? ''))
   }
 
-  function openNew() { setIsNew(true); setModal({}); reset({ level: 'BEGINNER', mode: 'ONLINE', is_active: true, price: 0 }) }
+  function openNew() { setIsNew(true); setModal({}); reset({ level: 'BEGINNER', mode: 'ONLINE', is_published: false, price: 0 }) }
 
   const courses = data?.items || []
 
@@ -86,7 +86,7 @@ export default function AdminCourses() {
                     {c.price != null ? (Number(c.price) === 0 ? 'Free' : `₹${Number(c.price).toLocaleString('en-IN')}`) : '—'}
                   </td>
                   <td className={s.td}>{c.max_seats ?? '∞'}</td>
-                  <td className={s.td}><StatusBadge status={c.is_active ? 'APPROVED' : 'REJECTED'} /></td>
+                  <td className={s.td}><StatusBadge status={c.is_published ? 'APPROVED' : 'REJECTED'} /></td>
                   <td className={s.tdActions}>
                     <div className={s.actionBtns}>
                       <button className={`${s.btn} ${s.btnEdit} ${s.btnIconOnly}`} onClick={() => openEdit(c)}><Pencil size={13} /></button>
@@ -150,7 +150,7 @@ export default function AdminCourses() {
             <div className={s.formGroup}><label className={s.formLabel}>Price (₹)</label><input type="number" {...register('price')} className={s.formInput} /></div>
             <div className={s.formGroup}><label className={s.formLabel}>Max Seats</label><input type="number" {...register('max_seats')} className={s.formInput} /></div>
           </div>
-          <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('is_active')} /> Active</label></div>
+          <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('is_published')} /> Published (visible to students)</label></div>
           <button type="submit" className={s.formSubmit} disabled={saveMutation.isPending}>{saveMutation.isPending ? 'Saving…' : isNew ? 'Create Course' : 'Update Course'}</button>
         </form>
       </Modal>
