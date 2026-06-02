@@ -92,6 +92,7 @@ def create_app() -> FastAPI:
         docs_url="/docs" if settings.debug else None,
         redoc_url="/redoc" if settings.debug else None,
         lifespan=lifespan,
+        redirect_slashes=False,  # Prevent 307 redirects that generate http:// URLs behind a proxy
     )
 
     # ── Middleware (order matters — last added = outermost = first to run) ──
