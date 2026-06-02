@@ -97,17 +97,17 @@ export default function AdminContacts() {
               {replyModal.phone && <p style={{ margin: '8px 0 0', fontSize: '0.78rem', color: '#64748b' }}>Phone: {replyModal.phone}</p>}
             </div>
 
-            {replyModal.admin_reply && (
+            {replyModal.reply && (
               <div style={{ background: '#eff6ff', borderRadius: '8px', padding: '1rem', marginBottom: '1.25rem', borderLeft: '3px solid #2563eb' }}>
                 <p style={{ margin: '0 0 4px', fontWeight: 600, fontSize: '0.82rem', color: '#2563eb' }}>Previous Reply</p>
-                <p style={{ margin: 0, color: '#1e40af', fontSize: '0.875rem', lineHeight: 1.6 }}>{replyModal.admin_reply}</p>
+                <p style={{ margin: 0, color: '#1e40af', fontSize: '0.875rem', lineHeight: 1.6 }}>{replyModal.reply}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit((d) => mutation.mutate(d))}>
               <div style={{ marginBottom: '1.25rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 500, fontSize: '0.875rem' }}>Reply</label>
-                <textarea {...register('reply', { required: true })} rows={5} defaultValue={replyModal.admin_reply || ''} style={{ width: '100%', padding: '0.6rem', border: '1px solid #e2e8f0', borderRadius: '6px', resize: 'vertical', boxSizing: 'border-box' }} />
+                <textarea {...register('reply', { required: true })} rows={5} defaultValue={replyModal.reply || ''} style={{ width: '100%', padding: '0.6rem', border: '1px solid #e2e8f0', borderRadius: '6px', resize: 'vertical', boxSizing: 'border-box' }} />
               </div>
               <button type="submit" disabled={mutation.isPending} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%', padding: '0.7rem', background: 'var(--clr-primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
                 <Send size={15} /> {mutation.isPending ? 'Sending…' : 'Send Reply'}

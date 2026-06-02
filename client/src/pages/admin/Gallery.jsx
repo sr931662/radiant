@@ -55,7 +55,6 @@ export default function AdminGallery() {
         const fd = new FormData()
         fd.append('file', file)
         fd.append('album_id', uploadAlbum.id)
-        fd.append('media_type', file.type.startsWith('video/') ? 'VIDEO' : 'IMAGE')
         await uploadMedia(fd)
       }
       toast.success(`${files.length} file(s) uploaded.`)
