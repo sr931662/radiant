@@ -30,8 +30,9 @@ class DonationService:
         await db.commit()
         return {
             "order_id": order["id"],
-            "amount": amount,
-            "currency": "INR",
+            "id": order["id"],           # alias so frontend can use order.id directly
+            "amount": order["amount"],   # paise — Razorpay checkout expects paise
+            "currency": order.get("currency", "INR"),
             "donation_id": str(donation.id),
         }
 

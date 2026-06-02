@@ -45,6 +45,8 @@ class CourseService:
             raise BadRequestException("Already enrolled")
         enrollment = Enrollment(user_id=user_id, course_id=course_id)
         db.add(enrollment)
+        # Increment denormalized count for fast display
+        course.enrollment_count = (course.enrollment_count or 0) + 1
         await db.commit()
         await db.refresh(enrollment)
         return enrollment

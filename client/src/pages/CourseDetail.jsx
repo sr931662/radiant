@@ -217,7 +217,8 @@ export default function CourseDetail() {
 
       {/* ── Main content + sidebar ── */}
       <div className="container" style={{ maxWidth: 1100, padding: '2.5rem 1rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '2.5rem', alignItems: 'start' }}>
+        <style>{`.crs-grid{display:grid;grid-template-columns:1fr;gap:2.5rem;align-items:start}@media(min-width:900px){.crs-grid{grid-template-columns:1fr 320px}}`}</style>
+        <div className="crs-grid">
 
           {/* Left column */}
           <div>
@@ -294,7 +295,10 @@ export default function CourseDetail() {
           </div>
 
           {/* Sticky sidebar */}
-          <div style={{ position: 'sticky', top: '88px' }}>
+          <div style={{ position: 'sticky', top: '88px', order: -1 }}
+            className="crs-sidebar"
+          >
+            <style>{`.crs-sidebar{order:-1}@media(min-width:900px){.crs-sidebar{order:unset}}`}</style>
             <div style={{ background: 'white', borderRadius: '14px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', overflow: 'hidden' }}>
               {!course.thumbnail && (
                 <div style={{ height: 140, background: 'linear-gradient(135deg,#2563eb,#7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

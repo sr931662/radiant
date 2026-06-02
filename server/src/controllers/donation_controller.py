@@ -29,7 +29,6 @@ async def verify_payment(
 ) -> DonationResponse:
     donation = await DonationService.verify_payment(
         db, data.razorpay_order_id, data.razorpay_payment_id, data.razorpay_signature,
-        user_id=current_user["sub"] if current_user else None,
     )
     return DonationResponse.model_validate(donation)
 

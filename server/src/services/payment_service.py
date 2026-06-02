@@ -23,21 +23,30 @@ class PaymentService:
 
     @staticmethod
     def verify_razorpay_signature(order_id: str, payment_id: str, signature: str) -> bool:
+        """Verify Razorpay payment signature.
+        Razorpay computes: HMAC-SHA256(key=key_secret, msg=order_id|payment_id)
+        """
         msg = f"{order_id}|{payment_id}"
         generated = hmac.new(
-            settings.razorpay_key_secret.encode(),
-            msg.encode(),
+            settings.razorpay_key_secret.encode("utf-8"),
+            msg.encode("utf-8"),
             hashlib.sha256,
         ).hexdigest()
-        return hmac.compare_digest(generated, signature)
+        try:
+            return hmac.compare_digest(generated, signature)
+        except TypeError:
+            return False
 
     @staticmethod
     def verify_webhook_signature(raw_body: bytes, signature: str) -> bool:
         """Verify Razorpay webhook using the raw request body bytes (NOT re-serialized JSON)."""
         secret = settings.razorpay_webhook_secret
         generated = hmac.new(
-            secret.encode(),
+            secret.encode("utf-8"),
             raw_body,
             hashlib.sha256,
         ).hexdigest()
-        return hmac.compare_digest(generated, signature)
+        try:
+            return hmac.compare_digest(generated, signature)
+        except TypeError:
+            return False

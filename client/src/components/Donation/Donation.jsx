@@ -1,9 +1,15 @@
 import { useState } from 'react'
-import { Heart, ShieldCheck, Globe2, QrCode } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
+import { Heart, ShieldCheck, Globe2, QrCode, TrendingUp, Users } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { createOrder, verifyPayment, getReceipt, simulateDonation } from '../../services/donationService'
+import api from '../../lib/api'
 import styles from './Donation.module.css'
+
+async function getPublicStats() {
+  const { data } = await api.get('/api/v1/public/stats')
+  return data.data ?? data
+}
 
 const TABS = [
   { id: 'once',    label: 'One-Time' },
@@ -41,6 +47,12 @@ export default function Donation() {
   const [activeTab, setActiveTab]   = useState('once')
   const [selectedAmt, setSelectedAmt] = useState(2000)
   const [customAmt, setCustomAmt]   = useState(2000)
+
+  const { data: stats } = useQuery({
+    queryKey: ['public-stats'],
+    queryFn: getPublicStats,
+    staleTime: 5 * 60 * 1000,
+  })
 
   const handlePreset = (amt) => { setSelectedAmt(amt); setCustomAmt(amt) }
   const handleCustom = (e) => { const v = Number(e.target.value); setCustomAmt(v); setSelectedAmt(null) }
@@ -164,16 +176,26 @@ export default function Donation() {
               <input type="number" className={styles.amtInput} value={customAmt} onChange={handleCustom} placeholder="Custom Amount" min={1} />
             </div>
 
-            <div className={styles.progressCard}>
-              <div className={styles.progressHeader}>
-                <span>Campaign: Education for Flood-Affected Children</span>
-                <span className={styles.progressPct}>73% funded</span>
+            {stats && (
+              <div className={styles.progressCard}>
+                <div className={styles.progressHeader}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <TrendingUp size={13} /> Total Raised So Far
+                  </span>
+                  <span className={styles.progressPct}>
+                    ₹{(stats.total_donations || 0).toLocaleString('en-IN')}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.4rem' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Users size={11} /> {(stats.total_students || 0).toLocaleString('en-IN')} students supported
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    {(stats.total_courses || 0)} courses available
+                  </span>
+                </div>
               </div>
-              <div className={styles.progressTrack}>
-                <div className={styles.progressFill} style={{ width: '73%' }} />
-              </div>
-              <p className={styles.progressMeta}>₹7.3L raised of ₹10L goal · 842 donors · 8 days left</p>
-            </div>
+            )}
 
             <p className={styles.payLabel}>Payment Method</p>
             <div className={styles.payOptions}>
