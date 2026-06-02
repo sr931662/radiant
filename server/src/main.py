@@ -119,6 +119,28 @@ def create_app() -> FastAPI:
     )
 
     # ── Global Exception Handler ──
+    def _cors_headers(request: Request) -> dict:
+        """Return CORS headers for the given request's origin.
+        Used as a safety net: CORSMiddleware normally adds these, but if an
+        exception propagates past CORSMiddleware (e.g. from middleware code),
+        the browser would see a response with no CORS headers and block it.
+        Adding them here ensures they're always present on error responses.
+        """
+        origin = request.headers.get("origin", "")
+        if not origin:
+            return {}
+        # Allow any origin that matches our configured list or regex
+        import re
+        allowed = list(settings.cors_origins)
+        regex = r"https?://(localhost(:\d+)?|[\w-]+\.(pages\.dev|workers\.dev))"
+        if origin in allowed or re.match(regex, origin):
+            return {
+                "Access-Control-Allow-Origin": origin,
+                "Access-Control-Allow-Credentials": "true",
+                "Vary": "Origin",
+            }
+        return {}
+
     @app.exception_handler(AppException)
     async def app_exception_handler(request: Request, exc: AppException):
         return JSONResponse(
@@ -128,16 +150,18 @@ def create_app() -> FastAPI:
                 "message": exc.detail,
                 "error_code": exc.error_code,
             },
+            headers=_cors_headers(request),
         )
 
     @app.exception_handler(Exception)
     async def generic_exception_handler(request: Request, exc: Exception):
         import logging
         logger = logging.getLogger("app")
-        logger.exception(f"Unhandled exception: {exc}")
+        logger.exception("Unhandled exception: %s", exc)
         return JSONResponse(
             status_code=500,
             content={"success": False, "message": "Internal server error", "error_code": "INTERNAL_ERROR"},
+            headers=_cors_headers(request),
         )
 
     # ── Routers ──

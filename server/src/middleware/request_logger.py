@@ -7,18 +7,27 @@ logger = logging.getLogger("request")
 
 
 class RequestLoggerMiddleware(BaseHTTPMiddleware):
-    """
-    Logs each incoming request with method, path, status code, and duration.
-    """
     async def dispatch(self, request: Request, call_next):
         start_time = time.time()
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception:
+            duration = time.time() - start_time
+            logger.error(
+                "%s %s ERROR %.3fs %s",
+                request.method,
+                request.url.path,
+                duration,
+                request.client.host if request.client else "unknown",
+            )
+            raise
         duration = time.time() - start_time
-
         logger.info(
-            f"{request.method} {request.url.path} "
-            f"{response.status_code} "
-            f"{duration:.3f}s "
-            f"{request.client.host if request.client else 'unknown'}"
+            "%s %s %s %.3fs %s",
+            request.method,
+            request.url.path,
+            response.status_code,
+            duration,
+            request.client.host if request.client else "unknown",
         )
         return response
