@@ -5,7 +5,8 @@ from src.core.database import get_db
 from src.dependencies import get_current_user
 from src.schemas.auth import (
     RegisterRequest, LoginRequest, TokenResponse, RefreshRequest,
-    VerifyEmailRequest, ForgotPasswordRequest, ResetPasswordRequest, ChangePasswordRequest,
+    VerifyEmailRequest, ForgotPasswordRequest, ResetPasswordRequest,
+    ChangePasswordRequest, ResendOTPRequest,
 )
 from src.schemas.common import APIResponse
 from src.services.auth_service import AuthService
@@ -66,6 +67,14 @@ async def change_password(
 ) -> APIResponse:
     await AuthService.change_password(db, current_user["sub"], data.current_password, data.new_password)
     return APIResponse(message="Password changed successfully")
+
+
+async def resend_otp(
+    data: ResendOTPRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+) -> APIResponse:
+    await AuthService.resend_otp(db, data.email, data.purpose)
+    return APIResponse(message="OTP sent. Check your email.")
 
 
 async def logout(

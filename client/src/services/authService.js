@@ -39,3 +39,8 @@ export async function changePassword(current_password, new_password) {
   const { data } = await api.post('/api/v1/auth/change-password', { current_password, new_password })
   return data
 }
+
+export async function resendOtp(email, purpose = 'VERIFY_EMAIL') {
+  const { data } = await api.post('/api/v1/auth/resend-otp', { email, purpose })
+  return data
+}

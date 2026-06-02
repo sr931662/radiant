@@ -128,6 +128,58 @@ class AuthService:
         await db.commit()
 
     @staticmethod
+    async def resend_otp(db: AsyncSession, email: str, purpose: str) -> None:
+        stmt = select(User).where(User.email == email)
+        result = await db.execute(stmt)
+        user = result.scalar_one_or_none()
+        if not user:
+            # Don't reveal whether the email exists
+            return
+
+        if purpose == "VERIFY_EMAIL" and user.is_email_verified:
+            raise BadRequestException("Email is already verified")
+
+        # Rate limit: one resend per 60 seconds per email+purpose
+        recent_stmt = (
+            select(OTP)
+            .where(OTP.email == email, OTP.purpose == purpose, OTP.used == False)
+            .order_by(OTP.created_at.desc())
+        )
+        recent_result = await db.execute(recent_stmt)
+        recent_otp = recent_result.scalar_one_or_none()
+
+        if recent_otp:
+            elapsed = (datetime.utcnow() - recent_otp.created_at).total_seconds()
+            if elapsed < 60:
+                wait = int(60 - elapsed)
+                raise BadRequestException(f"Please wait {wait} seconds before requesting another OTP")
+            # Invalidate all old OTPs for this email+purpose
+            old_stmt = select(OTP).where(OTP.email == email, OTP.purpose == purpose, OTP.used == False)
+            old_result = await db.execute(old_stmt)
+            for old in old_result.scalars().all():
+                old.used = True
+            await db.commit()
+
+        otp_code = generate_otp()
+        otp = OTP(
+            email=email,
+            code=otp_code,
+            purpose=purpose,
+            expires_at=datetime.utcnow() + timedelta(minutes=10),
+            user_id=user.id,
+        )
+        db.add(otp)
+        await db.commit()
+
+        try:
+            if purpose == "VERIFY_EMAIL":
+                await EmailService.send_verification_email(email, otp_code)
+            elif purpose == "RESET_PASSWORD":
+                await EmailService.send_password_reset_email(email, otp_code)
+        except Exception:
+            logger.warning(f"[AUTH] Resend OTP email failed for {email}. OTP logged above.")
+
+    @staticmethod
     async def forgot_password(db: AsyncSession, email: str) -> None:
         stmt = select(User).where(User.email == email)
         result = await db.execute(stmt)

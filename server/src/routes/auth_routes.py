@@ -6,7 +6,7 @@ from src.core.database import get_db
 from src.schemas.auth import TokenResponse
 from src.controllers.auth_controller import (
     register, login, refresh_token, verify_email, forgot_password,
-    reset_password, change_password, logout,
+    reset_password, change_password, logout, resend_otp,
 )
 from src.config import settings
 
@@ -16,6 +16,7 @@ router.post("/register", response_model=TokenResponse, status_code=201)(register
 router.post("/login", response_model=TokenResponse)(login)
 router.post("/refresh", response_model=TokenResponse)(refresh_token)
 router.post("/verify-email")(verify_email)
+router.post("/resend-otp")(resend_otp)
 router.post("/forgot-password")(forgot_password)
 router.post("/reset-password")(reset_password)
 router.post("/change-password")(change_password)

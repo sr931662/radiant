@@ -133,3 +133,66 @@
 }
 
 .switchLink:hover { text-decoration: underline; }
+
+/* ── Resend OTP ── */
+.resendSection {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--clr-slate-100);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resendText {
+  font-size: 0.85rem;
+  color: var(--clr-slate-500);
+  margin: 0;
+}
+
+.resendBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1.5px solid var(--clr-primary-border);
+  color: var(--clr-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.resendBtn:hover:not(:disabled) {
+  background: var(--clr-primary-bg);
+}
+
+.resendBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.countdownText {
+  font-size: 0.82rem;
+  color: var(--clr-slate-400);
+  margin: 0;
+}
+
+.countdownText strong {
+  color: var(--clr-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}

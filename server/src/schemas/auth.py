@@ -68,6 +68,11 @@ class ResetPasswordRequest(BaseModel):
         return self
 
 
+class ResendOTPRequest(BaseModel):
+    email: EmailStr
+    purpose: str = "VERIFY_EMAIL"  # VERIFY_EMAIL | RESET_PASSWORD
+
+
 class ChangePasswordRequest(BaseModel):
     current_password: str
     new_password: str = Field(..., min_length=8, max_length=128)
