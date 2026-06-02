@@ -6,6 +6,8 @@ import Spinner from '../../components/ui/Spinner'
 import StatusBadge from '../../components/ui/StatusBadge'
 import Pagination from '../../components/ui/Pagination'
 import Modal from '../../components/ui/Modal'
+import { Users as UsersIcon } from 'lucide-react'
+import s from './admin.module.css'
 
 const ROLES = ['SUPER_ADMIN', 'ADMIN', 'FACULTY', 'STUDENT', 'VOLUNTEER', 'PUBLIC']
 
@@ -37,53 +39,67 @@ export default function AdminUsers() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Users</h1>
-        <select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); setPage(1) }} style={{ padding: '0.5rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '0.875rem' }}>
-          <option value="">All Roles</option>
-          {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-        </select>
+      <div className={s.pageHeader}>
+        <div className={s.pageTitleGroup}>
+          <h1 className={s.pageTitle}>Users</h1>
+          <p className={s.pageSub}>{data?.total ?? 0} registered users</p>
+        </div>
+        <div className={s.filterBar} style={{ margin: 0 }}>
+          <select className={s.filterSelect} value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); setPage(1) }}>
+            <option value="">All Roles</option>
+            {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </div>
       </div>
 
       {isLoading ? <Spinner center /> : (
-        <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
+        <div className={s.tableWrap}>
+          <table className={s.table}>
+            <thead className={s.thead}>
+              <tr>
                 {['Name / Email', 'Roles', 'Status', 'Joined', 'Actions'].map((h) => (
-                  <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#64748b', fontSize: '0.78rem', textTransform: 'uppercase' }}>{h}</th>
+                  <th key={h} className={s.th}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody className={s.tbody}>
               {users.map((u) => (
-                <tr key={u.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.875rem 1rem' }}>
-                    <div style={{ fontWeight: 600, color: '#0f172a' }}>{u.name}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#64748b' }}>{u.email}</div>
+                <tr key={u.id}>
+                  <td className={s.tdPrimary}>
+                    <div className={s.tdMain}>{u.name}</div>
+                    <div className={s.tdSub}>{u.email}</div>
                   </td>
-                  <td style={{ padding: '0.875rem 1rem' }}>
+                  <td className={s.td}>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                      {u.roles?.map((r) => <span key={r} style={{ background: '#eff6ff', color: '#2563eb', padding: '1px 8px', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 600 }}>{r}</span>)}
+                      {u.roles?.map((r) => <span key={r} className={`${s.chip} ${s.chipBlue}`}>{r}</span>)}
                     </div>
                   </td>
-                  <td style={{ padding: '0.875rem 1rem' }}>
+                  <td className={s.td}>
                     <StatusBadge status={u.is_banned ? 'REJECTED' : 'APPROVED'} />
-                    {!u.is_email_verified && <span style={{ marginLeft: '6px', fontSize: '0.7rem', color: '#f59e0b' }}>Unverified</span>}
+                    {!u.is_email_verified && <span className={`${s.chip} ${s.chipAmber}`} style={{ marginLeft: 6 }}>Unverified</span>}
                   </td>
-                  <td style={{ padding: '0.875rem 1rem', color: '#64748b', fontSize: '0.82rem' }}>
-                    {new Date(u.created_at).toLocaleDateString('en-IN')}
-                  </td>
-                  <td style={{ padding: '0.875rem 1rem' }}>
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button onClick={() => { setRoleModal(u); setSelectedRoles(u.roles || []) }} style={{ padding: '4px 10px', background: '#eff6ff', color: '#2563eb', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>Roles</button>
-                      <button onClick={() => banMutation.mutate({ id: u.id, ban: !u.is_banned })} style={{ padding: '4px 10px', background: u.is_banned ? '#f0fdf4' : '#fef2f2', color: u.is_banned ? '#059669' : '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>
+                  <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{new Date(u.created_at).toLocaleDateString('en-IN')}</td>
+                  <td className={s.tdActions}>
+                    <div className={s.actionBtns}>
+                      <button className={`${s.btn} ${s.btnEdit}`} onClick={() => { setRoleModal(u); setSelectedRoles(u.roles || []) }}>Roles</button>
+                      <button
+                        className={`${s.btn} ${u.is_banned ? s.btnSuccess : s.btnDanger}`}
+                        onClick={() => banMutation.mutate({ id: u.id, ban: !u.is_banned })}
+                      >
                         {u.is_banned ? 'Unban' : 'Ban'}
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
+              {users.length === 0 && (
+                <tr><td colSpan={5}>
+                  <div className={s.emptyState}>
+                    <div className={s.emptyStateIcon}><UsersIcon size={24} /></div>
+                    <p className={s.emptyStateText}>No users found</p>
+                  </div>
+                </td></tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -94,13 +110,14 @@ export default function AdminUsers() {
       <Modal open={!!roleModal} onClose={() => setRoleModal(null)} title={`Change Roles — ${roleModal?.name}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
           {ROLES.map((r) => (
-            <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem' }}>
-              <input type="checkbox" checked={selectedRoles.includes(r)} onChange={(e) => setSelectedRoles(e.target.checked ? [...selectedRoles, r] : selectedRoles.filter((x) => x !== r))} />
+            <label key={r} className={s.formCheckLabel}>
+              <input type="checkbox" checked={selectedRoles.includes(r)}
+                onChange={(e) => setSelectedRoles(e.target.checked ? [...selectedRoles, r] : selectedRoles.filter((x) => x !== r))} />
               {r}
             </label>
           ))}
         </div>
-        <button onClick={() => roleMutation.mutate()} disabled={roleMutation.isPending} style={{ width: '100%', padding: '0.7rem', background: 'var(--clr-primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
+        <button className={s.formSubmit} onClick={() => roleMutation.mutate()} disabled={roleMutation.isPending}>
           {roleMutation.isPending ? 'Saving…' : 'Save Roles'}
         </button>
       </Modal>

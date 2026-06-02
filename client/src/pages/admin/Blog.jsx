@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, MessageSquare } from 'lucide-react'
 import { getAdminPosts, createPost, updatePost, deletePost } from '../../services/adminService'
 import Spinner from '../../components/ui/Spinner'
 import StatusBadge from '../../components/ui/StatusBadge'
 import Pagination from '../../components/ui/Pagination'
 import Modal from '../../components/ui/Modal'
+import s from './admin.module.css'
 
 export default function AdminBlog() {
   const qc = useQueryClient()
@@ -34,58 +35,62 @@ export default function AdminBlog() {
   })
 
   function openEdit(post) {
-    setIsNew(false)
-    setEditModal(post)
-    setValue('title', post.title)
-    setValue('content', post.content || '')
-    setValue('excerpt', post.excerpt || '')
-    setValue('featured_image', post.featured_image || '')
-    setValue('category', post.category || '')
-    setValue('status', post.status)
+    setIsNew(false); setEditModal(post)
+    ;['title', 'content', 'excerpt', 'featured_image', 'category', 'status'].forEach((f) => setValue(f, post[f] ?? ''))
   }
 
-  function openNew() {
-    setIsNew(true)
-    setEditModal({})
-    reset({ status: 'DRAFT' })
-  }
+  function openNew() { setIsNew(true); setEditModal({}); reset({ status: 'DRAFT' }) }
 
   const posts = data?.items || []
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Blog Posts</h1>
-        <button onClick={openNew} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.6rem 1.25rem', background: 'var(--clr-primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
-          <Plus size={16} /> New Post
+      <div className={s.pageHeader}>
+        <div className={s.pageTitleGroup}>
+          <h1 className={s.pageTitle}>Blog Posts</h1>
+          <p className={s.pageSub}>{data?.total ?? 0} posts</p>
+        </div>
+        <button className={`${s.btn} ${s.btnPrimary}`} onClick={openNew}>
+          <Plus size={15} /> New Post
         </button>
       </div>
 
       {isLoading ? <Spinner center /> : (
-        <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
+        <div className={s.tableWrap}>
+          <table className={s.table}>
+            <thead className={s.thead}>
+              <tr>
                 {['Title', 'Category', 'Status', 'Published', 'Actions'].map((h) => (
-                  <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#64748b', fontSize: '0.78rem', textTransform: 'uppercase' }}>{h}</th>
+                  <th key={h} className={s.th}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody className={s.tbody}>
               {posts.map((p) => (
-                <tr key={p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.875rem 1rem', fontWeight: 600, color: '#0f172a', maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</td>
-                  <td style={{ padding: '0.875rem 1rem', color: '#64748b' }}>{p.category || '—'}</td>
-                  <td style={{ padding: '0.875rem 1rem' }}><StatusBadge status={p.status} /></td>
-                  <td style={{ padding: '0.875rem 1rem', color: '#64748b', fontSize: '0.82rem' }}>{p.published_at ? new Date(p.published_at).toLocaleDateString('en-IN') : '—'}</td>
-                  <td style={{ padding: '0.875rem 1rem' }}>
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button onClick={() => openEdit(p)} style={{ padding: '4px 8px', background: '#eff6ff', color: '#2563eb', border: 'none', borderRadius: '4px', cursor: 'pointer' }}><Pencil size={14} /></button>
-                      <button onClick={() => { if (window.confirm('Delete this post?')) deleteMutation.mutate(p.id) }} style={{ padding: '4px 8px', background: '#fef2f2', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                <tr key={p.id}>
+                  <td className={s.tdPrimary}>
+                    <div className={s.tdMain} style={{ maxWidth: 260, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+                  </td>
+                  <td className={s.td}>{p.category ? <span className={`${s.chip} ${s.chipPurple}`}>{p.category}</span> : '—'}</td>
+                  <td className={s.td}><StatusBadge status={p.status} /></td>
+                  <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{p.published_at ? new Date(p.published_at).toLocaleDateString('en-IN') : '—'}</td>
+                  <td className={s.tdActions}>
+                    <div className={s.actionBtns}>
+                      <button className={`${s.btn} ${s.btnEdit} ${s.btnIconOnly}`} onClick={() => openEdit(p)}><Pencil size={14} /></button>
+                      <button className={`${s.btn} ${s.btnDanger} ${s.btnIconOnly}`} onClick={() => { if (window.confirm('Delete this post?')) deleteMutation.mutate(p.id) }}><Trash2 size={14} /></button>
                     </div>
                   </td>
                 </tr>
               ))}
+              {posts.length === 0 && (
+                <tr><td colSpan={5}>
+                  <div className={s.emptyState}>
+                    <div className={s.emptyStateIcon}><MessageSquare size={24} /></div>
+                    <p className={s.emptyStateText}>No posts yet</p>
+                    <p className={s.emptyStateSub}>Create your first blog post</p>
+                  </div>
+                </td></tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -94,24 +99,24 @@ export default function AdminBlog() {
 
       <Modal open={!!editModal} onClose={() => { setEditModal(null); reset() }} title={isNew ? 'New Post' : 'Edit Post'} width={680}>
         <form onSubmit={handleSubmit((d) => saveMutation.mutate(d))}>
-          {[['title', 'Title', 'text'], ['excerpt', 'Excerpt', 'text'], ['featured_image', 'Featured Image URL', 'url'], ['category', 'Category', 'text']].map(([name, label, type]) => (
-            <div key={name} style={{ marginBottom: '0.875rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 500, fontSize: '0.82rem' }}>{label}</label>
-              <input type={type} {...register(name)} style={{ width: '100%', padding: '0.55rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '6px', boxSizing: 'border-box' }} />
+          {[['title', 'Title'], ['excerpt', 'Excerpt'], ['featured_image', 'Featured Image URL'], ['category', 'Category']].map(([name, label]) => (
+            <div key={name} className={s.formGroup}>
+              <label className={s.formLabel}>{label}</label>
+              <input {...register(name)} className={s.formInput} />
             </div>
           ))}
-          <div style={{ marginBottom: '0.875rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 500, fontSize: '0.82rem' }}>Content</label>
-            <textarea {...register('content', { required: true })} rows={8} style={{ width: '100%', padding: '0.55rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '6px', resize: 'vertical', boxSizing: 'border-box' }} />
+          <div className={s.formGroup}>
+            <label className={s.formLabel}>Content *</label>
+            <textarea {...register('content', { required: true })} className={s.formTextarea} rows={8} />
           </div>
-          <div style={{ marginBottom: '1.25rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 500, fontSize: '0.82rem' }}>Status</label>
-            <select {...register('status')} style={{ width: '100%', padding: '0.55rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
+          <div className={s.formGroup}>
+            <label className={s.formLabel}>Status</label>
+            <select {...register('status')} className={s.formSelect}>
               <option value="DRAFT">Draft</option>
               <option value="PUBLISHED">Published</option>
             </select>
           </div>
-          <button type="submit" disabled={saveMutation.isPending} style={{ width: '100%', padding: '0.7rem', background: 'var(--clr-primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
+          <button type="submit" className={s.formSubmit} disabled={saveMutation.isPending}>
             {saveMutation.isPending ? 'Saving…' : isNew ? 'Create Post' : 'Update Post'}
           </button>
         </form>

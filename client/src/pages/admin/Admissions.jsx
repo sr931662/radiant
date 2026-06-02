@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { FileText } from 'lucide-react'
 import { getAdmissions, updateAdmissionStatus } from '../../services/adminService'
 import Spinner from '../../components/ui/Spinner'
 import StatusBadge from '../../components/ui/StatusBadge'
 import Pagination from '../../components/ui/Pagination'
 import Modal from '../../components/ui/Modal'
+import s from './admin.module.css'
 
 export default function AdminAdmissions() {
   const qc = useQueryClient()
@@ -27,41 +29,59 @@ export default function AdminAdmissions() {
   })
 
   const items = data?.items || []
+  const pending = items.filter((i) => i.status === 'PENDING').length
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Admissions</h1>
-        <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1) }} style={{ padding: '0.5rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
-          <option value="">All Status</option>
-          {['PENDING', 'APPROVED', 'REJECTED'].map((s) => <option key={s} value={s}>{s}</option>)}
-        </select>
+      <div className={s.pageHeader}>
+        <div className={s.pageTitleGroup}>
+          <h1 className={s.pageTitle}>Admissions</h1>
+          <p className={s.pageSub}>{data?.total ?? 0} applications · {pending} pending review</p>
+        </div>
+        <div className={s.filterBar} style={{ margin: 0 }}>
+          <select className={s.filterSelect} value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1) }}>
+            <option value="">All Status</option>
+            {['PENDING', 'APPROVED', 'REJECTED'].map((s_) => <option key={s_} value={s_}>{s_}</option>)}
+          </select>
+        </div>
       </div>
 
       {isLoading ? <Spinner center /> : (
-        <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
+        <div className={s.tableWrap}>
+          <table className={s.table}>
+            <thead className={s.thead}>
+              <tr>
                 {['Applicant', 'Course', 'Status', 'Applied On', 'Actions'].map((h) => (
-                  <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 600, color: '#64748b', fontSize: '0.78rem', textTransform: 'uppercase' }}>{h}</th>
+                  <th key={h} className={s.th}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody className={s.tbody}>
               {items.map((item) => (
-                <tr key={item.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>{item.user_id?.slice(0, 8)}…</td>
-                  <td style={{ padding: '0.875rem 1rem', color: '#475569' }}>{item.course_name}</td>
-                  <td style={{ padding: '0.875rem 1rem' }}><StatusBadge status={item.status} /></td>
-                  <td style={{ padding: '0.875rem 1rem', color: '#64748b', fontSize: '0.82rem' }}>{new Date(item.created_at).toLocaleDateString('en-IN')}</td>
-                  <td style={{ padding: '0.875rem 1rem' }}>
+                <tr key={item.id}>
+                  <td className={s.td}>
+                    <span className={s.tdMono}>{item.user_id?.slice(0, 10)}…</span>
+                  </td>
+                  <td className={s.tdPrimary}>
+                    <div className={s.tdMain}>{item.course_name || '—'}</div>
+                  </td>
+                  <td className={s.td}><StatusBadge status={item.status} /></td>
+                  <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{new Date(item.created_at).toLocaleDateString('en-IN')}</td>
+                  <td className={s.tdActions}>
                     {item.status === 'PENDING' && (
-                      <button onClick={() => setActionModal(item)} style={{ padding: '4px 10px', background: '#eff6ff', color: '#2563eb', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>Review</button>
+                      <button className={`${s.btn} ${s.btnEdit}`} onClick={() => setActionModal(item)}>Review</button>
                     )}
                   </td>
                 </tr>
               ))}
+              {items.length === 0 && (
+                <tr><td colSpan={5}>
+                  <div className={s.emptyState}>
+                    <div className={s.emptyStateIcon}><FileText size={24} /></div>
+                    <p className={s.emptyStateText}>No applications found</p>
+                  </div>
+                </td></tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -69,22 +89,30 @@ export default function AdminAdmissions() {
       <Pagination page={page} pages={data?.pages || 1} onPage={setPage} />
 
       <Modal open={!!actionModal} onClose={() => { setActionModal(null); reset() }} title="Review Application">
-        <form onSubmit={handleSubmit((d) => mutation.mutate(d))}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 500, fontSize: '0.875rem' }}>Decision</label>
-            <select {...register('status', { required: true })} style={{ width: '100%', padding: '0.6rem', border: '1px solid #e2e8f0', borderRadius: '6px' }}>
-              <option value="APPROVED">Approve</option>
-              <option value="REJECTED">Reject</option>
-            </select>
+        {actionModal && (
+          <div>
+            <div className={s.infoBox}>
+              <p className={s.infoBoxName}>Course: {actionModal.course_name}</p>
+              <p className={s.infoBoxSub}>Applicant ID: {actionModal.user_id}</p>
+            </div>
+            <form onSubmit={handleSubmit((d) => mutation.mutate(d))}>
+              <div className={s.formGroup}>
+                <label className={s.formLabel}>Decision</label>
+                <select {...register('status', { required: true })} className={s.formSelect}>
+                  <option value="APPROVED">Approve</option>
+                  <option value="REJECTED">Reject</option>
+                </select>
+              </div>
+              <div className={s.formGroup}>
+                <label className={s.formLabel}>Remarks (optional)</label>
+                <textarea {...register('remarks')} className={s.formTextarea} rows={3} />
+              </div>
+              <button type="submit" className={s.formSubmit} disabled={mutation.isPending}>
+                {mutation.isPending ? 'Saving…' : 'Submit Decision'}
+              </button>
+            </form>
           </div>
-          <div style={{ marginBottom: '1.25rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 500, fontSize: '0.875rem' }}>Remarks (optional)</label>
-            <textarea {...register('remarks')} rows={3} style={{ width: '100%', padding: '0.6rem', border: '1px solid #e2e8f0', borderRadius: '6px', resize: 'vertical' }} />
-          </div>
-          <button type="submit" disabled={mutation.isPending} style={{ width: '100%', padding: '0.7rem', background: 'var(--clr-primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
-            {mutation.isPending ? 'Saving…' : 'Submit Decision'}
-          </button>
-        </form>
+        )}
       </Modal>
     </div>
   )
