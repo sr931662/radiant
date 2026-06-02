@@ -19,6 +19,11 @@ export async function getDonationHistory(page = 1, size = 20) {
   return data.data ?? data
 }
 
+export async function simulateDonation(amount, anonymous = false) {
+  const { data } = await api.post('/api/v1/donations/simulate', { amount, anonymous })
+  return data.data ?? data
+}
+
 export async function getReceipt(donationId) {
   const { data } = await api.get(`/api/v1/donations/${donationId}/receipt`)
   return data.data ?? data

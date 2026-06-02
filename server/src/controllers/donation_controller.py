@@ -32,6 +32,20 @@ async def verify_payment(
     return DonationResponse.model_validate(donation)
 
 
+async def simulate_payment(
+    data: CreateOrderRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict | None = Depends(get_current_user_optional),
+) -> DonationResponse:
+    from src.config import settings
+    if settings.environment == "production":
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Simulate endpoint is disabled in production.")
+    user_id = current_user["sub"] if current_user else None
+    donation = await DonationService.simulate_payment(db, user_id, data.amount, data.anonymous)
+    return DonationResponse.model_validate(donation)
+
+
 async def webhook(
     request: Request,
     db: AsyncSession = Depends(get_db),

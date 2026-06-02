@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.donation import DonationResponse, DonationListResponse, DonationStatsResponse
 from src.controllers.donation_controller import (
-    create_order, verify_payment, webhook, my_history, download_receipt,
+    create_order, verify_payment, simulate_payment, webhook, my_history, download_receipt,
     list_all, stats, export_data,
 )
 
@@ -15,6 +15,7 @@ admin_router = APIRouter(
 
 public_router.post("/create-order")(create_order)
 public_router.post("/verify", response_model=DonationResponse)(verify_payment)
+public_router.post("/simulate", response_model=DonationResponse)(simulate_payment)
 public_router.post("/webhook", include_in_schema=False)(webhook)
 public_router.get("/history", response_model=DonationListResponse)(my_history)
 public_router.get("/{donation_id}/receipt")(download_receipt)

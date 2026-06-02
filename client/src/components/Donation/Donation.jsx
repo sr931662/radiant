@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Heart, ShieldCheck, Globe2, QrCode } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { createOrder, verifyPayment, getReceipt } from '../../services/donationService'
+import { createOrder, verifyPayment, getReceipt, simulateDonation } from '../../services/donationService'
 import styles from './Donation.module.css'
 
 const TABS = [
@@ -99,7 +99,15 @@ export default function Donation() {
     onError: (err) => toast.error(err?.response?.data?.message || 'Could not initiate payment. Please try again.'),
   })
 
-  const isLoading = orderMutation.isPending || verifyMutation.isPending
+  const simulateMutation = useMutation({
+    mutationFn: () => simulateDonation(customAmt || selectedAmt),
+    onSuccess: (data) => {
+      toast.success(`Test donation of ₹${(customAmt || selectedAmt).toLocaleString('en-IN')} recorded! ID: ${String(data.id).slice(0, 8)}…`)
+    },
+    onError: (err) => toast.error(err?.response?.data?.detail || 'Simulate failed.'),
+  })
+
+  const isLoading = orderMutation.isPending || verifyMutation.isPending || simulateMutation.isPending
 
   return (
     <section id="donate-section" className={styles.section}>
@@ -181,6 +189,16 @@ export default function Donation() {
                 <QrCode size={15} /> Show UPI QR Code
               </button>
             </div>
+            {import.meta.env.DEV && (
+              <button
+                className={styles.payAltFull}
+                onClick={() => simulateMutation.mutate()}
+                disabled={isLoading || !customAmt}
+                style={{ marginTop: '0.5rem', borderStyle: 'dashed', color: '#7c3aed', borderColor: '#c4b5fd' }}
+              >
+                🧪 Simulate Payment (Dev Only)
+              </button>
+            )}
             <p className={styles.payFootnote}>Instant 80G receipt via email · Bank transfer option available for large donations</p>
           </div>
         </div>

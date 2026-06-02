@@ -116,6 +116,23 @@ class DonationService:
             raise BadRequestException("Donation not completed")
         return donation.receipt_url
 
+    @staticmethod
+    async def simulate_payment(db: AsyncSession, user_id: uuid.UUID | None, amount: float, anonymous: bool = False) -> "Donation":
+        """Create a SUCCESS donation directly — dev/staging only, no Razorpay involved."""
+        donation = Donation(
+            user_id=user_id,
+            amount=amount,
+            currency="INR",
+            status="SUCCESS",
+            anonymous=anonymous,
+            razorpay_order_id=f"dummy_{uuid.uuid4().hex[:16]}",
+            razorpay_payment_id=f"dummy_pay_{uuid.uuid4().hex[:16]}",
+        )
+        db.add(donation)
+        await db.commit()
+        await db.refresh(donation)
+        return donation
+
     # Admin
     @staticmethod
     async def list_all(db: AsyncSession, page: int, size: int, status: str | None = None) -> tuple[list[Donation], int]:
