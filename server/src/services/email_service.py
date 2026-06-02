@@ -1,18 +1,24 @@
-from pathlib import Path
+import logging
 from fastapi.templating import Jinja2Templates
 from src.config import settings
-import httpx  # For Resend API, or use SMTP
+import httpx
 
+logger = logging.getLogger(__name__)
 templates = Jinja2Templates(directory="src/templates/emails")
 
 
 class EmailService:
     @staticmethod
     async def send_email(to_email: str, subject: str, html_content: str) -> None:
-        if settings.email_provider == "resend":
-            await EmailService._send_via_resend(to_email, subject, html_content)
-        else:
-            await EmailService._send_via_smtp(to_email, subject, html_content)
+        try:
+            if settings.email_provider == "resend":
+                await EmailService._send_via_resend(to_email, subject, html_content)
+            else:
+                await EmailService._send_via_smtp(to_email, subject, html_content)
+            logger.info(f"[EMAIL] Sent to {to_email} — {subject}")
+        except Exception as exc:
+            logger.error(f"[EMAIL] FAILED to {to_email} — {subject}: {exc}")
+            raise
 
     @staticmethod
     async def _send_via_resend(to_email: str, subject: str, html_content: str) -> None:
@@ -55,12 +61,14 @@ class EmailService:
 
     @staticmethod
     async def send_verification_email(email: str, otp: str) -> None:
+        logger.info(f"[OTP] Verification OTP for {email}: {otp}")
         template = templates.get_template("verify_email.html")
         html = template.render({"otp": otp, "email": email})
         await EmailService.send_email(email, "Verify Your Email", html)
 
     @staticmethod
     async def send_password_reset_email(email: str, otp: str) -> None:
+        logger.info(f"[OTP] Password reset OTP for {email}: {otp}")
         template = templates.get_template("password_reset.html")
         html = template.render({"otp": otp, "email": email})
         await EmailService.send_email(email, "Reset Your Password", html)

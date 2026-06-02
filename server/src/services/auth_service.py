@@ -1,3 +1,4 @@
+import logging
 import uuid
 from datetime import datetime, timedelta
 
@@ -9,6 +10,8 @@ from src.models import User, UserRole, Role, RefreshToken, OTP
 from src.utils.otp import generate_otp, verify_otp
 from src.utils.exceptions import AppException, UnauthorizedException, NotFoundException, BadRequestException
 from src.services.email_service import EmailService
+
+logger = logging.getLogger(__name__)
 
 
 class AuthService:
@@ -137,7 +140,10 @@ class AuthService:
         otp = OTP(email=email, code=otp_code, purpose="RESET_PASSWORD", expires_at=datetime.utcnow() + timedelta(minutes=10), user_id=user.id)
         db.add(otp)
         await db.commit()
-        await EmailService.send_password_reset_email(email, otp_code)
+        try:
+            await EmailService.send_password_reset_email(email, otp_code)
+        except Exception:
+            logger.warning(f"[AUTH] Password reset email failed for {email}. OTP logged above.")
 
     @staticmethod
     async def reset_password(db: AsyncSession, email: str, otp_code: str, new_password: str) -> None:
