@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from src.models.enrollment import Enrollment
     from src.models.module import Module
 
-from ast import Module
 from typing import Optional
 from sqlalchemy import Boolean, Float, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship

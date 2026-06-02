@@ -122,10 +122,31 @@ class FdpService:
 
     @staticmethod
     async def mark_attendance(db: AsyncSession, fdp_id: uuid.UUID, attendance_records: list[dict]) -> list:
+        """Accept frontend format: [{ user_id, attended: bool }]
+        Converts to Attendance rows with status PRESENT/ABSENT and today's date."""
         from src.models import Attendance
+        from sqlalchemy import delete as sa_delete
+        now = datetime.now(timezone.utc)
+
         attendance_list = []
         for rec in attendance_records:
-            attendance = Attendance(**rec, fdp_id=fdp_id)
+            user_id = rec.get("user_id")
+            attended = rec.get("attended", False)
+            if not user_id:
+                continue
+            # Upsert: delete existing record for this fdp+user then insert fresh
+            await db.execute(
+                sa_delete(Attendance).where(
+                    Attendance.fdp_id == fdp_id,
+                    Attendance.user_id == user_id,
+                )
+            )
+            attendance = Attendance(
+                fdp_id=fdp_id,
+                user_id=user_id,
+                date=now,
+                status="PRESENT" if attended else "ABSENT",
+            )
             db.add(attendance)
             attendance_list.append(attendance)
         await db.commit()

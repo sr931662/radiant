@@ -24,4 +24,4 @@ class VolunteerApplication(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     remarks: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship(back_populates="volunteer_applications")
+    user: Mapped["User"] = relationship(back_populates="volunteer_applications", lazy="selectin")

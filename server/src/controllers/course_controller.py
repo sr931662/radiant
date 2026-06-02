@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database import get_db
 from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.course import (
-    CourseCreateRequest, CourseUpdateRequest, CourseResponse, CourseListResponse,
-    ModuleCreateRequest, ModuleResponse, LessonCreateRequest, LessonResponse,
-    EnrollmentResponse, EnrollmentListResponse,
+    CourseCreateRequest, CourseUpdateRequest, CourseResponse, CourseDetailResponse,
+    CourseListResponse, ModuleCreateRequest, ModuleResponse, LessonCreateRequest,
+    LessonResponse, EnrollmentResponse, EnrollmentListResponse,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.course_service import CourseService
@@ -31,9 +31,9 @@ async def list_courses(
 async def get_course(
     course_id: uuid.UUID = Path(...),
     db: AsyncSession = Depends(get_db),
-) -> CourseResponse:
+) -> CourseDetailResponse:
     course = await CourseService.get_course(db, course_id)
-    return CourseResponse.model_validate(course)
+    return CourseDetailResponse.model_validate(course)
 
 
 async def enroll(

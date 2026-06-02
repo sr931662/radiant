@@ -18,6 +18,7 @@ class GalleryAlbum(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     cover_image: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    tag: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # e.g. Events, Programs
 
     # Relationships
     media: Mapped[list["GalleryMedia"]] = relationship(back_populates="album", lazy="selectin")

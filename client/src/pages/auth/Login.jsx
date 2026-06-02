@@ -11,7 +11,9 @@ export default function Login() {
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
 
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { remember: true },
+  })
 
   const mutation = useMutation({
     mutationFn: ({ email, password, remember }) => login(email, password, remember),

@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database import get_db
 from src.dependencies import get_current_admin_user
-from src.schemas.gallery import AlbumCreateRequest, AlbumResponse, MediaUploadResponse
+from src.schemas.gallery import AlbumCreateRequest, AlbumUpdateRequest, AlbumResponse, MediaUploadResponse
 from src.schemas.common import APIResponse
 from src.services.gallery_service import GalleryService
 
@@ -35,7 +35,7 @@ async def create_album(
 
 async def update_album(
     album_id: uuid.UUID = Path(...),
-    data: AlbumCreateRequest = Body(...),
+    data: AlbumUpdateRequest = Body(...),
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> AlbumResponse:

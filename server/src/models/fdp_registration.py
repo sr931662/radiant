@@ -25,4 +25,4 @@ class FdpRegistration(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
 
     # Relationships
     fdp: Mapped["Fdp"] = relationship(back_populates="registrations")
-    user: Mapped["User"] = relationship(back_populates="fdp_registrations")
+    user: Mapped["User"] = relationship(back_populates="fdp_registrations", lazy="selectin")

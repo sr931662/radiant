@@ -34,20 +34,6 @@ class CourseResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
-class ModuleCreateRequest(BaseModel):
-    title: str = Field(..., min_length=2, max_length=255)
-    order: int = 0
-
-
-class ModuleResponse(BaseModel):
-    id: uuid.UUID
-    course_id: uuid.UUID
-    title: str
-    order: int
-
-    model_config = {"from_attributes": True}
-
-
 class LessonCreateRequest(BaseModel):
     title: str = Field(..., min_length=2, max_length=255)
     content: str | None = None
@@ -66,6 +52,35 @@ class LessonResponse(BaseModel):
     order: int
 
     model_config = {"from_attributes": True}
+
+
+class ModuleCreateRequest(BaseModel):
+    title: str = Field(..., min_length=2, max_length=255)
+    order: int = 0
+
+
+class ModuleResponse(BaseModel):
+    id: uuid.UUID
+    course_id: uuid.UUID
+    title: str
+    order: int
+
+    model_config = {"from_attributes": True}
+
+
+class ModuleWithLessonsResponse(BaseModel):
+    id: uuid.UUID
+    course_id: uuid.UUID
+    title: str
+    order: int
+    lessons: list[LessonResponse] = []
+
+    model_config = {"from_attributes": True}
+
+
+class CourseDetailResponse(CourseResponse):
+    """Full course detail including nested modules and lessons."""
+    modules: list[ModuleWithLessonsResponse] = []
 
 
 class EnrollmentRequest(BaseModel):

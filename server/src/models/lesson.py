@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.models.module import Module
 
-from ast import Module
 from typing import Optional
 import uuid
 from sqlalchemy import ForeignKey, Integer, String, Text

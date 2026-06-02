@@ -53,8 +53,19 @@ class FdpRegistrationResponse(BaseModel):
     status: str
     remarks: str | None = None
     created_at: datetime
+    # Populated from the user relationship
+    name: str | None = None
+    email: str | None = None
 
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def model_validate(cls, obj, **kwargs):
+        instance = super().model_validate(obj, **kwargs)
+        if hasattr(obj, "user") and obj.user:
+            instance.name = obj.user.name
+            instance.email = obj.user.email
+        return instance
 
 
 class AttendanceRequest(BaseModel):
