@@ -47,10 +47,22 @@ from src.utils.exceptions import AppException
 async def lifespan(app: FastAPI):
     # Startup — wrap each check so a single failure never prevents the server from binding
     import logging as _log
+    _logger = _log.getLogger(__name__)
+
     try:
         await validate_database_connection()
     except Exception as _e:
-        _log.getLogger(__name__).error("DB startup check failed (server starting anyway): %s", _e)
+        _logger.error("DB startup check failed (server starting anyway): %s", _e)
+
+    # Log email configuration so failures are visible in Cloud Run logs
+    _logger.info(
+        "[EMAIL CONFIG] provider=%s from=%s smtp_host=%s smtp_port=%s smtp_user=%s",
+        settings.email_provider,
+        settings.email_from,
+        settings.smtp_host,
+        settings.smtp_port,
+        settings.smtp_user,
+    )
 
     try:
         await init_redis()

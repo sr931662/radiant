@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; }
+    .header { color: #1a56db; margin-bottom: 20px; }
+    .reply-box { background: #f8fafc; border-left: 4px solid #1a56db; padding: 16px; border-radius: 0 6px 6px 0; margin: 20px 0; color: #334155; line-height: 1.6; white-space: pre-wrap; }
+    .footer { margin-top: 30px; font-size: 12px; color: #888; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="header">Radiant Education Trust</h2>
+    <p>Thank you for reaching out. Here is our response to your inquiry regarding <strong>{{ subject }}</strong>:</p>
+    <div class="reply-box">{{ reply }}</div>
+    <p>If you have any further questions, feel free to reply to this email.</p>
+    <div class="footer">Radiant Education Trust | radianttrust.org</div>
+  </div>
+</body>
+</html>
