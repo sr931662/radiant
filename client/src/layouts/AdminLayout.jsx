@@ -2,16 +2,26 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   LayoutDashboard, Users, FileText, Heart,
-  MessageSquare, LogOut, Sun, ChevronRight
+  MessageSquare, LogOut, Sun, ChevronRight,
+  BookOpen, Image, HandHeart, BadgeCheck,
+  GraduationCap, Mail, Download, Award,
 } from 'lucide-react'
 import styles from './AdminLayout.module.css'
 
 const NAV = [
-  { to: '/admin',             label: 'Dashboard',    icon: LayoutDashboard, end: true },
-  { to: '/admin/users',       label: 'Users',        icon: Users },
-  { to: '/admin/admissions',  label: 'Admissions',   icon: FileText },
-  { to: '/admin/donations',   label: 'Donations',    icon: Heart },
-  { to: '/admin/blog',        label: 'Blog',         icon: MessageSquare },
+  { to: '/admin',                label: 'Dashboard',    icon: LayoutDashboard, end: true },
+  { to: '/admin/users',          label: 'Users',        icon: Users },
+  { to: '/admin/admissions',     label: 'Admissions',   icon: FileText },
+  { to: '/admin/donations',      label: 'Donations',    icon: Heart },
+  { to: '/admin/memberships',    label: 'Memberships',  icon: BadgeCheck },
+  { to: '/admin/volunteers',     label: 'Volunteers',   icon: HandHeart },
+  { to: '/admin/courses',        label: 'Courses',      icon: BookOpen },
+  { to: '/admin/fdp',            label: 'FDP',          icon: GraduationCap },
+  { to: '/admin/blog',           label: 'Blog',         icon: MessageSquare },
+  { to: '/admin/gallery',        label: 'Gallery',      icon: Image },
+  { to: '/admin/contacts',       label: 'Contacts',     icon: Mail },
+  { to: '/admin/downloads',      label: 'Downloads',    icon: Download },
+  { to: '/admin/certificates',   label: 'Certificates', icon: Award },
 ]
 
 export default function AdminLayout() {

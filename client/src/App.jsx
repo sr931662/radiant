@@ -27,6 +27,14 @@ import AdminUsers from './pages/admin/Users.jsx'
 import AdminAdmissions from './pages/admin/Admissions.jsx'
 import AdminDonations from './pages/admin/Donations.jsx'
 import AdminBlog from './pages/admin/Blog.jsx'
+import AdminCourses from './pages/admin/Courses.jsx'
+import AdminGallery from './pages/admin/Gallery.jsx'
+import AdminVolunteers from './pages/admin/Volunteers.jsx'
+import AdminMemberships from './pages/admin/Memberships.jsx'
+import AdminFDP from './pages/admin/FDP.jsx'
+import AdminContacts from './pages/admin/Contacts.jsx'
+import AdminDownloads from './pages/admin/Downloads.jsx'
+import AdminCertificates from './pages/admin/Certificates.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -69,7 +77,15 @@ export default function App() {
           <Route path="users" element={<AdminUsers />} />
           <Route path="admissions" element={<AdminAdmissions />} />
           <Route path="donations" element={<AdminDonations />} />
+          <Route path="memberships" element={<AdminMemberships />} />
+          <Route path="volunteers" element={<AdminVolunteers />} />
+          <Route path="courses" element={<AdminCourses />} />
+          <Route path="fdp" element={<AdminFDP />} />
           <Route path="blog" element={<AdminBlog />} />
+          <Route path="gallery" element={<AdminGallery />} />
+          <Route path="contacts" element={<AdminContacts />} />
+          <Route path="downloads" element={<AdminDownloads />} />
+          <Route path="certificates" element={<AdminCertificates />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
