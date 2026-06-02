@@ -11,7 +11,7 @@ class UserStatsResponse(BaseModel):
 
 class DonationAnalyticsResponse(BaseModel):
     total_donations: float
-    donation_count: int
+    total_count: int
     average_donation: float
     monthly_breakdown: list[dict]  # {month: "2025-01", total: 5000}
 
