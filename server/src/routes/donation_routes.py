@@ -20,6 +20,6 @@ public_router.post("/webhook", include_in_schema=False)(webhook)
 public_router.get("/history", response_model=DonationListResponse)(my_history)
 public_router.get("/{donation_id}/receipt")(download_receipt)
 
-admin_router.get("/", response_model=DonationListResponse)(list_all)
+admin_router.get("", response_model=DonationListResponse)(list_all)
 admin_router.get("/stats", response_model=DonationStatsResponse)(stats)
 admin_router.get("/export")(export_data)

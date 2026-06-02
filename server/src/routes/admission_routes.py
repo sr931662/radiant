@@ -10,9 +10,9 @@ admin_router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-public_router.post("/", response_model=AdmissionResponse, status_code=201)(apply)
+public_router.post("", response_model=AdmissionResponse, status_code=201)(apply)
 public_router.get("/my-applications", response_model=list[AdmissionResponse])(my_applications)
 
-admin_router.get("/", response_model=AdmissionListResponse)(list_all)
+admin_router.get("", response_model=AdmissionListResponse)(list_all)
 admin_router.get("/{admission_id}", response_model=AdmissionResponse)(get_one)
 admin_router.patch("/{admission_id}/status", response_model=AdmissionResponse)(update_status)

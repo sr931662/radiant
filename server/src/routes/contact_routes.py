@@ -10,6 +10,6 @@ admin_router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-public_router.post("/", status_code=201)(submit_inquiry)
-admin_router.get("/", response_model=InquiryListResponse)(list_inquiries)
+public_router.post("", status_code=201)(submit_inquiry)
+admin_router.get("", response_model=InquiryListResponse)(list_inquiries)
 admin_router.patch("/{inquiry_id}/reply")(reply_to_inquiry)

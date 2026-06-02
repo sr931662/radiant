@@ -10,8 +10,8 @@ admin_router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-public_router.get("/", response_model=list[DownloadItemResponse])(list_items)
+public_router.get("", response_model=list[DownloadItemResponse])(list_items)
 public_router.get("/{item_id}")(download_file)
 
-admin_router.post("/", response_model=DownloadItemResponse, status_code=201)(create_item)
+admin_router.post("", response_model=DownloadItemResponse, status_code=201)(create_item)
 admin_router.delete("/{item_id}")(delete_item)

@@ -16,5 +16,5 @@ public_router.post("/apply/volunteer", response_model=VolunteerResponse, status_
 public_router.post("/apply/internship", response_model=InternshipResponse, status_code=201)(apply_internship)
 public_router.get("/my-applications", response_model=list[VolunteerResponse | InternshipResponse])(my_applications)
 
-admin_router.get("/", response_model=VolunteerListResponse)(list_all)
+admin_router.get("", response_model=VolunteerListResponse)(list_all)
 admin_router.patch("/{application_id}/{type}")(update_status)

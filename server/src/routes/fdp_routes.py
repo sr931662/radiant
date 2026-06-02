@@ -14,12 +14,12 @@ admin_router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-public_router.get("/", response_model=FdpListResponse)(list_fdps)
+public_router.get("", response_model=FdpListResponse)(list_fdps)
+public_router.get("/my-registrations", response_model=list[FdpRegistrationResponse])(my_registrations)
 public_router.get("/{fdp_id}", response_model=FdpResponse)(get_fdp)
 public_router.post("/{fdp_id}/register", response_model=FdpRegistrationResponse)(register)
-public_router.get("/my-registrations", response_model=list[FdpRegistrationResponse])(my_registrations)
 
-admin_router.post("/", response_model=FdpResponse, status_code=201)(create_fdp)
+admin_router.post("", response_model=FdpResponse, status_code=201)(create_fdp)
 admin_router.put("/{fdp_id}", response_model=FdpResponse)(update_fdp)
 admin_router.delete("/{fdp_id}")(delete_fdp)
 admin_router.get("/{fdp_id}/registrations", response_model=list[FdpRegistrationResponse])(get_registrations)

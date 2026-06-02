@@ -19,6 +19,6 @@ public_router.get("/my-memberships", response_model=list[MembershipResponse])(my
 public_router.get("/{membership_id}/card", response_model=MembershipCardResponse)(download_card)
 public_router.post("/{membership_id}/renew", response_model=MembershipResponse)(renew)
 
-admin_router.get("/", response_model=MembershipListResponse)(list_all)
+admin_router.get("", response_model=MembershipListResponse)(list_all)
 admin_router.patch("/{membership_id}/approve", response_model=MembershipResponse)(approve_reject)
 admin_router.get("/export")(export_data)

@@ -9,7 +9,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-router.get("/", response_model=UserListResponse)(list_users)
+router.get("", response_model=UserListResponse)(list_users)
 router.get("/{user_id}", response_model=UserResponse)(get_user)
 router.patch("/{user_id}", response_model=UserResponse)(update_user)
 router.patch("/{user_id}/ban")(ban_user)

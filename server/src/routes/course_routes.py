@@ -14,14 +14,14 @@ admin_router = APIRouter(
     dependencies=[Depends(get_current_admin_user)],
 )
 
-public_router.get("/", response_model=CourseListResponse)(list_courses)
+public_router.get("", response_model=CourseListResponse)(list_courses)
+public_router.get("/my-courses", response_model=EnrollmentListResponse)(my_courses)
 public_router.get("/{course_id}", response_model=CourseResponse)(get_course)
 public_router.post("/{course_id}/enroll", response_model=EnrollmentResponse)(enroll)
-public_router.get("/my-courses", response_model=EnrollmentListResponse)(my_courses)
 public_router.get("/{course_id}/lessons", response_model=list[LessonResponse])(get_lessons)
 
-admin_router.get("/", response_model=CourseListResponse)(admin_list_courses)
-admin_router.post("/", response_model=CourseResponse, status_code=201)(create_course)
+admin_router.get("", response_model=CourseListResponse)(admin_list_courses)
+admin_router.post("", response_model=CourseResponse, status_code=201)(create_course)
 admin_router.put("/{course_id}", response_model=CourseResponse)(update_course)
 admin_router.delete("/{course_id}")(delete_course)
 admin_router.post("/{course_id}/modules", response_model=ModuleResponse)(create_module)
