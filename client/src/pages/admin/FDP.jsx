@@ -14,10 +14,23 @@ import Pagination from '../../components/ui/Pagination'
 import Modal from '../../components/ui/Modal'
 import s from './admin.module.css'
 
-function FDPForm({ onSubmit, isPending, isNew }) {
-  const { register, handleSubmit } = useForm()
+function toDateInput(iso) {
+  if (!iso) return ''
+  return iso.slice(0, 10)
+}
+
+function FDPForm({ onSubmit, isPending, isNew, defaultValues }) {
+  const { register, handleSubmit } = useForm({ defaultValues })
+
+  function handleFormSubmit(data) {
+    // Convert bare date strings to ISO datetime so FastAPI accepts them
+    if (data.start_date && !data.start_date.includes('T')) data.start_date = data.start_date + 'T00:00:00'
+    if (data.end_date && !data.end_date.includes('T')) data.end_date = data.end_date + 'T00:00:00'
+    onSubmit(data)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={s.formGroup}><label className={s.formLabel}>Title *</label><input {...register('title', { required: true })} className={s.formInput} /></div>
       <div className={s.formGroup}><label className={s.formLabel}>Description</label><textarea {...register('description')} className={s.formTextarea} rows={3} /></div>
       <div className={s.formGroup}><label className={s.formLabel}>Venue</label><input {...register('venue')} className={s.formInput} /></div>
@@ -26,7 +39,7 @@ function FDPForm({ onSubmit, isPending, isNew }) {
         <div className={s.formGroup}><label className={s.formLabel}>Start Date</label><input type="date" {...register('start_date')} className={s.formInput} /></div>
         <div className={s.formGroup}><label className={s.formLabel}>End Date</label><input type="date" {...register('end_date')} className={s.formInput} /></div>
         <div className={s.formGroup}><label className={s.formLabel}>Max Seats</label><input type="number" {...register('max_seats')} className={s.formInput} /></div>
-        <div className={s.formGroup}><label className={s.formLabel}>Fee (₹)</label><input type="number" defaultValue={0} {...register('fee')} className={s.formInput} /></div>
+        <div className={s.formGroup}><label className={s.formLabel}>Fee (₹)</label><input type="number" {...register('fee')} className={s.formInput} /></div>
       </div>
       <button type="submit" disabled={isPending} className={s.formSubmit}>{isPending ? 'Saving…' : isNew ? 'Create FDP' : 'Update FDP'}</button>
     </form>
@@ -137,7 +150,16 @@ export default function AdminFDP() {
       <Pagination page={page} pages={data?.pages || 1} onPage={setPage} />
 
       <Modal open={!!fdpModal} onClose={() => setFdpModal(null)} title={isNew ? 'New FDP' : 'Edit FDP'} width={620}>
-        <FDPForm onSubmit={(d) => saveMutation.mutate(d)} isPending={saveMutation.isPending} isNew={isNew} />
+        <FDPForm
+          onSubmit={(d) => saveMutation.mutate(d)}
+          isPending={saveMutation.isPending}
+          isNew={isNew}
+          defaultValues={isNew ? {} : {
+            ...fdpModal,
+            start_date: toDateInput(fdpModal?.start_date),
+            end_date: toDateInput(fdpModal?.end_date),
+          }}
+        />
       </Modal>
 
       <Modal open={!!regsModal} onClose={() => { setRegsModal(null); setAttendanceMap({}) }} title={`Registrations — ${regsModal?.title}`} width={740}>

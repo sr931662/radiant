@@ -23,4 +23,4 @@ class BlogComment(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
 
     # Relationships
     post: Mapped["BlogPost"] = relationship(back_populates="comments")
-    user: Mapped["User"] = relationship(back_populates="blog_comments")
+    user: Mapped["User"] = relationship(back_populates="blog_comments", lazy="selectin")

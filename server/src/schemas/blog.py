@@ -52,12 +52,19 @@ class CommentResponse(BaseModel):
     id: uuid.UUID
     post_id: uuid.UUID
     user_id: uuid.UUID
-    user_name: str
+    user_name: str = ""
     content: str
     status: str
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def model_validate(cls, obj, **kwargs):
+        instance = super().model_validate(obj, **kwargs)
+        if hasattr(obj, "user") and obj.user:
+            instance.user_name = obj.user.name or ""
+        return instance
 
 
 class PostListResponse(PaginatedResponse[PostResponse]):

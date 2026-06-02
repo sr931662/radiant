@@ -111,6 +111,10 @@ class CourseService:
         return lesson
 
     @staticmethod
-    async def all_enrollments(db: AsyncSession) -> list[Enrollment]:
-        result = await db.execute(select(Enrollment).order_by(Enrollment.created_at.desc()))
-        return list(result.scalars().all())
+    async def all_enrollments(db: AsyncSession, page: int = 1, size: int = 20) -> tuple[list[Enrollment], int]:
+        count_q = select(func.count(Enrollment.id))
+        total = await db.scalar(count_q) or 0
+        result = await db.execute(
+            select(Enrollment).order_by(Enrollment.created_at.desc()).offset((page - 1) * size).limit(size)
+        )
+        return list(result.scalars().all()), total

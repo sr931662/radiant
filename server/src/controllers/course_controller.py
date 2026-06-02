@@ -131,14 +131,15 @@ async def create_lesson(
 
 
 async def all_enrollments(
+    pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> EnrollmentListResponse:
-    enrollments = await CourseService.all_enrollments(db)
+    enrollments, total = await CourseService.all_enrollments(db, pagination.page, pagination.size)
     return EnrollmentListResponse(
         items=[EnrollmentResponse.model_validate(e) for e in enrollments],
-        total=len(enrollments),
-        page=1,
-        size=len(enrollments),
-        pages=1,
+        total=total,
+        page=pagination.page,
+        size=pagination.size,
+        pages=(total + pagination.size - 1) // pagination.size,
     )

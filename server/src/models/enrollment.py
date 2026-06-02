@@ -23,5 +23,5 @@ class Enrollment(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
-    user: Mapped["User"] = relationship(back_populates="enrollments")
-    course: Mapped["Course"] = relationship(back_populates="enrollments")
+    user: Mapped["User"] = relationship(back_populates="enrollments", lazy="selectin")
+    course: Mapped["Course"] = relationship(back_populates="enrollments", lazy="selectin")

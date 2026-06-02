@@ -115,10 +115,23 @@ class FdpService:
 
     @staticmethod
     async def get_registrations(db: AsyncSession, fdp_id: uuid.UUID) -> list[FdpRegistration]:
+        from src.models import Attendance
         result = await db.execute(
             select(FdpRegistration).where(FdpRegistration.fdp_id == fdp_id, FdpRegistration.deleted_at == None)
         )
-        return list(result.scalars().all())
+        registrations = list(result.scalars().all())
+
+        attendance_result = await db.execute(
+            select(Attendance.user_id).where(
+                Attendance.fdp_id == fdp_id, Attendance.status == "PRESENT"
+            )
+        )
+        attended_user_ids = {row[0] for row in attendance_result.all()}
+
+        for reg in registrations:
+            setattr(reg, "_attended", reg.user_id in attended_user_ids)
+
+        return registrations
 
     @staticmethod
     async def update_registration_status(db: AsyncSession, registration_id: uuid.UUID, status: str) -> FdpRegistration:

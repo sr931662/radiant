@@ -62,6 +62,7 @@ class FdpRegistrationResponse(BaseModel):
     # Populated from the user relationship
     name: str | None = None
     email: str | None = None
+    attended: bool = False  # populated from Attendance table
 
     model_config = {"from_attributes": True}
 
@@ -71,6 +72,8 @@ class FdpRegistrationResponse(BaseModel):
         if hasattr(obj, "user") and obj.user:
             instance.name = obj.user.name
             instance.email = obj.user.email
+        if hasattr(obj, "_attended"):
+            instance.attended = obj._attended
         return instance
 
 
