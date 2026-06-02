@@ -16,6 +16,15 @@ function resolveApiBaseUrl() {
 
   try {
     const configuredUrl = new URL(configured)
+    // Auto-upgrade http → https when the page itself is served over https.
+    // Prevents Mixed Content blocks if VITE_API_URL was accidentally set to http://.
+    if (
+      configuredUrl.protocol === 'http:' &&
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'https:'
+    ) {
+      configuredUrl.protocol = 'https:'
+    }
     return configuredUrl.origin
   } catch {
     return configured.replace(/\/+$/, '')
