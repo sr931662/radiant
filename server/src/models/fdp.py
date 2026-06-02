@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -25,6 +25,8 @@ class Fdp(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     end_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     max_seats: Mapped[int] = mapped_column(Integer, nullable=False)
     venue: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    resource_person: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    fee: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     # Relationships

@@ -57,10 +57,10 @@ export default function AdminGallery() {
 
   function openEdit(album) {
     setIsNew(false); setAlbumModal(album)
-    ;['title', 'description', 'cover_image', 'is_public'].forEach((f) => setValue(f, album[f] ?? ''))
+    ;['title', 'description', 'cover_image', 'tag'].forEach((f) => setValue(f, album[f] ?? ''))
   }
 
-  function openNew() { setIsNew(true); setAlbumModal({}); reset({ is_public: true }) }
+  function openNew() { setIsNew(true); setAlbumModal({}); reset() }
 
   return (
     <div>
@@ -97,7 +97,7 @@ export default function AdminGallery() {
                     <div>
                       <h3 style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>{album.title}</h3>
                       <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#94a3b8' }}>
-                        {album.media?.length ?? 0} items · {album.is_public ? 'Public' : 'Private'}
+                        {album.media_count ?? album.media?.length ?? 0} items{album.tag ? ` · ${album.tag}` : ''}
                       </p>
                     </div>
                     <div className={s.actionBtns}>
@@ -110,7 +110,7 @@ export default function AdminGallery() {
                     <button className={`${s.btn} ${s.btnSuccess}`} style={{ flex: 1, justifyContent: 'center' }} onClick={() => setUploadAlbum(album)}>
                       <Upload size={13} /> Upload
                     </button>
-                    {(album.media?.length ?? 0) > 0 && (
+                    {(album.media_count ?? album.media?.length ?? 0) > 0 && (
                       <button className={`${s.btn} ${s.btnGhost}`} style={{ flex: 1, justifyContent: 'center' }} onClick={() => setMediaAlbum(mediaAlbum?.id === album.id ? null : album)}>
                         <Image size={13} /> {mediaAlbum?.id === album.id ? 'Hide' : 'Media'}
                       </button>
@@ -122,9 +122,9 @@ export default function AdminGallery() {
                   <div style={{ borderTop: '1px solid #f1f5f9', padding: '0.75rem 1.1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))', gap: '6px' }}>
                     {album.media?.map((m) => (
                       <div key={m.id} style={{ position: 'relative', borderRadius: '6px', overflow: 'hidden' }}>
-                        {m.media_type === 'VIDEO'
+                        {m.type === 'VIDEO'
                           ? <video src={m.url} style={{ width: '100%', height: 62, objectFit: 'cover' }} />
-                          : <img src={m.thumbnail_url || m.url} alt="" style={{ width: '100%', height: 62, objectFit: 'cover' }} />
+                          : <img src={m.url} alt="" style={{ width: '100%', height: 62, objectFit: 'cover' }} />
                         }
                         <button
                           onClick={() => { if (window.confirm('Delete?')) deleteMediaMutation.mutate(m.id) }}
@@ -153,7 +153,7 @@ export default function AdminGallery() {
           <div className={s.formGroup}><label className={s.formLabel}>Title *</label><input {...register('title', { required: true })} className={s.formInput} /></div>
           <div className={s.formGroup}><label className={s.formLabel}>Description</label><textarea {...register('description')} className={s.formTextarea} rows={3} /></div>
           <div className={s.formGroup}><label className={s.formLabel}>Cover Image URL</label><input {...register('cover_image')} className={s.formInput} /></div>
-          <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" {...register('is_public')} /> Make Album Public</label></div>
+          <div className={s.formGroup}><label className={s.formLabel}>Tag</label><input {...register('tag')} className={s.formInput} placeholder="Events, Programs, Field Stories…" /></div>
           <button type="submit" className={s.formSubmit} disabled={saveMutation.isPending}>{saveMutation.isPending ? 'Saving…' : isNew ? 'Create Album' : 'Update Album'}</button>
         </form>
       </Modal>

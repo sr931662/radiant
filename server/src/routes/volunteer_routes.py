@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from src.dependencies import get_current_user, get_current_admin_user
-from src.schemas.volunteer import VolunteerResponse, InternshipResponse, VolunteerListResponse
+from src.schemas.volunteer import VolunteerResponse, InternshipResponse, VolunteerListResponse, MixedVolunteerListResponse
 from src.controllers.volunteer_controller import (
     apply_volunteer, apply_internship, my_applications, list_all, update_status,
 )
@@ -16,5 +16,5 @@ public_router.post("/apply/volunteer", response_model=VolunteerResponse, status_
 public_router.post("/apply/internship", response_model=InternshipResponse, status_code=201)(apply_internship)
 public_router.get("/my-applications", response_model=list[VolunteerResponse | InternshipResponse])(my_applications)
 
-admin_router.get("", response_model=VolunteerListResponse)(list_all)
+admin_router.get("", response_model=MixedVolunteerListResponse)(list_all)
 admin_router.patch("/{application_id}/{type}")(update_status)

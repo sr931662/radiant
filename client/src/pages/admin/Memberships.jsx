@@ -72,13 +72,13 @@ export default function AdminMemberships() {
               {items.map((item) => (
                 <tr key={item.id}>
                   <td className={s.tdPrimary}>
-                    <div className={s.tdMain}>{item.user_name || item.user_id?.slice(0, 10)}</div>
-                    {item.user_email && <div className={s.tdSub}>{item.user_email}</div>}
+                    <div className={s.tdMain}>{item.user_id?.slice(0, 10)}…</div>
+                    <div className={s.tdSub}>{item.member_id || ''}</div>
                   </td>
-                  <td className={s.td}>{item.plan_name || item.plan_id || '—'}</td>
+                  <td className={s.td}>{item.plan?.name || '—'}</td>
                   <td className={s.td}><StatusBadge status={item.status} /></td>
                   <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{item.created_at ? new Date(item.created_at).toLocaleDateString('en-IN') : '—'}</td>
-                  <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{item.expires_at ? new Date(item.expires_at).toLocaleDateString('en-IN') : '—'}</td>
+                  <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{item.end_date ? new Date(item.end_date).toLocaleDateString('en-IN') : '—'}</td>
                   <td className={s.tdActions}>
                     {item.status === 'PENDING' && (
                       <button className={`${s.btn} ${s.btnEdit}`} onClick={() => { setReviewModal(item); reset() }}>Review</button>
@@ -104,8 +104,8 @@ export default function AdminMemberships() {
         {reviewModal && (
           <div>
             <div className={s.infoBox}>
-              <p className={s.infoBoxName}>{reviewModal.user_name || reviewModal.user_id}</p>
-              <p className={s.infoBoxSub}>Plan: {reviewModal.plan_name || reviewModal.plan_id}</p>
+              <p className={s.infoBoxName}>{reviewModal.user_id}</p>
+              <p className={s.infoBoxSub}>Plan: {reviewModal.plan?.name || '—'}</p>
             </div>
             <form onSubmit={handleSubmit((d) => mutation.mutate(d))}>
               <div className={s.formGroup}>

@@ -6,7 +6,7 @@ from src.core.database import get_db
 from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.volunteer import (
     VolunteerApplyRequest, InternshipApplyRequest, VolunteerResponse, InternshipResponse,
-    VolunteerListResponse, ApplicationStatusUpdate,
+    VolunteerListResponse, ApplicationStatusUpdate, MixedVolunteerListResponse,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.volunteer_service import VolunteerService
@@ -50,11 +50,16 @@ async def list_all(
     pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
-) -> VolunteerListResponse:
+) -> MixedVolunteerListResponse:
     apps, total = await VolunteerService.list_all(db, pagination.page, pagination.size)
-    volunteer_items = [VolunteerResponse.model_validate(a) for a in apps if not hasattr(a, "position")]
-    return VolunteerListResponse(
-        items=volunteer_items,
+    items = []
+    for a in apps:
+        if hasattr(a, "position"):
+            items.append(InternshipResponse.model_validate(a))
+        else:
+            items.append(VolunteerResponse.model_validate(a))
+    return MixedVolunteerListResponse(
+        items=items,
         total=total,
         page=pagination.page,
         size=pagination.size,

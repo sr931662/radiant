@@ -9,12 +9,14 @@ class AlbumCreateRequest(BaseModel):
     title: str = Field(..., min_length=2, max_length=255)
     description: str | None = None
     tag: str | None = None  # e.g. Events, Programs, Field Stories, Training
+    cover_image: str | None = None
 
 
 class AlbumUpdateRequest(BaseModel):
     title: str | None = Field(None, min_length=2, max_length=255)
     description: str | None = None
     tag: str | None = None
+    cover_image: str | None = None
 
 
 class AlbumResponse(BaseModel):
@@ -25,6 +27,7 @@ class AlbumResponse(BaseModel):
     tag: str | None = None
     created_at: datetime
     media_count: int = 0
+    media: list["MediaUploadResponse"] = []
 
     model_config = {"from_attributes": True}
 

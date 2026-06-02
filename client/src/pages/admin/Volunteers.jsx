@@ -43,7 +43,7 @@ export default function AdminVolunteers() {
           <table className={s.table}>
             <thead className={s.thead}>
               <tr>
-                {['Applicant', 'Skills', 'Availability', 'Status', 'Applied On', 'Actions'].map((h) => (
+                {['Applicant', 'Type / Skills', 'Status', 'Applied On', 'Actions'].map((h) => (
                   <th key={h} className={s.th}>{h}</th>
                 ))}
               </tr>
@@ -55,10 +55,12 @@ export default function AdminVolunteers() {
                     <div className={s.tdMain}>{item.name || item.user_id?.slice(0, 8)}</div>
                     {item.email && <div className={s.tdSub}>{item.email}</div>}
                   </td>
-                  <td className={s.td} style={{ maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {Array.isArray(item.skills) ? item.skills.join(', ') : item.skills || '—'}
+                  <td className={s.td} style={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item.position
+                      ? <span style={{ color: '#7c3aed', fontWeight: 600 }}>Internship: {item.position}</span>
+                      : (Array.isArray(item.skills) ? item.skills.join(', ') : item.skills || `${item.type || 'VOLUNTEER'}`)
+                    }
                   </td>
-                  <td className={s.td}>{item.availability || '—'}</td>
                   <td className={s.td}><StatusBadge status={item.status} /></td>
                   <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{item.created_at ? new Date(item.created_at).toLocaleDateString('en-IN') : '—'}</td>
                   <td className={s.tdActions}>
@@ -69,7 +71,7 @@ export default function AdminVolunteers() {
                 </tr>
               ))}
               {items.length === 0 && (
-                <tr><td colSpan={6}>
+                <tr><td colSpan={5}>
                   <div className={s.emptyState}>
                     <div className={s.emptyStateIcon}><HandHeart size={24} /></div>
                     <p className={s.emptyStateText}>No applications yet</p>

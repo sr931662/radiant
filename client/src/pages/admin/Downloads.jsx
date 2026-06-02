@@ -105,13 +105,19 @@ export default function AdminDownloads() {
       <Modal open={addModal} onClose={() => { setAddModal(false); reset() }} title="Add Download Item">
         <form onSubmit={handleSubmit((d) => createMutation.mutate(d))}>
           <div className={s.formGroup}><label className={s.formLabel}>Title *</label><input {...register('title', { required: true })} className={s.formInput} /></div>
-          <div className={s.formGroup}><label className={s.formLabel}>Description</label><input {...register('description')} className={s.formInput} /></div>
           <div className={s.formGroup}><label className={s.formLabel}>File URL *</label><input {...register('file_url', { required: true })} className={s.formInput} placeholder="https://…" /></div>
           <div className={s.formGroup}>
             <label className={s.formLabel}>Category</label>
             <select {...register('category')} className={s.formSelect}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select>
           </div>
-          <div className={s.formGroup}><label className={s.formCheckLabel}><input type="checkbox" defaultChecked {...register('is_public')} /> Publicly Visible</label></div>
+          <div className={s.formGroup}>
+            <label className={s.formLabel}>Access Level</label>
+            <select {...register('access_level')} className={s.formSelect} defaultValue="PUBLIC">
+              <option value="PUBLIC">Public (everyone)</option>
+              <option value="MEMBER">Members only</option>
+              <option value="ADMIN">Admin only</option>
+            </select>
+          </div>
           <button type="submit" className={s.formSubmit} disabled={createMutation.isPending}>{createMutation.isPending ? 'Adding…' : 'Add Item'}</button>
         </form>
       </Modal>

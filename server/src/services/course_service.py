@@ -19,6 +19,16 @@ class CourseService:
         return courses, total
 
     @staticmethod
+    async def list_all_courses(db: AsyncSession, page: int, size: int) -> tuple[list[Course], int]:
+        query = select(Course).where(Course.deleted_at == None).order_by(Course.created_at.desc())
+        count_query = select(func.count(Course.id)).where(Course.deleted_at == None)
+        total = await db.scalar(count_query) or 0
+        query = query.offset((page - 1) * size).limit(size)
+        result = await db.execute(query)
+        courses = list(result.scalars().all())
+        return courses, total
+
+    @staticmethod
     async def get_course(db: AsyncSession, course_id: uuid.UUID) -> Course:
         course = await db.get(Course, course_id)
         if not course:

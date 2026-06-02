@@ -14,6 +14,8 @@ class FdpCreateRequest(BaseModel):
     end_date: datetime
     max_seats: int = Field(..., gt=0)
     venue: str | None = None
+    resource_person: str | None = None
+    fee: float = 0.0
     is_active: bool = True
 
 
@@ -24,6 +26,8 @@ class FdpUpdateRequest(BaseModel):
     end_date: datetime | None = None
     max_seats: int | None = Field(None, gt=0)
     venue: str | None = None
+    resource_person: str | None = None
+    fee: float | None = None
     is_active: bool | None = None
 
 
@@ -35,6 +39,8 @@ class FdpResponse(BaseModel):
     end_date: datetime
     max_seats: int
     venue: str | None
+    resource_person: str | None = None
+    fee: float = 0.0
     is_active: bool
     seats_remaining: int = 0  # computed field
     created_at: datetime
@@ -72,6 +78,11 @@ class AttendanceRequest(BaseModel):
     user_id: uuid.UUID
     date: datetime
     status: str = Field(..., pattern="^(PRESENT|ABSENT)$")
+
+
+class AttendanceBulkItem(BaseModel):
+    user_id: uuid.UUID
+    attended: bool
 
 
 class FdpListResponse(PaginatedResponse[FdpResponse]):

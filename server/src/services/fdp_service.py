@@ -17,6 +17,16 @@ class FdpService:
         query = query.offset((page - 1) * size).limit(size)
         result = await db.execute(query)
         fdps = list(result.scalars().all())
+
+        for fdp in fdps:
+            reg_count = await db.scalar(
+                select(func.count(FdpRegistration.id)).where(
+                    FdpRegistration.fdp_id == fdp.id,
+                    FdpRegistration.status != "CANCELLED",
+                )
+            ) or 0
+            setattr(fdp, "seats_remaining", max(0, fdp.max_seats - reg_count))
+
         return fdps, total
 
     @staticmethod

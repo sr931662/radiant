@@ -22,8 +22,8 @@ public_router.get("/{course_id}/lessons", response_model=list[LessonResponse])(g
 
 admin_router.get("", response_model=CourseListResponse)(admin_list_courses)
 admin_router.post("", response_model=CourseResponse, status_code=201)(create_course)
+admin_router.get("/enrollments", response_model=EnrollmentListResponse)(all_enrollments)
+admin_router.post("/modules/{module_id}/lessons", response_model=LessonResponse)(create_lesson)
 admin_router.put("/{course_id}", response_model=CourseResponse)(update_course)
 admin_router.delete("/{course_id}")(delete_course)
 admin_router.post("/{course_id}/modules", response_model=ModuleResponse)(create_module)
-admin_router.post("/modules/{module_id}/lessons", response_model=LessonResponse)(create_lesson)
-admin_router.get("/enrollments", response_model=EnrollmentListResponse)(all_enrollments)

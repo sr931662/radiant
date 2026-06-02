@@ -6,7 +6,7 @@ from src.core.database import get_db
 from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.fdp import (
     FdpCreateRequest, FdpUpdateRequest, FdpResponse, FdpListResponse,
-    FdpRegistrationRequest, FdpRegistrationResponse, AttendanceRequest,
+    FdpRegistrationRequest, FdpRegistrationResponse, AttendanceBulkItem,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.fdp_service import FdpService
@@ -103,7 +103,7 @@ async def update_registration_status(
 
 async def mark_attendance(
     fdp_id: uuid.UUID = Path(...),
-    records: list[AttendanceRequest] = Body(...),
+    records: list[AttendanceBulkItem] = Body(...),
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(get_current_admin_user),
 ) -> APIResponse:

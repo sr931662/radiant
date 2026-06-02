@@ -68,6 +68,10 @@ class VolunteerListResponse(PaginatedResponse[VolunteerResponse]):
     pass
 
 
+class MixedVolunteerListResponse(PaginatedResponse[VolunteerResponse | InternshipResponse]):
+    pass
+
+
 class ApplicationStatusUpdate(BaseModel):
     status: str = Field(..., pattern="^(APPROVED|REJECTED)$")
     remarks: str | None = None

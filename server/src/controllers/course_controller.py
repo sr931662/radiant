@@ -72,7 +72,7 @@ async def admin_list_courses(
     pagination: PaginationQuery = Depends(),
     db: AsyncSession = Depends(get_db),
 ) -> CourseListResponse:
-    courses, total = await CourseService.list_courses(db, pagination.page, pagination.size)
+    courses, total = await CourseService.list_all_courses(db, pagination.page, pagination.size)
     return CourseListResponse(
         items=[CourseResponse.model_validate(c) for c in courses],
         total=total,
