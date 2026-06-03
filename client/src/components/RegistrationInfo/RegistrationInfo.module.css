@@ -1,0 +1,122 @@
+.section {
+  padding: var(--sp-20, 5rem) 0;
+  background: var(--clr-slate-900);
+}
+
+.header {
+  text-align: center;
+  max-width: 38rem;
+  margin: 0 auto 2.5rem;
+}
+
+.sectionLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #818cf8;
+  margin-bottom: 0.75rem;
+}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--clr-white);
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
+}
+
+.sub {
+  color: var(--clr-slate-400);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  transition: background 0.2s;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.cardIcon {
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 7px;
+  padding: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cardLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--clr-slate-400);
+  margin: 0 0 2px;
+}
+
+.cardValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--clr-white);
+  margin: 0 0 2px;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.02em;
+}
+
+.cardNote {
+  font-size: 0.72rem;
+  color: var(--clr-slate-500);
+  margin: 0;
+}
+
+.addressRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.addressCard {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.addressType {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #818cf8;
+  margin: 0 0 3px;
+}
+
+.addressDetail {
+  font-size: 0.875rem;
+  color: var(--clr-slate-300);
+  margin: 0;
+  line-height: 1.5;
+}

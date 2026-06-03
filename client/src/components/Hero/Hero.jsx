@@ -16,7 +16,7 @@ export default function Hero() {
         <div className={styles.content}>
           <div className={styles.badge}>
             <Award size={15} color="var(--clr-accent)" />
-            Govt. Registered NGO · 80G · FCRA Certified
+            Govt. Registered NGO · 80G · ISO 9001:2015 Certified
           </div>
 
           <h1 className={styles.headline}>
@@ -58,7 +58,7 @@ export default function Hero() {
             </span>
             <span className={styles.trustItem}>
               <CheckCircle2 size={18} color="var(--clr-green-500)" />
-              FCRA Approved
+              ISO 9001:2015
             </span>
             <span className={styles.trustItem}>
               <CheckCircle2 size={18} color="var(--clr-green-500)" />

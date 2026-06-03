@@ -36,7 +36,7 @@ export default function Footer() {
               and empowering communities — from local villages to global classrooms.
             </p>
             <p className={styles.brandMeta}>
-              FCRA Approved · 80G Certified · DPDP Compliant · SDG 4, 5, 10, 17 Aligned
+              80G Certified · ISO 9001:2015 · DPDP Compliant · SDG 4, 5, 10, 17 Aligned
             </p>
             <p className={styles.newsletter}>Subscribe to Impact Updates</p>
             <div className={styles.emailRow}>
@@ -81,7 +81,11 @@ export default function Footer() {
             <ul className={styles.contactList}>
               <li className={styles.contactItem}>
                 <MapPin size={18} color="var(--clr-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span>12, Radiant Bhawan, Education Colony, Lucknow, Uttar Pradesh 226001, India</span>
+                <span>Registered: 215 Prabhavi Apartment, Sec-10, Dwarka, Delhi</span>
+              </li>
+              <li className={styles.contactItem}>
+                <MapPin size={18} color="var(--clr-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <span>Correspondence: A-141, Sec-48, Noida – 201301</span>
               </li>
               <li className={styles.contactItem}>
                 <Clock size={18} color="var(--clr-primary)" style={{ flexShrink: 0 }} />
@@ -89,11 +93,11 @@ export default function Footer() {
               </li>
               <li className={styles.contactItem}>
                 <Phone size={18} color="var(--clr-primary)" style={{ flexShrink: 0 }} />
-                <span>1800-000-0000 (Toll Free)</span>
+                <span>8796278474 · 8512017549</span>
               </li>
               <li className={styles.contactItem}>
                 <Globe size={18} color="var(--clr-primary)" style={{ flexShrink: 0 }} />
-                <span>Available in: English · हिंदी · Français · Español · عربي</span>
+                <span>radianteducationtrust@gmail.com</span>
               </li>
               <li className={styles.contactItem}>
                 <button className={styles.waBtn}>
@@ -107,7 +111,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © 2026 Radiant Education Trust. Registered NGO · FCRA No. XXXX · 80G No. YYYY. All rights reserved.
+            © 2026 Radiant Education Trust. Reg. No. 106 (08-Jan-2008) · 80G: AADTR8447DE2026102 · DARPAN: DL/2025/0845871 · MSME: UDYAM-UP-28-0220207. All rights reserved.
           </p>
           <div className={styles.legalLinks}>
             {['Privacy Policy', 'Terms of Service', 'Refund Policy', 'Child Safety'].map((l) => (

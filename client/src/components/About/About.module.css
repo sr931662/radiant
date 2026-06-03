@@ -297,8 +297,126 @@
   font-size: 1.1rem;
 }
 
+/* ── Trustees ── */
+.trusteesSection {
+  margin-top: 4rem;
+}
+
+.trusteesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+.trusteeCard {
+  background: var(--clr-white);
+  border: 1.5px solid var(--clr-slate-100);
+  border-radius: var(--r-xl);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trusteeCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+
+.trusteeAvatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
+
+.trusteeName {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--clr-slate-900);
+  margin: 0 0 0.5rem;
+  line-height: 1.3;
+}
+
+.trusteeRole {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Thematic Areas ── */
+.thematicSection {
+  margin-top: 4rem;
+}
+
+.thematicGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.thematicCard {
+  background: var(--clr-slate-50);
+  border: 1.5px solid var(--clr-slate-100);
+  border-radius: var(--r-xl);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.thematicCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+}
+
+.thematicFeatured {
+  background: var(--clr-white);
+  border-color: var(--th-color, #7c3aed);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.thematicIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thematicLabel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--clr-slate-700);
+  line-height: 1.4;
+}
+
+.thematicBadge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 @media (min-width: 768px) {
-  .cards     { grid-template-columns: repeat(3, 1fr); }
-  .certCards { grid-template-columns: repeat(3, 1fr); }
-  .sdgStrip  { flex-direction: row; align-items: center; justify-content: space-between; }
+  .cards          { grid-template-columns: repeat(3, 1fr); }
+  .certCards      { grid-template-columns: repeat(3, 1fr); }
+  .trusteesGrid   { grid-template-columns: repeat(4, 1fr); }
+  .thematicGrid   { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .sdgStrip       { flex-direction: row; align-items: center; justify-content: space-between; }
 }

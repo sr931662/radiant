@@ -1,5 +1,50 @@
-import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar } from 'lucide-react'
+import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar, Heart, BookOpen, Briefcase, Leaf, PawPrint, Users, Scale, Droplets, TreePine, Wrench, GraduationCap } from 'lucide-react'
 import styles from './About.module.css'
+
+const TRUSTEES = [
+  {
+    name: 'Dr. Seema Gupta',
+    role: 'Managing Trustee',
+    initial: 'SG',
+    color: '#7c3aed',
+    bg: '#faf5ff',
+  },
+  {
+    name: 'Mr. Utkarsh Gupta',
+    role: 'Trustee',
+    initial: 'UG',
+    color: '#1d4ed8',
+    bg: '#eff6ff',
+  },
+  {
+    name: 'Mr. Sanjeev Bhardwaj',
+    role: 'Trustee',
+    initial: 'SB',
+    color: '#059669',
+    bg: '#f0fdf4',
+  },
+  {
+    name: 'Mr. Santosh Upadhyay',
+    role: 'Coordinator',
+    initial: 'SU',
+    color: '#b45309',
+    bg: '#fffbeb',
+  },
+]
+
+const THEMATIC_AREAS = [
+  { label: 'Health Care', icon: Heart, color: '#dc2626', bg: '#fef2f2', featured: false },
+  { label: 'Literacy & Education', icon: BookOpen, color: '#2563eb', bg: '#eff6ff', featured: true },
+  { label: 'Vocational & Skill Development Training', icon: Wrench, color: '#7c3aed', bg: '#faf5ff', featured: true },
+  { label: 'Livelihood Enhancement', icon: Briefcase, color: '#059669', bg: '#f0fdf4', featured: true },
+  { label: 'Animal Welfare', icon: PawPrint, color: '#ea580c', bg: '#fff7ed', featured: false },
+  { label: 'Health Care & Family Planning', icon: Users, color: '#db2777', bg: '#fdf2f8', featured: false },
+  { label: 'Advocacy & Human Rights', icon: Scale, color: '#0891b2', bg: '#ecfeff', featured: false },
+  { label: 'Legal Aid', icon: Scale, color: '#6d28d9', bg: '#ede9fe', featured: false },
+  { label: 'Water & Sanitation', icon: Droplets, color: '#0284c7', bg: '#f0f9ff', featured: false },
+  { label: 'Environment Conservation', icon: TreePine, color: '#16a34a', bg: '#f0fdf4', featured: false },
+  { label: 'Skill Development', icon: GraduationCap, color: '#d97706', bg: '#fffbeb', featured: true },
+]
 
 const CERTIFICATIONS = [
   {
@@ -31,14 +76,14 @@ const CERTIFICATIONS = [
     border: '#bbf7d0',
   },
   {
-    id: 'fcra',
-    badge: 'FCRA',
-    title: 'Foreign Contribution Regulated',
-    body: 'Ministry of Home Affairs, Government of India',
-    certNo: null,
+    id: '12a',
+    badge: 'Form 12(A)',
+    title: 'Income Tax Exemption (Sec 12A)',
+    body: 'Income Tax Department, Government of India',
+    certNo: 'AADTR8447DE2026101',
     issued: null,
     expiry: null,
-    scope: 'Authorised to receive foreign contributions for educational purposes',
+    scope: 'Trust registered under Section 12A for income tax exemption on charitable activities',
     pdf: null,
     color: '#7c3aed',
     bg: '#faf5ff',
@@ -201,6 +246,58 @@ export default function About() {
                     <Download size={13} /> Download Certificate
                   </a>
                 )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Board of Trustees */}
+        <div className={styles.trusteesSection}>
+          <div className={styles.certsHeader}>
+            <div className={styles.certsSectionLabel}>
+              <Users size={15} />
+              Leadership
+            </div>
+            <h3 className={styles.certsSectionTitle}>Board of Trustees</h3>
+            <p className={styles.certsSectionSub}>
+              Radiant Education Trust is governed by a dedicated board committed to our mission of education and social welfare.
+            </p>
+          </div>
+          <div className={styles.trusteesGrid}>
+            {TRUSTEES.map((t) => (
+              <div key={t.name} className={styles.trusteeCard}>
+                <div className={styles.trusteeAvatar} style={{ background: t.bg, color: t.color }}>
+                  {t.initial}
+                </div>
+                <h4 className={styles.trusteeName}>{t.name}</h4>
+                <span className={styles.trusteeRole} style={{ background: t.bg, color: t.color }}>{t.role}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Thematic Areas */}
+        <div className={styles.thematicSection}>
+          <div className={styles.certsHeader}>
+            <div className={styles.certsSectionLabel}>
+              <Leaf size={15} />
+              Our Focus Areas
+            </div>
+            <h3 className={styles.certsSectionTitle}>Thematic Areas</h3>
+            <p className={styles.certsSectionSub}>
+              Our work spans a broad spectrum of social development goals, with a strong emphasis on education,
+              skills, and livelihoods.
+            </p>
+          </div>
+          <div className={styles.thematicGrid}>
+            {THEMATIC_AREAS.map(({ label, icon: Icon, color, bg, featured }) => (
+              <div key={label} className={`${styles.thematicCard} ${featured ? styles.thematicFeatured : ''}`}
+                style={featured ? { borderColor: color, '--th-color': color, '--th-bg': bg } : {}}>
+                <div className={styles.thematicIcon} style={{ background: bg }}>
+                  <Icon size={18} color={color} />
+                </div>
+                <span className={styles.thematicLabel} style={featured ? { color } : {}}>{label}</span>
+                {featured && <span className={styles.thematicBadge} style={{ background: bg, color }}>Key Focus</span>}
               </div>
             ))}
           </div>
