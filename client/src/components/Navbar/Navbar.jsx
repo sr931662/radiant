@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
-import { Sun, Heart, UserCheck, Menu, X, LogOut, LayoutDashboard, User } from 'lucide-react'
+import { Sun, Heart, UserCheck, Menu, X, LogOut, LayoutDashboard, User, Award } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
-  { to: '/',             label: 'Home',      end: true },
+  { to: '/',             label: 'Home',       end: true },
   { to: '/about',        label: 'About' },
   { to: '/programs',     label: 'Programs' },
+  { to: '/courses',      label: 'Courses' },
+  { to: '/membership',   label: 'Membership', highlight: true },
   { to: '/blog',         label: 'Stories' },
-  { to: '/volunteer',    label: 'Volunteer' },
-  { to: '/transparency', label: 'Reports' },
   { to: '/contact',      label: 'Contact' },
 ]
 
@@ -82,15 +82,18 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className={styles.desktopMenu}>
-          {NAV_LINKS.map(({ to, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-            >
-              {label}
-            </NavLink>
+          {NAV_LINKS.map(({ to, label, end, highlight }) => (
+            highlight ? (
+              <NavLink key={to} to={to} end={end}
+                className={({ isActive }) => `${styles.membershipLink} ${isActive ? styles.membershipLinkActive : ''}`}>
+                <Award size={13} /> {label}
+              </NavLink>
+            ) : (
+              <NavLink key={to} to={to} end={end}
+                className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>
+                {label}
+              </NavLink>
+            )
           ))}
           <div className={styles.navActions}>
             <Link to="/volunteer" className={styles.sponsorBtn}>
@@ -118,14 +121,15 @@ export default function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          {NAV_LINKS.map(({ to, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) => `${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
+          {NAV_LINKS.map(({ to, label, end, highlight }) => (
+            <NavLink key={to} to={to} end={end}
+              className={({ isActive }) =>
+                highlight
+                  ? `${styles.mobileMembershipLink} ${isActive ? styles.mobileMembershipLinkActive : ''}`
+                  : `${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ''}`
+              }
+              onClick={() => setMenuOpen(false)}>
+              {highlight && <Award size={14} style={{ display: 'inline', marginRight: 5 }} />}
               {label}
             </NavLink>
           ))}

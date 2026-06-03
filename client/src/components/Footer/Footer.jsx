@@ -5,8 +5,8 @@ import styles from './Footer.module.css'
 const EXPLORE_LINKS = [
   { to: '/about',        label: 'About Us' },
   { to: '/programs',     label: 'Programs' },
-  { to: '/about#impact', label: 'Live Impact' },
-  { to: '/volunteer',    label: 'Sponsor a Child' },
+  { to: '/courses',      label: 'Courses' },
+  { to: '/membership',   label: 'Become a Member' },
   { to: '/volunteer',    label: 'Volunteer / Careers' },
   { to: '/contact',      label: 'Partner With Us' },
 ]
