@@ -65,20 +65,20 @@ function ModuleAccordion({ mod, index }) {
 }
 
 export default function CourseDetail() {
-  const { id } = useParams()
+  const { slug } = useParams()
   const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
   const qc = useQueryClient()
   const [demoOrder, setDemoOrder] = useState(null)
 
   const { data: course, isLoading, isError } = useQuery({
-    queryKey: ['course', id],
-    queryFn: () => getCourse(id),
+    queryKey: ['course', slug],
+    queryFn: () => getCourse(slug),
   })
 
   // Free enroll
   const enrollMutation = useMutation({
-    mutationFn: () => enrollCourse(id),
+    mutationFn: () => enrollCourse(slug),
     onSuccess: () => {
       toast.success('Enrolled successfully! Check My Courses to start learning.')
       qc.invalidateQueries({ queryKey: ['my-courses'] })
@@ -88,7 +88,7 @@ export default function CourseDetail() {
 
   // Paid enroll via Razorpay (or demo modal)
   const paymentMutation = useMutation({
-    mutationFn: () => createCoursePaymentOrder(id),
+    mutationFn: () => createCoursePaymentOrder(slug),
     onSuccess: async (order) => {
       // Demo mode — show our own payment UI
       if (order.demo || order.order_id?.startsWith('demo_')) {
@@ -111,7 +111,7 @@ export default function CourseDetail() {
         theme: { color: '#2563eb' },
         handler: async (response) => {
           try {
-            await verifyCoursePayment(id, {
+            await verifyCoursePayment(slug, {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -131,7 +131,7 @@ export default function CourseDetail() {
 
   async function handleDemoSuccess() {
     try {
-      await verifyCoursePayment(id, {
+      await verifyCoursePayment(slug, {
         razorpay_order_id: demoOrder.order_id,
         razorpay_payment_id: `demo_pay_${Date.now()}`,
         razorpay_signature: 'demo_signature',

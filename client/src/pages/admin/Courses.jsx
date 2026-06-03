@@ -132,9 +132,15 @@ export default function AdminCourses() {
                 <tbody className={s.tbody}>
                   {(enrollData?.items || []).map((e) => (
                     <tr key={e.id}>
-                      <td className={s.td}><span className={s.tdMono}>{e.user_id?.slice(0, 10)}…</span></td>
-                      <td className={s.tdPrimary}><div className={s.tdMain}>{e.course_title || e.course_id?.slice(0, 10)}</div></td>
-                      <td className={s.td}><StatusBadge status={e.status || 'APPROVED'} /></td>
+                      <td className={s.tdPrimary}>
+                        <div className={s.tdMain}>{e.user_name || e.user_id?.slice(0, 10) + '…'}</div>
+                        {e.user_email && <div className={s.tdSub}>{e.user_email}</div>}
+                      </td>
+                      <td className={s.tdPrimary}>
+                        <div className={s.tdMain}>{e.course?.title || '—'}</div>
+                        {e.course?.level && <div className={s.tdSub}>{e.course.level}</div>}
+                      </td>
+                      <td className={s.td}><StatusBadge status={e.completed ? 'COMPLETED' : 'APPROVED'} /></td>
                       <td className={s.td} style={{ whiteSpace: 'nowrap' }}>{e.created_at ? new Date(e.created_at).toLocaleDateString('en-IN') : '—'}</td>
                     </tr>
                   ))}

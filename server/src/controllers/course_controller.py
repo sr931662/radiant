@@ -38,7 +38,7 @@ async def list_courses(
 
 
 async def get_course(
-    course_id: uuid.UUID = Path(...),
+    course_id: str = Path(...),   # accepts UUID or slug
     db: AsyncSession = Depends(get_db),
 ) -> CourseDetailResponse:
     course = await CourseService.get_course(db, course_id)
@@ -46,16 +46,17 @@ async def get_course(
 
 
 async def enroll(
-    course_id: uuid.UUID = Path(...),
+    course_id: str = Path(...),   # accepts UUID or slug
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ) -> EnrollmentResponse:
-    enrollment = await CourseService.enroll(db, current_user["sub"], course_id)
+    course = await CourseService.get_course(db, course_id)
+    enrollment = await CourseService.enroll(db, current_user["sub"], course.id)
     return EnrollmentResponse.model_validate(enrollment)
 
 
 async def create_payment_order(
-    course_id: uuid.UUID = Path(...),
+    course_id: str = Path(...),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ) -> CoursePaymentOrderResponse:
@@ -77,7 +78,7 @@ async def create_payment_order(
 
 
 async def verify_course_payment(
-    course_id: uuid.UUID = Path(...),
+    course_id: str = Path(...),
     data: CoursePaymentVerifyRequest = Body(...),
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
@@ -89,7 +90,8 @@ async def verify_course_payment(
     )
     if not ok:
         raise BadRequestException("Payment verification failed — signature mismatch.")
-    enrollment = await CourseService.enroll(db, current_user["sub"], course_id)
+    course = await CourseService.get_course(db, course_id)
+    enrollment = await CourseService.enroll(db, current_user["sub"], course.id)
     return EnrollmentResponse.model_validate(enrollment)
 
 
@@ -108,10 +110,11 @@ async def my_courses(
 
 
 async def get_lessons(
-    course_id: uuid.UUID = Path(...),
+    course_id: str = Path(...),   # accepts UUID or slug
     db: AsyncSession = Depends(get_db),
 ) -> list[LessonResponse]:
-    lessons = await CourseService.get_lessons(db, course_id)
+    course = await CourseService.get_course(db, course_id)
+    lessons = await CourseService.get_lessons(db, course.id)
     return [LessonResponse.model_validate(l) for l in lessons]
 
 

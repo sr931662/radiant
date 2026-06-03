@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import {
   Calendar, MapPin, Users, GraduationCap, Clock, UserCircle2,
-  IndianRupee, CheckCircle2, AlertCircle, Wifi, WifiOff,
+  IndianRupee, CheckCircle2, AlertCircle, ArrowRight,
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { getFdps, registerFdp } from '../services/fdpService'
 import { useAuth } from '../contexts/AuthContext'
 import Spinner from '../components/ui/Spinner'
@@ -170,7 +171,7 @@ export default function FDPPage() {
                       </div>
                     )}
 
-                    <div style={{ marginTop: 'auto' }}>
+                    <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <button
                         onClick={() => handleRegister(fdp.id)}
                         disabled={registerMutation.isPending || isFull || isPast}
@@ -185,6 +186,12 @@ export default function FDPPage() {
                       >
                         {isPast ? 'Program Ended' : isFull ? 'Fully Booked' : registerMutation.isPending ? 'Registering…' : hasFee ? `Register — ₹${fdp.fee.toLocaleString('en-IN')}` : 'Register Free'}
                       </button>
+                      <Link
+                        to={`/fdp/${fdp.id}`}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, padding: '0.6rem', background: 'white', border: '1.5px solid #e2e8f0', borderRadius: '9px', fontSize: '0.82rem', fontWeight: 600, color: '#475569', textDecoration: 'none' }}
+                      >
+                        View Details <ArrowRight size={13} />
+                      </Link>
                     </div>
                   </div>
                 </div>

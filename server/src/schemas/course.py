@@ -58,6 +58,7 @@ class CourseUpdateRequest(BaseModel):
 
 class CourseResponse(BaseModel):
     id: uuid.UUID
+    slug: str | None = None
     title: str
     description: str | None
     thumbnail: str | None
@@ -155,12 +156,22 @@ class EnrollmentRequest(BaseModel):
 class EnrollmentResponse(BaseModel):
     id: uuid.UUID
     user_id: uuid.UUID
+    user_name: str | None = None
+    user_email: str | None = None
     course: CourseResponse
     progress: float
     completed: bool
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def model_validate(cls, obj, **kwargs):
+        instance = super().model_validate(obj, **kwargs)
+        if hasattr(obj, "user") and obj.user:
+            instance.user_name = obj.user.name
+            instance.user_email = obj.user.email
+        return instance
 
 
 class CourseListResponse(PaginatedResponse[CourseResponse]):

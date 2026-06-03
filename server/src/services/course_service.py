@@ -1,10 +1,20 @@
 import uuid
+import re
 from datetime import datetime, timezone
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Course, Module, Lesson, Enrollment, User
 from src.utils.exceptions import NotFoundException, BadRequestException
+from src.utils.slug import generate_slug
+
+
+def _is_uuid(value: str) -> bool:
+    try:
+        uuid.UUID(str(value))
+        return True
+    except ValueError:
+        return False
 
 
 class CourseService:
@@ -29,11 +39,33 @@ class CourseService:
         return courses, total
 
     @staticmethod
-    async def get_course(db: AsyncSession, course_id: uuid.UUID) -> Course:
-        course = await db.get(Course, course_id)
+    async def get_course(db: AsyncSession, course_id_or_slug: str) -> Course:
+        """Accept either a UUID or a slug."""
+        if _is_uuid(course_id_or_slug):
+            course = await db.get(Course, uuid.UUID(str(course_id_or_slug)))
+        else:
+            result = await db.execute(
+                select(Course).where(Course.slug == course_id_or_slug, Course.deleted_at == None)
+            )
+            course = result.scalar_one_or_none()
         if not course:
             raise NotFoundException("Course not found")
         return course
+
+    @staticmethod
+    async def _unique_slug(db: AsyncSession, base: str, exclude_id: uuid.UUID | None = None) -> str:
+        """Ensure slug is unique by appending a counter if needed."""
+        slug = base
+        counter = 1
+        while True:
+            q = select(Course).where(Course.slug == slug, Course.deleted_at == None)
+            if exclude_id:
+                q = q.where(Course.id != exclude_id)
+            existing = await db.scalar(q)
+            if not existing:
+                return slug
+            slug = f"{base}-{counter}"
+            counter += 1
 
     @staticmethod
     async def enroll(db: AsyncSession, user_id: uuid.UUID, course_id: uuid.UUID) -> Enrollment:
@@ -74,6 +106,8 @@ class CourseService:
     # Admin
     @staticmethod
     async def create_course(db: AsyncSession, data: dict) -> Course:
+        if not data.get("slug") and data.get("title"):
+            data["slug"] = await CourseService._unique_slug(db, generate_slug(data["title"]))
         course = Course(**data)
         db.add(course)
         await db.commit()
@@ -82,7 +116,10 @@ class CourseService:
 
     @staticmethod
     async def update_course(db: AsyncSession, course_id: uuid.UUID, data: dict) -> Course:
-        course = await CourseService.get_course(db, course_id)
+        course = await CourseService.get_course(db, str(course_id))
+        # Re-generate slug if title changed and no explicit slug provided
+        if "title" in data and "slug" not in data:
+            data["slug"] = await CourseService._unique_slug(db, generate_slug(data["title"]), exclude_id=course.id)
         for key, value in data.items():
             if value is not None and hasattr(course, key):
                 setattr(course, key, value)

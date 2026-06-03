@@ -16,6 +16,7 @@ import Courses from './pages/Courses.jsx'
 import CourseDetail from './pages/CourseDetail.jsx'
 import Membership from './pages/Membership.jsx'
 import FDPPage from './pages/FDPPage.jsx'
+import FDPDetail from './pages/FDPDetail.jsx'
 import CertVerify from './pages/CertVerify.jsx'
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
@@ -46,9 +47,10 @@ export default function App() {
           <Route path="about" element={<About />} />
           <Route path="programs" element={<Programs />} />
           <Route path="courses" element={<Courses />} />
-          <Route path="courses/:id" element={<CourseDetail />} />
+          <Route path="courses/:slug" element={<CourseDetail />} />
           <Route path="membership" element={<Membership />} />
           <Route path="fdp" element={<FDPPage />} />
+          <Route path="fdp/:id" element={<FDPDetail />} />
           <Route path="cert-verify" element={<CertVerify />} />
           <Route path="volunteer" element={<Volunteer />} />
           <Route path="donate" element={<Donate />} />

@@ -18,6 +18,7 @@ class Course(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     __tablename__ = "courses"
 
     title: Mapped[str] = mapped_column(String(255), nullable=False)
+    slug: Mapped[Optional[str]] = mapped_column(String(320), unique=True, index=True, nullable=True)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     thumbnail: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
     price: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)

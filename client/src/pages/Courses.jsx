@@ -23,7 +23,7 @@ function CourseCard({ course }) {
   const isFree = course.price === 0
 
   return (
-    <Link to={`/courses/${course.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex' }}>
+    <Link to={`/courses/${course.slug || course.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex' }}>
       <div style={{
         background: 'white', borderRadius: '14px', overflow: 'hidden',
         boxShadow: '0 2px 12px rgba(0,0,0,0.07)', border: '1px solid #f1f5f9',

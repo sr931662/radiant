@@ -16,7 +16,7 @@ function CourseCard({ course }) {
   const colors = LEVEL_COLORS[level] || LEVEL_COLORS.BEGINNER
 
   return (
-    <Link to={`/courses/${course.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to={`/courses/${course.slug || course.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className={styles.card}>
         <div className={styles.iconBox}>
           {course.thumbnail

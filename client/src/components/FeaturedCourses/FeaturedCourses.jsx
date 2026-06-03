@@ -40,7 +40,7 @@ export default function FeaturedCourses() {
             {courses.map((c) => {
               const badge = LEVEL_BADGE[c.level] || LEVEL_BADGE.BEGINNER
               return (
-                <Link key={c.id} to={`/courses/${c.id}`} className={styles.cardLink}>
+                <Link key={c.id} to={`/courses/${c.slug || c.id}`} className={styles.cardLink}>
                   <div className={styles.card}>
                     {c.thumbnail
                       ? <img src={c.thumbnail} alt={c.title} className={styles.thumb} />
