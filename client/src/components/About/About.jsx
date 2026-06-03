@@ -1,32 +1,36 @@
 import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar, BookOpen, Briefcase, Leaf, Users, Wrench, GraduationCap } from 'lucide-react'
 import styles from './About.module.css'
+import seemaImg from '../../assets/seema.png'
+import utkarshImg from '../../assets/utkarsh.jpg'
+import sanjeevImg from '../../assets/sanjeev.png'
+import santoshImg from '../../assets/santosh.png'
 
 const TRUSTEES = [
   {
     name: 'Dr. Seema Gupta',
     role: 'Managing Trustee',
-    initial: 'SG',
+    image: seemaImg,
     color: '#7c3aed',
     bg: '#faf5ff',
   },
   {
     name: 'Mr. Utkarsh Gupta',
     role: 'Trustee',
-    initial: 'UG',
+    image: utkarshImg,
     color: '#1d4ed8',
     bg: '#eff6ff',
   },
   {
     name: 'Mr. Sanjeev Bhardwaj',
     role: 'Trustee',
-    initial: 'SB',
+    image: sanjeevImg,
     color: '#059669',
     bg: '#f0fdf4',
   },
   {
     name: 'Mr. Santosh Upadhyay',
     role: 'Coordinator',
-    initial: 'SU',
+    image: santoshImg,
     color: '#b45309',
     bg: '#fffbeb',
   },
@@ -259,8 +263,8 @@ export default function About() {
           <div className={styles.trusteesGrid}>
             {TRUSTEES.map((t) => (
               <div key={t.name} className={styles.trusteeCard}>
-                <div className={styles.trusteeAvatar} style={{ background: t.bg, color: t.color }}>
-                  {t.initial}
+                <div className={styles.trusteeAvatar} style={{ borderColor: t.color }}>
+                  <img src={t.image} alt={t.name} className={styles.trusteePhoto} />
                 </div>
                 <h4 className={styles.trusteeName}>{t.name}</h4>
                 <span className={styles.trusteeRole} style={{ background: t.bg, color: t.color }}>{t.role}</span>
