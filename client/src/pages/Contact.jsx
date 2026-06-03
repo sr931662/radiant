@@ -39,21 +39,21 @@ export default function Contact() {
               <div className={styles.infoIcon}><MapPin size={22} /></div>
               <div>
                 <h3 className={styles.infoTitle}>Address</h3>
-                <p className={styles.infoText}>12, Radiant Bhawan, Education Colony,<br />Lucknow, UP 226001, India</p>
+                <p className={styles.infoText}>Registered: 215 Prabhavi Apartment, Sec-10, Dwarka, Delhi<br />Correspondence: A-141, Sec-48, Noida – 201301</p>
               </div>
             </div>
             <div className={styles.infoCard}>
               <div className={styles.infoIcon}><Phone size={22} /></div>
               <div>
                 <h3 className={styles.infoTitle}>Phone</h3>
-                <p className={styles.infoText}>1800-000-0000 (Toll Free)<br />Mon–Sat, 10 AM – 6 PM IST</p>
+                <p className={styles.infoText}>8796278474 · 8512017549<br />Mon–Sat, 10 AM – 6 PM IST</p>
               </div>
             </div>
             <div className={styles.infoCard}>
               <div className={styles.infoIcon}><Globe size={22} /></div>
               <div>
                 <h3 className={styles.infoTitle}>Email</h3>
-                <p className={styles.infoText}>info@radianttrust.org<br />support@radianttrust.org</p>
+                <p className={styles.infoText}>radianteducationtrust@gmail.com<br />Mr. Santosh Upadhyay – Coordinator</p>
               </div>
             </div>
             <div className={styles.infoCard}>
@@ -63,7 +63,7 @@ export default function Contact() {
                 <p className={styles.infoText}>Monday – Saturday<br />10:00 AM – 6:00 PM IST</p>
               </div>
             </div>
-            <a href="https://wa.me/911800000000" target="_blank" rel="noreferrer" className={styles.waBtn}>
+            <a href="https://wa.me/918796278474" target="_blank" rel="noreferrer" className={styles.waBtn}>
               <MessageCircle size={18} /> Chat on WhatsApp
             </a>
           </div>

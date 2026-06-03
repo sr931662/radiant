@@ -1,11 +1,12 @@
 import Hero from '../components/Hero/Hero.jsx'
 import DonationBar from '../components/DonationBar/DonationBar.jsx'
 import ImpactCounter from '../components/ImpactCounter/ImpactCounter.jsx'
+import AdmissionsBanner from '../components/AdmissionsBanner/AdmissionsBanner.jsx'
 import FeaturedCourses from '../components/FeaturedCourses/FeaturedCourses.jsx'
 import Stories from '../components/Stories/Stories.jsx'
+import RegistrationInfo from '../components/RegistrationInfo/RegistrationInfo.jsx'
 import Sponsorship from '../components/Sponsorship/Sponsorship.jsx'
 import Partnership from '../components/Partnership/Partnership.jsx'
-import RegistrationInfo from '../components/RegistrationInfo/RegistrationInfo.jsx'
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <DonationBar />
       <ImpactCounter />
+      <AdmissionsBanner />
       <FeaturedCourses />
       <Stories />
       <RegistrationInfo />

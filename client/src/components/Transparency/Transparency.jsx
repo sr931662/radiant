@@ -19,7 +19,7 @@ const STATIC_DOCS = [
   { color: 'green',  icon: <FileCheck2 size={22} />, title: 'Annual Reports',            desc: 'Comprehensive yearly reports on programs, financials, and impact.' },
   { color: 'blue',   icon: <Landmark size={22} />,   title: 'Audited Financial Statements', desc: 'External audit reports confirming financial integrity.' },
   { color: 'amber',  icon: <PieChart size={22} />,   title: 'Fund Utilisation Reports',  desc: 'Detailed breakdown of how every rupee was spent.' },
-  { color: 'indigo', icon: <ScrollText size={22} />, title: 'Legal Registrations',       desc: 'NGO certificate, FCRA approval, 80G certification.' },
+  { color: 'indigo', icon: <ScrollText size={22} />, title: 'Legal Registrations',       desc: 'NGO certificate, 80G & 12A certification, DARPAN, MSME registrations.' },
   { color: 'rose',   icon: <Shield size={22} />,     title: 'Child Protection Policy',   desc: 'Formal safeguarding policy for all programs.' },
   { color: 'purple', icon: <UsersRound size={22} />, title: 'Governance Documents',      desc: 'Board constitution, conflict of interest policy, whistleblower policy.' },
 ]

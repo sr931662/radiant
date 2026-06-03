@@ -161,7 +161,7 @@ export default function Donation() {
             <div className={styles.certRow}>
               <div className={styles.cert}><span className={styles.certNum}>80G</span><span className={styles.certLabel}>Tax Exempt</span></div>
               <div className={styles.certDivider} />
-              <div className={styles.cert}><span className={styles.certNum}>FCRA</span><span className={styles.certLabel}>Approved</span></div>
+              <div className={styles.cert}><span className={styles.certNum}>12A</span><span className={styles.certLabel}>Registered</span></div>
               <div className={styles.certDivider} />
               <div className={styles.cert}><span className={styles.certNum}>100%</span><span className={styles.certLabel}>Transparent</span></div>
             </div>

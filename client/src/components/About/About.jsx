@@ -1,4 +1,4 @@
-import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar, Heart, BookOpen, Briefcase, Leaf, PawPrint, Users, Scale, Droplets, TreePine, Wrench, GraduationCap } from 'lucide-react'
+import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar, BookOpen, Briefcase, Leaf, Users, Wrench, GraduationCap } from 'lucide-react'
 import styles from './About.module.css'
 
 const TRUSTEES = [
@@ -33,17 +33,10 @@ const TRUSTEES = [
 ]
 
 const THEMATIC_AREAS = [
-  { label: 'Health Care', icon: Heart, color: '#dc2626', bg: '#fef2f2', featured: false },
-  { label: 'Literacy & Education', icon: BookOpen, color: '#2563eb', bg: '#eff6ff', featured: true },
-  { label: 'Vocational & Skill Development Training', icon: Wrench, color: '#7c3aed', bg: '#faf5ff', featured: true },
-  { label: 'Livelihood Enhancement', icon: Briefcase, color: '#059669', bg: '#f0fdf4', featured: true },
-  { label: 'Animal Welfare', icon: PawPrint, color: '#ea580c', bg: '#fff7ed', featured: false },
-  { label: 'Health Care & Family Planning', icon: Users, color: '#db2777', bg: '#fdf2f8', featured: false },
-  { label: 'Advocacy & Human Rights', icon: Scale, color: '#0891b2', bg: '#ecfeff', featured: false },
-  { label: 'Legal Aid', icon: Scale, color: '#6d28d9', bg: '#ede9fe', featured: false },
-  { label: 'Water & Sanitation', icon: Droplets, color: '#0284c7', bg: '#f0f9ff', featured: false },
-  { label: 'Environment Conservation', icon: TreePine, color: '#16a34a', bg: '#f0fdf4', featured: false },
-  { label: 'Skill Development', icon: GraduationCap, color: '#d97706', bg: '#fffbeb', featured: true },
+  { label: 'Literacy & Education', icon: BookOpen, color: '#2563eb', bg: '#eff6ff' },
+  { label: 'Vocational & Skill Development Training', icon: Wrench, color: '#7c3aed', bg: '#faf5ff' },
+  { label: 'Livelihood Enhancement', icon: Briefcase, color: '#059669', bg: '#f0fdf4' },
+  { label: 'Skill Development', icon: GraduationCap, color: '#d97706', bg: '#fffbeb' },
 ]
 
 const CERTIFICATIONS = [
@@ -290,14 +283,13 @@ export default function About() {
             </p>
           </div>
           <div className={styles.thematicGrid}>
-            {THEMATIC_AREAS.map(({ label, icon: Icon, color, bg, featured }) => (
-              <div key={label} className={`${styles.thematicCard} ${featured ? styles.thematicFeatured : ''}`}
-                style={featured ? { borderColor: color, '--th-color': color, '--th-bg': bg } : {}}>
+            {THEMATIC_AREAS.map(({ label, icon: Icon, color, bg }) => (
+              <div key={label} className={`${styles.thematicCard} ${styles.thematicFeatured}`}
+                style={{ borderColor: color, '--th-color': color, '--th-bg': bg }}>
                 <div className={styles.thematicIcon} style={{ background: bg }}>
-                  <Icon size={18} color={color} />
+                  <Icon size={20} color={color} />
                 </div>
-                <span className={styles.thematicLabel} style={featured ? { color } : {}}>{label}</span>
-                {featured && <span className={styles.thematicBadge} style={{ background: bg, color }}>Key Focus</span>}
+                <span className={styles.thematicLabel} style={{ color }}>{label}</span>
               </div>
             ))}
           </div>

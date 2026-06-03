@@ -5,6 +5,8 @@ import { BookOpen, IndianRupee, Clock, Users, Award, MonitorPlay, WifiOff, Shuff
 import { getCourses } from '../services/coursesService'
 import Spinner from '../components/ui/Spinner'
 import Pagination from '../components/ui/Pagination'
+import CourseCatalog from '../components/CourseCatalog/CourseCatalog.jsx'
+import PhDGuidance from '../components/PhDGuidance/PhDGuidance.jsx'
 
 const LEVEL_META = {
   BEGINNER:     { label: 'Beginner',     color: '#166534', bg: '#dcfce7' },
@@ -185,6 +187,12 @@ export default function Courses() {
 
         <Pagination page={page} pages={data?.pages || 1} onPage={setPage} />
       </div>
+
+      {/* Full course catalog from official prospectus */}
+      <CourseCatalog />
+
+      {/* PhD Guidance */}
+      <PhDGuidance />
     </div>
   )
 }

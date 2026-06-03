@@ -1,0 +1,224 @@
+.section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #5c2a0e 0%, #7c3d12 40%, #5c2a0e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 80% 50%, rgba(245,200,66,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Trust badge */
+.trustBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(245,200,66,0.15);
+  border: 1px solid rgba(245,200,66,0.3);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.retLogo {
+  background: linear-gradient(135deg, #f5c842, #d97706);
+  color: #5c2a0e;
+  font-weight: 900;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.retName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f5c842;
+  margin: 0;
+}
+
+.retTagline {
+  font-size: 0.72rem;
+  color: rgba(245,200,66,0.65);
+  margin: 0;
+}
+
+/* Main grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+/* Left */
+.left {}
+
+.heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  color: #f5c842;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.subHeading {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  margin: 0 0 1.5rem;
+  font-style: italic;
+}
+
+.servicesTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #f5c842;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.servicesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.serviceItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.88);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Right */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.highlightsCard {
+  background: rgba(245,200,66,0.12);
+  border: 1.5px solid rgba(245,200,66,0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.highlightItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+}
+
+/* CTA card */
+.ctaCard {
+  background: rgba(0,0,0,0.25);
+  border: 1.5px solid rgba(245,200,66,0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ctaTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ctaDesc {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ctaBtn {
+  background: linear-gradient(90deg, #f5c842, #d97706);
+  color: #5c2a0e;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.ctaBtn:hover { opacity: 0.85; }
+
+/* Contact strip */
+.contactStrip {
+  border-top: 1px solid rgba(245,200,66,0.2);
+  padding-top: 1.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.contactLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f5c842;
+  margin: 0 0 0.6rem;
+}
+
+.contactItems {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.contactItems span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+}
+
+.bottomLine {
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(245,200,66,0.55);
+  font-style: italic;
+  margin: 0.75rem 0 0;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}

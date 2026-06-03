@@ -100,9 +100,9 @@ export default function Footer() {
                 <span>radianteducationtrust@gmail.com</span>
               </li>
               <li className={styles.contactItem}>
-                <button className={styles.waBtn}>
+                <a href="https://wa.me/918796278474" target="_blank" rel="noreferrer" className={styles.waBtn}>
                   <MessageCircle size={18} /> Chat on WhatsApp
-                </button>
+                </a>
               </li>
             </ul>
           </div>
