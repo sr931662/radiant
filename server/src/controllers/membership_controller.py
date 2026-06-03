@@ -7,6 +7,7 @@ from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.membership import (
     MembershipApplyRequest, MembershipResponse, MembershipListResponse,
     ApproveMembershipRequest, MembershipCardResponse, MembershipPlanResponse,
+    MembershipPlanCreateRequest,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.membership_service import MembershipService
@@ -88,3 +89,21 @@ async def export_data(
 ) -> list[MembershipResponse]:
     memberships = await MembershipService.export_data(db)
     return [MembershipResponse.model_validate(m) for m in memberships]
+
+
+async def create_plan(
+    data: MembershipPlanCreateRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+    _: dict = Depends(get_current_admin_user),
+) -> MembershipPlanResponse:
+    plan = await MembershipService.create_plan(db, data.name, data.type, data.price, data.duration_days, data.benefits)
+    return MembershipPlanResponse.model_validate(plan)
+
+
+async def delete_plan(
+    plan_id: uuid.UUID = Path(...),
+    db: AsyncSession = Depends(get_db),
+    _: dict = Depends(get_current_admin_user),
+) -> dict:
+    await MembershipService.delete_plan(db, plan_id)
+    return {"message": "Plan deleted successfully"}

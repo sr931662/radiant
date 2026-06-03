@@ -84,6 +84,23 @@ class MembershipService:
             "valid_until": membership.end_date,
         }
 
+    @staticmethod
+    async def create_plan(db: AsyncSession, name: str, type: str, price: float, duration_days: int, benefits: dict | None) -> MembershipPlan:
+        plan = MembershipPlan(name=name, type=type, price=price, duration_days=duration_days, benefits=benefits)
+        db.add(plan)
+        await db.commit()
+        await db.refresh(plan)
+        return plan
+
+    @staticmethod
+    async def delete_plan(db: AsyncSession, plan_id: uuid.UUID) -> None:
+        from datetime import datetime, timezone
+        plan = await db.get(MembershipPlan, plan_id)
+        if not plan:
+            raise NotFoundException("Membership plan not found")
+        plan.deleted_at = datetime.now(timezone.utc)
+        await db.commit()
+
     # Admin
     @staticmethod
     async def list_all(db: AsyncSession, page: int, size: int, status: str | None = None) -> tuple[list[Membership], int]:

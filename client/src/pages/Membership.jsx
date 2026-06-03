@@ -305,15 +305,7 @@ export default function Membership() {
       navigate('/login')
       return
     }
-    if (selectedPlan?.id) {
-      // API-backed plan → submit to backend
-      applyMutation.mutate(selectedPlan.id)
-    } else {
-      // Static/offline plan → redirect to contact for manual processing
-      setSelectedPlan(null)
-      toast.success('Redirecting you to contact us. Our team will process your membership.')
-      navigate('/contact')
-    }
+    applyMutation.mutate(selectedPlan.id)
   }
 
   return (
@@ -367,37 +359,19 @@ export default function Membership() {
         {isLoading && <Spinner center size="lg" />}
         {isError && <p style={{ textAlign: 'center', color: '#ef4444' }}>Failed to load membership plans.</p>}
 
-        {/* Static plan cards when API has no plans yet */}
-        {!isLoading && plans.length === 0 && (
-          <>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: '1.5rem', maxWidth: '860px', margin: '0 auto 1.5rem' }}>
-              {MEMBERSHIP_TYPES.map((mt) => (
-                <div key={mt.label} style={{
-                  background: mt.highlight ? 'linear-gradient(135deg,#1e3a5f,#7c3aed)' : mt.bg,
-                  border: `2px solid ${mt.highlight ? '#7c3aed' : mt.border}`,
-                  borderRadius: '16px', padding: '2rem',
-                  boxShadow: mt.highlight ? '0 20px 40px rgba(124,58,237,0.25)' : '0 4px 20px rgba(0,0,0,0.06)',
-                }}>
-                  {mt.highlight && <div style={{ background: 'rgba(255,255,255,0.15)', display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, color: 'white', marginBottom: '0.75rem', letterSpacing: '0.06em' }}>MOST POPULAR</div>}
-                  <Award size={30} color={mt.highlight ? 'rgba(255,255,255,0.9)' : mt.color} style={{ marginBottom: '0.75rem' }} />
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: mt.highlight ? 'white' : mt.color, marginBottom: '0.25rem' }}>{mt.label}</h3>
-                  <div style={{ fontSize: '2rem', fontWeight: 800, color: mt.highlight ? 'white' : '#0f172a', margin: '0.75rem 0 1.5rem' }}>{mt.price}</div>
-                  <button
-                    onClick={() => {
-                      if (!isAuthenticated) { toast.error('Please login first.'); navigate('/login'); return }
-                      toast.success('Please contact us to complete your membership application.')
-                      navigate('/contact')
-                    }}
-                    style={{ width: '100%', padding: '0.75rem', background: mt.highlight ? 'rgba(255,255,255,0.2)' : '#7c3aed', color: 'white', border: mt.highlight ? '1.5px solid rgba(255,255,255,0.4)' : 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                    Apply via Contact <ChevronRight size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-            <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.8rem' }}>
-              📞 To apply, contact: <strong>8796278474</strong> or email <strong>radianteducationtrust@gmail.com</strong>
+        {/* Plans not yet seeded — admin needs to run seed script */}
+        {!isLoading && !isError && plans.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '3rem 1rem', maxWidth: '480px', margin: '0 auto' }}>
+            <Award size={48} color="#c4b5fd" style={{ marginBottom: '1rem' }} />
+            <h3 style={{ fontWeight: 700, color: '#4c1d95', marginBottom: '0.5rem' }}>Membership Plans Coming Soon</h3>
+            <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>
+              Our membership plans are being configured. Please check back shortly or contact us directly.
             </p>
-          </>
+            <div style={{ background: '#faf5ff', border: '1.5px solid #e9d5ff', borderRadius: '10px', padding: '1rem', fontSize: '0.85rem', color: '#6d28d9' }}>
+              📞 <strong>8796278474</strong> · <strong>8512017549</strong><br />
+              ✉️ radianteducationtrust@gmail.com
+            </div>
+          </div>
         )}
 
         {!isLoading && plans.length > 0 && (

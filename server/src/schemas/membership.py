@@ -22,6 +22,14 @@ class MembershipApplyRequest(BaseModel):
     plan_id: uuid.UUID
 
 
+class MembershipPlanCreateRequest(BaseModel):
+    name: str
+    type: str
+    price: float
+    duration_days: int
+    benefits: dict | None = None
+
+
 class MembershipResponse(BaseModel):
     id: uuid.UUID
     user_id: uuid.UUID
