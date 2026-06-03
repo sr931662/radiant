@@ -274,12 +274,46 @@ export default function Membership() {
       toast.success('Membership application submitted! We will review and approve shortly.')
       setSelectedPlan(null)
     },
-    onError: (err) => toast.error(err?.response?.data?.message || 'Application failed.'),
+    onError: (err) => {
+      const status = err?.response?.status
+      const msg = err?.response?.data?.message
+      if (status === 401) {
+        toast.error('Session expired. Please login again.')
+        setSelectedPlan(null)
+        navigate('/login')
+      } else if (msg?.toLowerCase().includes('already')) {
+        toast.error('You have already applied for this membership. Please wait for approval.')
+        setSelectedPlan(null)
+      } else {
+        toast.error(msg || 'Application failed. Please try again.')
+      }
+    },
   })
 
   function handleApply(plan) {
-    if (!isAuthenticated) { navigate('/login'); return }
+    if (!isAuthenticated) {
+      toast.error('Please login first to apply for membership.')
+      navigate('/login')
+      return
+    }
     setSelectedPlan(plan)
+  }
+
+  function handleFormSubmit() {
+    if (!isAuthenticated) {
+      toast.error('Session expired. Please login again.')
+      navigate('/login')
+      return
+    }
+    if (selectedPlan?.id) {
+      // API-backed plan → submit to backend
+      applyMutation.mutate(selectedPlan.id)
+    } else {
+      // Static/offline plan → redirect to contact for manual processing
+      setSelectedPlan(null)
+      toast.success('Redirecting you to contact us. Our team will process your membership.')
+      navigate('/contact')
+    }
   }
 
   return (
@@ -315,30 +349,55 @@ export default function Membership() {
           </p>
         </div>
 
+        {/* Login nudge for guests */}
+        {!isAuthenticated && (
+          <div style={{ maxWidth: '600px', margin: '0 auto 2rem', background: '#faf5ff', border: '1.5px solid #c4b5fd', borderRadius: '12px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.875rem', flexWrap: 'wrap' }}>
+            <Award size={22} color="#7c3aed" style={{ flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: 0, fontWeight: 700, color: '#4c1d95', fontSize: '0.9rem' }}>Login required to apply</p>
+              <p style={{ margin: 0, color: '#6d28d9', fontSize: '0.82rem' }}>Create a free account or login to submit your membership application.</p>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button onClick={() => navigate('/login')} style={{ padding: '0.45rem 1rem', background: '#7c3aed', color: 'white', border: 'none', borderRadius: '7px', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem' }}>Login</button>
+              <button onClick={() => navigate('/register')} style={{ padding: '0.45rem 1rem', background: 'white', color: '#7c3aed', border: '1.5px solid #c4b5fd', borderRadius: '7px', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem' }}>Register</button>
+            </div>
+          </div>
+        )}
+
         {isLoading && <Spinner center size="lg" />}
         {isError && <p style={{ textAlign: 'center', color: '#ef4444' }}>Failed to load membership plans.</p>}
 
-        {/* Fallback static plan cards if API returns nothing */}
+        {/* Static plan cards when API has no plans yet */}
         {!isLoading && plans.length === 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: '1.5rem', maxWidth: '860px', margin: '0 auto' }}>
-            {MEMBERSHIP_TYPES.map((mt) => (
-              <div key={mt.label} style={{
-                background: mt.highlight ? 'linear-gradient(135deg,#1e3a5f,#7c3aed)' : mt.bg,
-                border: `2px solid ${mt.highlight ? '#7c3aed' : mt.border}`,
-                borderRadius: '16px', padding: '2rem',
-                boxShadow: mt.highlight ? '0 20px 40px rgba(124,58,237,0.25)' : '0 4px 20px rgba(0,0,0,0.06)',
-              }}>
-                {mt.highlight && <div style={{ background: 'rgba(255,255,255,0.15)', display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, color: 'white', marginBottom: '0.75rem', letterSpacing: '0.06em' }}>MOST POPULAR</div>}
-                <Award size={30} color={mt.highlight ? 'rgba(255,255,255,0.9)' : mt.color} style={{ marginBottom: '0.75rem' }} />
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: mt.highlight ? 'white' : mt.color, marginBottom: '0.25rem' }}>{mt.label}</h3>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: mt.highlight ? 'white' : '#0f172a', margin: '0.75rem 0 1.5rem' }}>{mt.price}</div>
-                <button onClick={() => handleApply({ name: mt.label, price: 0, duration_days: mt.label === 'Life Member' ? 36500 : mt.label === 'Annual Member' ? 365 : 365 })}
-                  style={{ width: '100%', padding: '0.75rem', background: mt.highlight ? 'rgba(255,255,255,0.2)' : '#7c3aed', color: 'white', border: mt.highlight ? '1.5px solid rgba(255,255,255,0.4)' : 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                  Apply Now <ChevronRight size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: '1.5rem', maxWidth: '860px', margin: '0 auto 1.5rem' }}>
+              {MEMBERSHIP_TYPES.map((mt) => (
+                <div key={mt.label} style={{
+                  background: mt.highlight ? 'linear-gradient(135deg,#1e3a5f,#7c3aed)' : mt.bg,
+                  border: `2px solid ${mt.highlight ? '#7c3aed' : mt.border}`,
+                  borderRadius: '16px', padding: '2rem',
+                  boxShadow: mt.highlight ? '0 20px 40px rgba(124,58,237,0.25)' : '0 4px 20px rgba(0,0,0,0.06)',
+                }}>
+                  {mt.highlight && <div style={{ background: 'rgba(255,255,255,0.15)', display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, color: 'white', marginBottom: '0.75rem', letterSpacing: '0.06em' }}>MOST POPULAR</div>}
+                  <Award size={30} color={mt.highlight ? 'rgba(255,255,255,0.9)' : mt.color} style={{ marginBottom: '0.75rem' }} />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: mt.highlight ? 'white' : mt.color, marginBottom: '0.25rem' }}>{mt.label}</h3>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: mt.highlight ? 'white' : '#0f172a', margin: '0.75rem 0 1.5rem' }}>{mt.price}</div>
+                  <button
+                    onClick={() => {
+                      if (!isAuthenticated) { toast.error('Please login first.'); navigate('/login'); return }
+                      toast.success('Please contact us to complete your membership application.')
+                      navigate('/contact')
+                    }}
+                    style={{ width: '100%', padding: '0.75rem', background: mt.highlight ? 'rgba(255,255,255,0.2)' : '#7c3aed', color: 'white', border: mt.highlight ? '1.5px solid rgba(255,255,255,0.4)' : 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                    Apply via Contact <ChevronRight size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.8rem' }}>
+              📞 To apply, contact: <strong>8796278474</strong> or email <strong>radianteducationtrust@gmail.com</strong>
+            </p>
+          </>
         )}
 
         {!isLoading && plans.length > 0 && (
@@ -438,7 +497,7 @@ export default function Membership() {
         <MembershipFormModal
           plan={selectedPlan}
           onClose={() => setSelectedPlan(null)}
-          onSubmit={() => selectedPlan.id && applyMutation.mutate(selectedPlan.id)}
+          onSubmit={handleFormSubmit}
           isPending={applyMutation.isPending}
         />
       )}
