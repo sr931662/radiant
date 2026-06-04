@@ -35,7 +35,6 @@ function FDPForm({ onSubmit, isPending, isNew, defaultValues }) {
       <div className={s.formGroup}><label className={s.formLabel}>Description</label><textarea {...register('description')} className={s.formTextarea} rows={3} /></div>
       <div className={s.formGroup}><label className={s.formLabel}>Venue</label><input {...register('venue')} className={s.formInput} /></div>
       <div className={s.formGroup}><label className={s.formLabel}>Resource Person</label><input {...register('resource_person')} className={s.formInput} /></div>
-      <div className={s.formGroup}><label className={s.formLabel}>Hotel & Accommodation Info</label><textarea {...register('hotel_info')} className={s.formTextarea} rows={3} placeholder="e.g. Recommended hotels near venue, contact details, tie-up rates…" /></div>
       <div className={s.formRow}>
         <div className={s.formGroup}><label className={s.formLabel}>Start Date</label><input type="date" {...register('start_date')} className={s.formInput} /></div>
         <div className={s.formGroup}><label className={s.formLabel}>End Date</label><input type="date" {...register('end_date')} className={s.formInput} /></div>

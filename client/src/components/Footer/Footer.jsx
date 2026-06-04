@@ -117,14 +117,11 @@ export default function Footer() {
             </span>
           </p>
           <div className={styles.legalLinks}>
-            {['Privacy Policy', 'Terms of Service', 'Child Safety'].map((l) => (
+            {['Privacy Policy', 'Terms of Service', 'Refund Policy', 'Child Safety'].map((l) => (
               <button key={l} type="button" className={styles.legalLink}>
                 {l}
               </button>
             ))}
-            <Link to="/cancellation-policy" className={styles.legalLink}>
-              Refund Policy
-            </Link>
           </div>
         </div>
       </div>

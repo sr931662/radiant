@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import {
   ArrowLeft, Calendar, MapPin, Users, GraduationCap, UserCircle2,
   IndianRupee, CheckCircle2, Clock, Award, AlertCircle, BookOpen,
-  Share2, BadgeCheck, Building2,
+  Share2, BadgeCheck,
 } from 'lucide-react'
 import { getFdp, registerFdp } from '../services/fdpService'
 import { useAuth } from '../contexts/AuthContext'
@@ -170,16 +170,6 @@ export default function FDPDetail() {
                     <p style={{ color: '#64748b', marginTop: '0.25rem', fontSize: '0.875rem' }}>Program Facilitator · Radiant Education Trust</p>
                   </div>
                 </div>
-              </section>
-            )}
-
-            {/* Hotel & Accommodation */}
-            {fdp.hotel_info && (
-              <section style={{ marginBottom: '2rem', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 12, padding: '1.5rem' }}>
-                <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Building2 size={20} color="#2563eb" /> Hotel & Accommodation
-                </h2>
-                <p style={{ color: '#1e40af', lineHeight: 1.8, whiteSpace: 'pre-line', fontSize: '0.9rem' }}>{fdp.hotel_info}</p>
               </section>
             )}
 

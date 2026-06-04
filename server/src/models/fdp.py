@@ -28,7 +28,6 @@ class Fdp(Base, UUIDMixin, TimestampMixin, SoftDeleteMixin):
     resource_person: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     fee: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    hotel_info: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # Relationships
     registrations: Mapped[list["FdpRegistration"]] = relationship(back_populates="fdp", lazy="selectin")

@@ -36,7 +36,6 @@ import AdminFDP from './pages/admin/FDP.jsx'
 import AdminContacts from './pages/admin/Contacts.jsx'
 import AdminDownloads from './pages/admin/Downloads.jsx'
 import AdminCertificates from './pages/admin/Certificates.jsx'
-import CancellationPolicy from './pages/CancellationPolicy.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -60,7 +59,6 @@ export default function App() {
           <Route path="gallery" element={<Gallery />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:slug" element={<BlogPost />} />
-          <Route path="cancellation-policy" element={<CancellationPolicy />} />
         </Route>
 
         <Route path="login" element={<Login />} />
