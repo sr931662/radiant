@@ -96,7 +96,7 @@ export default function Navbar() {
             )
           ))}
           <div className={styles.navActions}>
-            <Link to="/volunteer" className={styles.sponsorBtn}>
+            <Link to="/donate" className={styles.sponsorBtn}>
               <UserCheck size={15} /> Sponsor a Child
             </Link>
             <Link to="/donate" className={styles.donateBtn}>
@@ -134,7 +134,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className={styles.mobileDivider} />
-          <Link to="/volunteer" className={styles.mobileSponsorBtn} onClick={() => setMenuOpen(false)}>
+          <Link to="/donate" className={styles.mobileSponsorBtn} onClick={() => setMenuOpen(false)}>
             <UserCheck size={16} /> Sponsor a Child
           </Link>
           <Link to="/donate" className={styles.mobileDonateBtn} onClick={() => setMenuOpen(false)}>
