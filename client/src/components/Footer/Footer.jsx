@@ -111,14 +111,20 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © 2026 Radiant Education Trust. Reg. No. 106 (08-Jan-2008) · 80G: AADTR8447DE2026102 · DARPAN: DL/2025/0845871 · MSME: UDYAM-UP-28-0220207. All rights reserved.
+            © 2026 Radiant Education Trust. All rights reserved.
+            <span className={styles.copyrightMeta}>
+              Reg. No. 106 (08-Jan-2008) · 80G: AADTR8447DE2026102 · DARPAN: DL/2025/0845871 · MSME: UDYAM-UP-28–0220207
+            </span>
           </p>
           <div className={styles.legalLinks}>
-            {['Privacy Policy', 'Terms of Service', 'Refund Policy', 'Child Safety'].map((l) => (
+            {['Privacy Policy', 'Terms of Service', 'Child Safety'].map((l) => (
               <button key={l} type="button" className={styles.legalLink}>
                 {l}
               </button>
             ))}
+            <Link to="/cancellation-policy" className={styles.legalLink}>
+              Refund Policy
+            </Link>
           </div>
         </div>
       </div>

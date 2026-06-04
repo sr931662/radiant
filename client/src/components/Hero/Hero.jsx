@@ -40,7 +40,7 @@ export default function Hero() {
               <HandHelping size={16} />
               Volunteer
             </button>
-            <button className={styles.ctaAmber} onClick={() => navigate('/volunteer')}>
+            <button className={styles.ctaAmber} onClick={() => navigate('/donate')}>
               <UserCheck size={16} />
               Sponsor a Child
             </button>

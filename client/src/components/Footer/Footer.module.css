@@ -160,6 +160,15 @@
   font-size: 0.72rem;
   color: var(--clr-slate-500);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.copyrightMeta {
+  font-size: 0.65rem;
+  color: var(--clr-slate-600);
+  letter-spacing: 0.01em;
 }
 
 .legalLinks {

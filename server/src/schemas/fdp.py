@@ -17,6 +17,7 @@ class FdpCreateRequest(BaseModel):
     resource_person: str | None = None
     fee: float = 0.0
     is_active: bool = True
+    hotel_info: str | None = None
 
 
 class FdpUpdateRequest(BaseModel):
@@ -29,6 +30,7 @@ class FdpUpdateRequest(BaseModel):
     resource_person: str | None = None
     fee: float | None = None
     is_active: bool | None = None
+    hotel_info: str | None = None
 
 
 class FdpResponse(BaseModel):
@@ -44,6 +46,7 @@ class FdpResponse(BaseModel):
     is_active: bool
     seats_remaining: int = 0  # computed field
     created_at: datetime
+    hotel_info: str | None = None
 
     model_config = {"from_attributes": True}
 
