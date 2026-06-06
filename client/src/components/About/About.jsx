@@ -1,4 +1,22 @@
-import { Telescope, Target, ShieldCheck, CheckCircle2, Award, ExternalLink, Download, BadgeCheck, Calendar, BookOpen, Briefcase, Leaf, Users, Wrench, GraduationCap } from 'lucide-react'
+import {
+  Telescope,
+  Target,
+  ShieldCheck,
+  CheckCircle2,
+  Award,
+  ExternalLink,
+  Download,
+  BadgeCheck,
+  Calendar,
+  BookOpen,
+  Leaf,
+  Users,
+  GraduationCap,
+  HeartPulse,
+  Scale,
+  Venus,
+  Trees
+} from 'lucide-react'
 import styles from './About.module.css'
 import seemaImg from '../../assets/seema.png'
 import utkarshImg from '../../assets/utkarsh.jpg'
@@ -37,10 +55,48 @@ const TRUSTEES = [
 ]
 
 const THEMATIC_AREAS = [
-  { label: 'Literacy & Education', icon: BookOpen, color: '#2563eb', bg: '#eff6ff' },
-  { label: 'Vocational & Skill Development Training', icon: Wrench, color: '#7c3aed', bg: '#faf5ff' },
-  { label: 'Livelihood Enhancement', icon: Briefcase, color: '#059669', bg: '#f0fdf4' },
-  { label: 'Skill Development', icon: GraduationCap, color: '#d97706', bg: '#fffbeb' },
+  {
+    label: 'Literacy & Education',
+    icon: BookOpen,
+    color: '#2563eb',
+    bg: '#eff6ff',
+  },
+  {
+    label: 'Skill Development',
+    icon: GraduationCap,
+    color: '#7c3aed',
+    bg: '#faf5ff',
+  },
+  {
+    label: 'Health Care',
+    icon: HeartPulse,
+    color: '#dc2626',
+    bg: '#fef2f2',
+  },
+  {
+    label: 'Environment Conservation & Sustainability',
+    icon: Trees,
+    color: '#059669',
+    bg: '#f0fdf4',
+  },
+  {
+    label: 'Legal Aid',
+    icon: Scale,
+    color: '#d97706',
+    bg: '#fffbeb',
+  },
+  {
+    label: 'Women Empowerment',
+    icon: Venus,
+    color: '#db2777',
+    bg: '#fdf2f8',
+  },
+  {
+    label: 'Rural Education & Scholarship',
+    icon: BookOpen,
+    color: '#0891b2',
+    bg: '#ecfeff',
+  },
 ]
 
 const CERTIFICATIONS = [
@@ -118,6 +174,9 @@ export default function About() {
             Every rupee raised, every volunteer hour given, and every partnership forged is
             guided by one north star — every child deserves a classroom.
           </p>
+          <div className={styles.memorialNote}>
+            In memory of <strong>Jagnath Rai</strong> and <strong>Balu Ram Jalan</strong>
+          </div>
         </div>
 
         {/* Cards */}
