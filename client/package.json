@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm install --no-package-lock && vite build",
     "preview": "vite preview",
     "cf:deploy": "wrangler pages deploy dist",
     "cf:dev": "wrangler pages dev dist"

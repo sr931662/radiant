@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Sun, MapPin, Clock, Phone, Globe, MessageCircle } from 'lucide-react'
+import { MapPin, Clock, Phone, Globe, MessageCircle } from 'lucide-react'
 import styles from './Footer.module.css'
+import Logo from '../../assets/image.svg'
 
 const EXPLORE_LINKS = [
   { to: '/about',        label: 'About Us' },
@@ -28,7 +29,9 @@ export default function Footer() {
           {/* Brand */}
           <div className={styles.brand}>
             <div className={styles.logoRow}>
-              <div className={styles.logoIcon}><Sun size={22} /></div>
+              <div className={styles.logoIcon}>
+                <img src={Logo} alt="Radiant Education Trust" style={{ height: '32px', width: 'auto', borderRadius: '6px' }} />
+              </div>
               <span className={styles.logoName}>Radiant Education Trust</span>
             </div>
             <p className={styles.brandDesc}>
