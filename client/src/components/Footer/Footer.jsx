@@ -29,9 +29,7 @@ export default function Footer() {
           {/* Brand */}
           <div className={styles.brand}>
             <div className={styles.logoRow}>
-              <div className={styles.logoIcon}>
-                <img src={Logo} alt="Radiant Education Trust" style={{ height: '32px', width: 'auto', borderRadius: '6px' }} />
-              </div>
+              <img src={Logo} alt="Radiant Education Trust" style={{ height: '36px', width: 'auto', borderRadius: '8px' }} />
               <span className={styles.logoName}>Radiant Education Trust</span>
             </div>
             <p className={styles.brandDesc}>
