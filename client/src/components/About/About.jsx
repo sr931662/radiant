@@ -14,7 +14,7 @@ import {
   GraduationCap,
   HeartPulse,
   Scale,
-  Venus,
+  Users,
   Trees
 } from 'lucide-react'
 import styles from './About.module.css'
@@ -87,7 +87,7 @@ const THEMATIC_AREAS = [
   },
   {
     label: 'Women Empowerment',
-    icon: Venus,
+    icon: Users,
     color: '#db2777',
     bg: '#fdf2f8',
   },
