@@ -374,8 +374,8 @@
 }
 
 .thematicGrid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(180px, 220px));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 1.25rem;
 }
@@ -391,6 +391,9 @@
   gap: 0.6rem;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
+  flex: 1 1 200px;
+  max-width: 220px;
+  min-width: 160px;
 }
 
 .thematicCard:hover {
@@ -435,26 +438,9 @@
   .trusteesGrid   { grid-template-columns: repeat(4, 1fr); }
   .sdgStrip       { flex-direction: row; align-items: center; justify-content: space-between; }
 }
-@media (max-width: 1200px) {
-  .thematicGrid {
-    grid-template-columns: repeat(4, minmax(180px, 220px));
-  }
-}
-
-@media (max-width: 992px) {
-  .thematicGrid {
-    grid-template-columns: repeat(3, minmax(180px, 220px));
-  }
-}
-
-@media (max-width: 768px) {
-  .thematicGrid {
-    grid-template-columns: repeat(2, minmax(160px, 1fr));
-  }
-}
 
 @media (max-width: 480px) {
-  .thematicGrid {
-    grid-template-columns: 1fr;
+  .thematicCard {
+    max-width: 100%;
   }
 }
