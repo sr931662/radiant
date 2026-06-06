@@ -375,8 +375,9 @@
 
 .thematicGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(5, minmax(180px, 220px));
+  justify-content: center;
+  gap: 1.25rem;
 }
 
 .thematicCard {
@@ -432,6 +433,28 @@
   .cards          { grid-template-columns: repeat(3, 1fr); }
   .certCards      { grid-template-columns: repeat(3, 1fr); }
   .trusteesGrid   { grid-template-columns: repeat(4, 1fr); }
-  .thematicGrid   { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
   .sdgStrip       { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+@media (max-width: 1200px) {
+  .thematicGrid {
+    grid-template-columns: repeat(4, minmax(180px, 220px));
+  }
+}
+
+@media (max-width: 992px) {
+  .thematicGrid {
+    grid-template-columns: repeat(3, minmax(180px, 220px));
+  }
+}
+
+@media (max-width: 768px) {
+  .thematicGrid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .thematicGrid {
+    grid-template-columns: 1fr;
+  }
 }

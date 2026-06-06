@@ -3,6 +3,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { Sun, Heart, UserCheck, Menu, X, LogOut, LayoutDashboard, User, Award } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import styles from './Navbar.module.css'
+import Logo from '../../assets/image.svg'
 
 const NAV_LINKS = [
   { to: '/',             label: 'Home',       end: true },
@@ -73,7 +74,7 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
-          <div className={styles.logoIcon}><Sun size={28} /></div>
+          <div className={styles.logoIcon}><Logo /></div>
           <div className={styles.logoText}>
             <span className={styles.logoName}>Radiant Education</span>
             <span className={styles.logoSub}>Trust · NGO</span>
