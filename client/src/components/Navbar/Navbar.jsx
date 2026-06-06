@@ -74,7 +74,9 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
         {/* Logo */}
         <Link to="/" className={styles.logo}>
-          <div className={styles.logoIcon}><Logo /></div>
+          <div className={styles.logoIcon}>
+            <img src={Logo} alt="Radiant Education Trust" />
+          </div>
           <div className={styles.logoText}>
             <span className={styles.logoName}>Radiant Education</span>
             <span className={styles.logoSub}>Trust · NGO</span>

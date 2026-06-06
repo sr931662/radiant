@@ -24,19 +24,19 @@
 }
 
 .logoIcon {
-  background: linear-gradient(135deg, var(--clr-primary), #3730a3);
-  color: var(--clr-white);
-  padding: 0.625rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgb(79 70 229 / 0.35);
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: box-shadow 0.2s;
+  flex-shrink: 0;
 }
 
-.logo:hover .logoIcon {
-  box-shadow: 0 4px 18px rgb(79 70 229 / 0.5);
+.logoIcon img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
 }
 
 .logoText {
