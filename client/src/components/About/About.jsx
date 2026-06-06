@@ -14,7 +14,6 @@ import {
   GraduationCap,
   HeartPulse,
   Scale,
-  Users,
   Trees
 } from 'lucide-react'
 import styles from './About.module.css'
