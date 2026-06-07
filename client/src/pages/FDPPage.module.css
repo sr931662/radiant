@@ -1,0 +1,292 @@
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #1e3a5f 0%, #92400e 100%);
+  padding: 4.5rem 0 3.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 50%, rgba(251,191,36,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(251,191,36,0.2);
+  border: 1px solid rgba(251,191,36,0.4);
+  border-radius: 99px;
+  padding: 4px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.heroDesc {
+  color: rgba(255,255,255,0.75);
+  max-width: 540px;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+.heroFeatures {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.heroFeatureItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+}
+
+/* ── Grid ── */
+.body {
+  padding: 3rem 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── FDP Card ── */
+.card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
+}
+
+.cardBar {
+  height: 6px;
+}
+
+.cardBody {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.875rem;
+}
+
+.feeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.freeBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #dcfce7;
+  color: #166534;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.pastBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #94a3b8;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.fullBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.lowBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #fff7ed;
+  color: #c2410c;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  margin-bottom: 0.625rem;
+}
+
+.cardDesc {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.84rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #475569;
+}
+
+/* ── Seats bar ── */
+.seatsWrap {
+  margin-bottom: 1.1rem;
+}
+
+.seatsInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}
+
+.seatsLabelNormal { color: #475569; }
+.seatsLabelLow    { color: #dc2626; font-weight: 700; }
+
+.seatsPct { color: #94a3b8; }
+
+.seatsTrack {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 99px;
+}
+
+.seatsFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s;
+}
+
+.seatsFillNormal { background: #22c55e; }
+.seatsFillLow    { background: #dc2626; }
+
+/* ── Card actions ── */
+.actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.registerBtn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+
+.registerBtnActive {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: white;
+}
+
+.registerBtnDisabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.detailsLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0.6rem;
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+}
+
+/* ── Empty / error states ── */
+.emptyState {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #64748b;
+}
+
+.emptyTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.emptySubtitle {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.errorMsg {
+  text-align: center;
+  color: #ef4444;
+  padding: 2rem;
+}

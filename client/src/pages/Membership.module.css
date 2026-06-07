@@ -1,0 +1,658 @@
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
+  padding: 4rem 0;
+  text-align: center;
+  color: white;
+}
+
+.heroLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.5rem;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin: 0.5rem 0;
+}
+
+.heroDesc {
+  color: rgba(255,255,255,0.8);
+  max-width: 40rem;
+  margin: 0 auto 1.5rem;
+}
+
+.heroMotto {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ── Plans section ── */
+.plansSection {
+  padding: 3.5rem 1rem 1rem;
+}
+
+.plansHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.plansSectionLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7c3aed;
+  margin-bottom: 0.4rem;
+}
+
+.plansSectionTitle {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.plansSectionDesc {
+  color: #64748b;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+/* ── Login nudge ── */
+.loginNudge {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  background: #faf5ff;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.loginNudgeText {
+  flex: 1;
+}
+
+.loginNudgeTitle {
+  margin: 0;
+  font-weight: 700;
+  color: #4c1d95;
+  font-size: 0.9rem;
+}
+
+.loginNudgeSubtitle {
+  margin: 0;
+  color: #6d28d9;
+  font-size: 0.82rem;
+}
+
+.loginNudgeBtns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.loginBtn {
+  padding: 0.45rem 1rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.registerBtn {
+  padding: 0.45rem 1rem;
+  background: white;
+  color: #7c3aed;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+/* ── Empty plans state ── */
+.emptyPlans {
+  text-align: center;
+  padding: 3rem 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.emptyPlansTitle {
+  font-weight: 700;
+  color: #4c1d95;
+  margin-bottom: 0.5rem;
+}
+
+.emptyPlansDesc {
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+
+.emptyPlansContact {
+  background: #faf5ff;
+  border: 1.5px solid #e9d5ff;
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: #6d28d9;
+}
+
+/* ── Plans grid ── */
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.planCard {
+  border-radius: 16px;
+  padding: 2rem;
+  transition: border-color 0.2s;
+}
+
+.planCardRegular {
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 2px solid transparent;
+}
+
+.planCardRegular:hover {
+  border-color: #7c3aed;
+}
+
+.planCardLife {
+  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
+  box-shadow: 0 20px 40px rgba(124,58,237,0.25);
+  border: 2px solid #7c3aed;
+}
+
+.popularBadge {
+  background: rgba(255,255,255,0.15);
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.planName {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.planNameRegular { color: #0f172a; }
+.planNameLife    { color: white; }
+
+.planMeta {
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.planMetaRegular { color: #64748b; }
+.planMetaLife    { color: rgba(255,255,255,0.6); }
+
+.planPrice {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.planPriceRegular { color: #0f172a; }
+.planPriceLife    { color: white; }
+
+.planBenefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.planBenefitItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.planBenefitRegular { color: #374151; }
+.planBenefitLife    { color: rgba(255,255,255,0.8); }
+
+.applyBtn {
+  width: 100%;
+  padding: 0.75rem;
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.applyBtnRegular {
+  background: #7c3aed;
+  border: none;
+}
+
+.applyBtnLife {
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+/* ── Benefits section ── */
+.benefitsSection {
+  background: #f8fafc;
+  padding: 4rem 0;
+  margin-top: 3rem;
+}
+
+.benefitsInner {
+  padding: 0 1rem;
+}
+
+.benefitsHeader {
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto 3rem;
+}
+
+.benefitsSectionLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7c3aed;
+  margin-bottom: 0.4rem;
+}
+
+.benefitsSectionTitle {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.75rem;
+}
+
+.benefitsSectionDesc {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem;
+}
+
+.benefitCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border: 1px solid #f1f5f9;
+  transition: box-shadow 0.2s;
+}
+
+.benefitCard:hover {
+  box-shadow: 0 6px 24px rgba(124,58,237,0.12);
+}
+
+.benefitIcon {
+  background: #faf5ff;
+  border-radius: 8px;
+  padding: 7px;
+  flex-shrink: 0;
+}
+
+.benefitText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.benefitNum {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.mottoBox {
+  text-align: center;
+  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mottoLabel {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.mottoText {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-style: italic;
+  margin: 0;
+}
+
+.errorMsg {
+  text-align: center;
+  color: #ef4444;
+}
+
+/* ── Membership Form Modal ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+}
+
+.modalHeader {
+  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
+  padding: 1.5rem 2rem;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalHeaderText {
+  /* intentionally empty — child elements handle text */
+}
+
+.modalOrg {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.modalTitle {
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.planBanner {
+  background: #faf5ff;
+  border-bottom: 1px solid #e9d5ff;
+  padding: 0.9rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.planBannerName {
+  font-weight: 700;
+  color: #4c1d95;
+}
+
+.planBannerPrice {
+  color: #7c3aed;
+  font-size: 0.88rem;
+  margin-left: 0.75rem;
+}
+
+.planBannerValidity {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  margin-left: 0.5rem;
+}
+
+.form {
+  padding: 2rem;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.formField {
+  /* container for label + input pairs */
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.3rem;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 7px;
+  font-size: 0.875rem;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.genderRow {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.35rem;
+}
+
+.genderOption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #374151;
+}
+
+.categoryRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.categoryOption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  color: #374151;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.categoryOptionActive {
+  border-color: #7c3aed;
+  background: #faf5ff;
+  color: #4c1d95;
+}
+
+/* ── Section title ── */
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.9rem;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 0.5rem;
+}
+
+.sectionNum {
+  background: #1e3a5f;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.sectionName {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+/* ── Declaration ── */
+.declaration {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.declarationText {
+  font-size: 0.82rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.declarationCheck {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e3a5f;
+}
+
+.declarationCheckInput {
+  margin-top: 2px;
+  accent-color: #7c3aed;
+}
+
+.formNote {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitBtn {
+  flex: 2;
+  padding: 0.75rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}

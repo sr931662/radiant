@@ -1,0 +1,156 @@
+.container {
+  max-width: 800px;
+  padding: 3rem 1rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.featuredImage {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--clr-primary);
+  background: #eff6ff;
+  padding: 3px 12px;
+  border-radius: 999px;
+}
+
+.dateMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.excerpt {
+  font-size: 1.1rem;
+  color: #475569;
+  font-style: italic;
+  border-left: 3px solid var(--clr-primary);
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.content {
+  line-height: 1.8;
+  color: #374151;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  margin-bottom: 3rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.tag {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 2rem 0;
+}
+
+.commentsTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.commentForm {
+  margin-bottom: 2rem;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.submitBtn {
+  padding: 0.6rem 1.5rem;
+  background: var(--clr-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.loginPrompt {
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+.errorState {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.errorStateText {
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
