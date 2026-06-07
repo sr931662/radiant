@@ -1,189 +1,3 @@
-/* ── Course Card ── */
-.courseLink {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-}
-
-.card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  border: 1px solid #f1f5f9;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-}
-
-.thumbnail {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.thumbnailPlaceholder {
-  width: 100%;
-  height: 180px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cardBody {
-  padding: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.badges {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.6rem;
-}
-
-.levelBeginner {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: #dcfce7;
-  color: #166534;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.levelIntermediate {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: #dbeafe;
-  color: #1e40af;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.levelAdvanced {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: #fce7f3;
-  color: #9d174d;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.modeBadge {
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: #f1f5f9;
-  color: #475569;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.certBadge {
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: #fef3c7;
-  color: #92400e;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.courseTitle {
-  font-size: 0.975rem;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.35;
-  margin-bottom: 0.4rem;
-}
-
-.instructor {
-  font-size: 0.78rem;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-}
-
-.desc {
-  font-size: 0.82rem;
-  color: #64748b;
-  line-height: 1.55;
-  margin-bottom: 0.75rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
-}
-
-.metaRow {
-  display: flex;
-  gap: 0.75rem;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  margin-bottom: 0.875rem;
-  flex-wrap: wrap;
-}
-
-.metaItem {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.priceRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.75rem;
-  border-top: 1px solid #f1f5f9;
-}
-
-.priceFree {
-  font-weight: 800;
-  font-size: 1.05rem;
-  color: #059669;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.pricePaid {
-  font-weight: 800;
-  font-size: 1.05rem;
-  color: #0f172a;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.enrollBtn {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #2563eb;
-  background: #eff6ff;
-  padding: 4px 12px;
-  border-radius: 8px;
-}
-
 /* ── Hero ── */
 .hero {
   background: linear-gradient(135deg, #1e3a5f, #047857);
@@ -200,104 +14,62 @@
   align-items: center;
   gap: 6px;
   background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 99px;
-  padding: 4px 14px;
+  padding: 5px 16px;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .heroTitle {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
   font-weight: 800;
   margin: 0 0 1rem;
+  line-height: 1.2;
 }
 
 .heroDesc {
-  color: rgba(255,255,255,0.8);
-  max-width: 540px;
+  color: rgba(255,255,255,0.82);
+  max-width: 560px;
   margin: 0 auto 2rem;
-  line-height: 1.65;
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
-.statsRow {
+.heroPills {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 2.5rem;
-  flex-wrap: wrap;
-}
-
-.statItem {
-  text-align: center;
-}
-
-.statValue {
-  font-size: 1.6rem;
-  font-weight: 800;
-}
-
-.statLabel {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.7);
-}
-
-/* ── Filter bar ── */
-.filterBar {
-  display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.75rem;
-  flex-wrap: wrap;
-  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.filterBtn {
-  padding: 5px 14px;
+.heroPill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 99px;
-  border: 1px solid #e2e8f0;
-  background: white;
-  color: #475569;
+  padding: 5px 14px;
   font-size: 0.8rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
+  color: rgba(255,255,255,0.9);
 }
 
-.filterBtnActive {
-  border-color: #2563eb;
-  background: #2563eb;
-  color: white;
-}
-
-/* ── Grid / states ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+.heroContact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
 
-.emptyState {
-  text-align: center;
-  padding: 4rem 1rem;
-  color: #64748b;
-}
-
-.emptyIcon {
-  margin-bottom: 1rem;
-}
-
-.emptyMsg {
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.errorMsg {
-  text-align: center;
-  color: #ef4444;
-  padding: 2rem;
-}
-
-.body {
-  padding: 2.5rem 1rem;
+.heroContactItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.8);
 }

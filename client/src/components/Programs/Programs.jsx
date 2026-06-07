@@ -1,121 +1,96 @@
-import { BookOpen, IndianRupee, Sparkles } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { getCourses } from '../../services/coursesService'
-import Spinner from '../ui/Spinner'
+import { GraduationCap, ChevronRight, BookOpen, Sparkles } from 'lucide-react'
 import styles from './Programs.module.css'
 
-const LEVEL_COLORS = {
-  BEGINNER: { bg: '#dcfce7', text: '#166534' },
-  INTERMEDIATE: { bg: '#dbeafe', text: '#1e40af' },
-  ADVANCED: { bg: '#fce7f3', text: '#9d174d' },
-}
+const UG_PROGRAMS = [
+  { degree: 'BBA', color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', specs: ['Operations', 'Finance', 'HR', 'Marketing', 'Business Analytics', 'Data Analytics'] },
+  { degree: 'B.COM', color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe', specs: ['Hons.', 'General', 'International Finance & Accounting'] },
+  { degree: 'BCA', color: '#7c3aed', bg: '#faf5ff', border: '#e9d5ff', specs: ['AI & Data Science', 'Cloud Computing', 'Cyber Security', 'FinTech', 'General'] },
+  { degree: 'BA', color: '#ea580c', bg: '#fff7ed', border: '#fed7aa', specs: ['General', 'JMC', 'Hindi'] },
+]
 
-function CourseCard({ course }) {
-  const level = course.level || 'BEGINNER'
-  const colors = LEVEL_COLORS[level] || LEVEL_COLORS.BEGINNER
+const PG_PROGRAMS = [
+  { degree: 'MBA', color: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe', specs: ['Healthcare Mgmt', 'Business Analytics', 'Digital Business', 'Banking & Finance', 'Supply Chain', 'HR', 'Marketing', '+10 more'] },
+  { degree: 'MCA', color: '#7c3aed', bg: '#faf5ff', border: '#e9d5ff', specs: ['AI & Machine Learning', 'Blockchain', 'Cyber Security', 'Augmented Reality'] },
+  { degree: 'MSC', color: '#0891b2', bg: '#ecfeff', border: '#a5f3fc', specs: ['Data Science', 'Mathematics', 'Economics'] },
+  { degree: 'MA', color: '#b45309', bg: '#fffbeb', border: '#fde68a', specs: ['Sociology', 'English', 'Economics', 'Public Policy'] },
+  { degree: 'M.COM', color: '#059669', bg: '#f0fdf4', border: '#bbf7d0', specs: ['Financial Technology'] },
+  { degree: 'MSW', color: '#dc2626', bg: '#fef2f2', border: '#fecaca', specs: ['General'] },
+]
 
+function ProgramCard({ program }) {
   return (
-    <Link to={`/courses/${course.slug || course.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <div className={styles.card}>
-        <div className={styles.iconBox}>
-          {course.thumbnail
-            ? <img src={course.thumbnail} alt={course.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.75rem' }} />
-            : <BookOpen size={22} />}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <span style={{
-            fontSize: '0.7rem', fontWeight: 700, padding: '2px 8px', borderRadius: '99px',
-            background: colors.bg, color: colors.text, textTransform: 'uppercase', letterSpacing: '0.05em',
-          }}>
-            {level}
-          </span>
-          {course.mode && (
-            <span style={{ fontSize: '0.7rem', color: '#64748b', background: '#f1f5f9', padding: '2px 8px', borderRadius: '99px' }}>
-              {course.mode}
-            </span>
-          )}
-        </div>
-        <h3 className={styles.cardTitle}>{course.title}</h3>
-        {course.description && (
-          <p className={styles.cardDesc} style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-            {course.description}
-          </p>
-        )}
-        <button type="button" className={styles.learnMore}>
-          {course.price === 0
-            ? 'Enroll Free →'
-            : <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}><IndianRupee size={12} />{course.price?.toLocaleString('en-IN')} · Enroll →</span>}
-        </button>
+    <div className={styles.programCard} style={{ background: program.bg, borderColor: program.border }}>
+      <div className={styles.programDegree} style={{ color: program.color, background: program.color + '18' }}>
+        {program.degree}
       </div>
-    </Link>
+      <div className={styles.programSpecs}>
+        {program.specs.map((s) => (
+          <span key={s} className={styles.specPill} style={{ color: program.color, borderColor: program.color + '40' }}>
+            {s}
+          </span>
+        ))}
+      </div>
+    </div>
   )
 }
 
 export default function Programs() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['courses', 1],
-    queryFn: () => getCourses(1, 8),
-    staleTime: 2 * 60 * 1000,
-  })
-
-  const courses = data?.items || []
-  const beginner = courses.filter((c) => c.level === 'BEGINNER' || !c.level)
-  const advanced = courses.filter((c) => c.level === 'INTERMEDIATE' || c.level === 'ADVANCED')
-
   return (
     <section id="programs" className={styles.section}>
       <div className="container">
         <div className={styles.headerRow}>
           <div>
-            <p className="section-label">Our Courses</p>
-            <h2 className="section-heading">Programs For Every Learner</h2>
+            <p className="section-label">Our Programs</p>
+            <h2 className="section-heading">UG &amp; PG Courses</h2>
             <p className="section-sub">
-              All courses are managed through our admin panel — enroll and start learning today.
+              UGC-approved online programmes for working professionals — 100% flexible learning since 2008.
             </p>
           </div>
           <Link to="/courses">
-            <button className={styles.viewAllBtn}>View All Courses →</button>
+            <button className={styles.viewAllBtn}>View Full Catalog →</button>
           </Link>
         </div>
 
-        {isLoading && <Spinner center />}
-
-        {isError && (
-          <p style={{ textAlign: 'center', color: '#ef4444', padding: '2rem' }}>
-            Failed to load courses.
-          </p>
-        )}
-
-        {!isLoading && !isError && courses.length === 0 && (
-          <p style={{ textAlign: 'center', color: '#64748b', padding: '3rem 0' }}>
-            No courses published yet. Check back soon!
-          </p>
-        )}
-
-        {!isLoading && beginner.length > 0 && (
-          <>
-            <div className={styles.categoryLabel}>
-              <BookOpen size={18} color="var(--clr-primary)" />
-              Beginner &amp; Foundational
+        {/* UG Programs */}
+        <div className={styles.categoryBanner} style={{ background: 'linear-gradient(135deg,#1d4ed8,#0891b2)' }}>
+          <div className={styles.categoryBannerLeft}>
+            <BookOpen size={22} color="white" style={{ flexShrink: 0 }} />
+            <div>
+              <p className={styles.categoryBannerLabel}>Undergraduate Programs</p>
+              <p className={styles.categoryBannerSub}>3-Year Degree · Foundation to Career</p>
             </div>
-            <div className={styles.grid}>
-              {beginner.map((c) => <CourseCard key={c.id} course={c} />)}
-            </div>
-          </>
-        )}
+          </div>
+          <span className={styles.categoryBannerCount}>{UG_PROGRAMS.length} Programs</span>
+        </div>
+        <div className={styles.grid}>
+          {UG_PROGRAMS.map((p) => <ProgramCard key={p.degree} program={p} />)}
+        </div>
 
-        {!isLoading && advanced.length > 0 && (
-          <>
-            <div className={`${styles.categoryLabel} ${styles.categoryLabelAmber}`}>
-              <Sparkles size={18} color="var(--clr-accent)" />
-              Intermediate &amp; Advanced
+        {/* PG Programs */}
+        <div className={styles.categoryBanner} style={{ background: 'linear-gradient(135deg,#7c3aed,#1e3a5f)', marginTop: '2rem' }}>
+          <div className={styles.categoryBannerLeft}>
+            <Sparkles size={22} color="white" style={{ flexShrink: 0 }} />
+            <div>
+              <p className={styles.categoryBannerLabel}>Postgraduate Programs</p>
+              <p className={styles.categoryBannerSub}>2-Year Degree · Advance Your Career</p>
             </div>
-            <div className={styles.grid}>
-              {advanced.map((c) => <CourseCard key={c.id} course={c} />)}
-            </div>
-          </>
-        )}
+          </div>
+          <span className={styles.categoryBannerCount}>{PG_PROGRAMS.length} Programs</span>
+        </div>
+        <div className={`${styles.grid} ${styles.gridPg}`}>
+          {PG_PROGRAMS.map((p) => <ProgramCard key={p.degree} program={p} />)}
+        </div>
+
+        {/* CTA row */}
+        <div className={styles.ctaRow}>
+          <p className={styles.ctaText}>PhD guidance also available — Regular &amp; Part-Time</p>
+          <Link to="/courses">
+            <button className={styles.ctaBtn}>
+              Enquire Now <ChevronRight size={16} />
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   )

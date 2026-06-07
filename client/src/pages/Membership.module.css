@@ -1,97 +1,113 @@
 /* ── Hero ── */
 .hero {
   background: linear-gradient(135deg, #1e3a5f, #7c3aed);
-  padding: 4rem 0;
+  padding: 4.5rem 0;
   text-align: center;
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 40%, rgba(124,58,237,0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
 }
 
 .heroLabel {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 0.5rem;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 0.75rem;
 }
 
 .heroTitle {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
-  margin: 0.5rem 0;
+  margin: 0 0 1rem;
+  line-height: 1.15;
 }
 
 .heroDesc {
   color: rgba(255,255,255,0.8);
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto 1.5rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
 .heroMotto {
-  color: rgba(255,255,255,0.6);
-  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.88rem;
   font-style: italic;
 }
 
 /* ── Plans section ── */
 .plansSection {
-  padding: 3.5rem 1rem 1rem;
+  padding: 4rem 1rem 2rem;
 }
 
 .plansHeader {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 .plansSectionLabel {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #7c3aed;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .plansSectionTitle {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.625rem;
 }
 
 .plansSectionDesc {
   color: #64748b;
-  max-width: 34rem;
+  max-width: 36rem;
   margin: 0 auto;
+  line-height: 1.65;
 }
 
 /* ── Login nudge ── */
 .loginNudge {
-  max-width: 600px;
-  margin: 0 auto 2rem;
+  max-width: 620px;
+  margin: 0 auto 2.5rem;
   background: #faf5ff;
   border: 1.5px solid #c4b5fd;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  padding: 1.1rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-.loginNudgeText {
-  flex: 1;
-}
+.loginNudgeText { flex: 1; }
 
 .loginNudgeTitle {
   margin: 0;
   font-weight: 700;
   color: #4c1d95;
-  font-size: 0.9rem;
+  font-size: 0.925rem;
 }
 
 .loginNudgeSubtitle {
-  margin: 0;
+  margin: 2px 0 0;
   color: #6d28d9;
   font-size: 0.82rem;
 }
@@ -102,26 +118,32 @@
 }
 
 .loginBtn {
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1.1rem;
   background: #7c3aed;
   color: white;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   font-size: 0.82rem;
+  transition: background 0.15s;
 }
 
+.loginBtn:hover { background: #6d28d9; }
+
 .registerBtn {
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1.1rem;
   background: white;
   color: #7c3aed;
   border: 1.5px solid #c4b5fd;
-  border-radius: 7px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   font-size: 0.82rem;
+  transition: background 0.15s;
 }
+
+.registerBtn:hover { background: #faf5ff; }
 
 /* ── Empty plans state ── */
 .emptyPlans {
@@ -151,62 +173,84 @@
   padding: 1rem;
   font-size: 0.85rem;
   color: #6d28d9;
+  line-height: 1.8;
 }
 
 /* ── Plans grid ── */
 .plansGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
+@media (min-width: 640px) {
+  .plansGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .plansGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
 .planCard {
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 2rem;
-  transition: border-color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.planCard:hover {
+  transform: translateY(-4px);
 }
 
 .planCardRegular {
   background: white;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border: 2px solid transparent;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+  border: 2px solid #f1f5f9;
 }
 
 .planCardRegular:hover {
-  border-color: #7c3aed;
+  border-color: #c4b5fd;
+  box-shadow: 0 12px 40px rgba(124,58,237,0.12);
 }
 
 .planCardLife {
-  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
-  box-shadow: 0 20px 40px rgba(124,58,237,0.25);
+  background: linear-gradient(145deg, #1e3a5f, #7c3aed);
+  box-shadow: 0 16px 40px rgba(124,58,237,0.3);
   border: 2px solid #7c3aed;
 }
 
+.planCardLife:hover {
+  box-shadow: 0 24px 56px rgba(124,58,237,0.4);
+}
+
 .popularBadge {
-  background: rgba(255,255,255,0.15);
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 0.75rem;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1e3a5f;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 99px;
   letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 .planName {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  margin-bottom: 0.25rem;
+  margin: 0.75rem 0 0.25rem;
 }
 
 .planNameRegular { color: #0f172a; }
 .planNameLife    { color: white; }
 
 .planMeta {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   margin-bottom: 0.75rem;
 }
 
@@ -214,9 +258,10 @@
 .planMetaLife    { color: rgba(255,255,255,0.6); }
 
 .planPrice {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 2.25rem;
+  font-weight: 900;
   margin: 0.75rem 0 1.5rem;
+  line-height: 1;
 }
 
 .planPriceRegular { color: #0f172a; }
@@ -225,69 +270,72 @@
 .planBenefits {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .planBenefitItem {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 .planBenefitRegular { color: #374151; }
-.planBenefitLife    { color: rgba(255,255,255,0.8); }
+.planBenefitLife    { color: rgba(255,255,255,0.85); }
 
 .applyBtn {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.8rem;
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  transition: opacity 0.15s;
 }
 
+.applyBtn:hover { opacity: 0.9; }
+
 .applyBtnRegular {
-  background: #7c3aed;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
   border: none;
 }
 
 .applyBtnLife {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.18);
   border: 1.5px solid rgba(255,255,255,0.4);
 }
 
 /* ── Benefits section ── */
 .benefitsSection {
   background: #f8fafc;
-  padding: 4rem 0;
+  padding: 5rem 0;
   margin-top: 3rem;
+  border-top: 1px solid #e2e8f0;
 }
 
-.benefitsInner {
-  padding: 0 1rem;
-}
+.benefitsInner { padding: 0 1rem; }
 
 .benefitsHeader {
   text-align: center;
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto 3rem;
 }
 
 .benefitsSectionLabel {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #7c3aed;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .benefitsSectionTitle {
@@ -304,71 +352,74 @@
 
 .benefitsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
-  max-width: 1000px;
-  margin: 0 auto 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.1rem;
+  max-width: 1020px;
+  margin: 0 auto 3rem;
 }
 
 .benefitCard {
   background: white;
   border-radius: 12px;
-  padding: 1.25rem;
+  padding: 1.1rem 1.25rem;
   display: flex;
   gap: 0.875rem;
   align-items: flex-start;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
   border: 1px solid #f1f5f9;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.18s;
 }
 
 .benefitCard:hover {
-  box-shadow: 0 6px 24px rgba(124,58,237,0.12);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.1);
+  transform: translateY(-2px);
 }
 
 .benefitIcon {
   background: #faf5ff;
   border-radius: 8px;
-  padding: 7px;
+  padding: 8px;
   flex-shrink: 0;
 }
 
 .benefitText {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #374151;
   line-height: 1.6;
 }
 
 .benefitNum {
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
 }
 
 .mottoBox {
   text-align: center;
   background: linear-gradient(135deg, #1e3a5f, #7c3aed);
-  border-radius: 16px;
-  padding: 2.5rem;
-  max-width: 600px;
+  border-radius: 18px;
+  padding: 3rem 2.5rem;
+  max-width: 640px;
   margin: 0 auto;
+  box-shadow: 0 12px 40px rgba(124,58,237,0.2);
 }
 
 .mottoLabel {
-  color: rgba(255,255,255,0.7);
-  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .mottoText {
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 700;
   font-style: italic;
   margin: 0;
+  line-height: 1.5;
 }
 
 .errorMsg {
@@ -376,11 +427,12 @@
   color: #ef4444;
 }
 
-/* ── Membership Form Modal ── */
+/* ── Modal Overlay ── */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(15,23,42,0.65);
+  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -391,81 +443,86 @@
 
 .modal {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
-  max-width: 680px;
-  max-height: 90vh;
+  max-width: 700px;
+  max-height: 92vh;
   overflow-y: auto;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.25);
 }
 
+/* ── Modal Header ── */
 .modalHeader {
   background: linear-gradient(135deg, #1e3a5f, #7c3aed);
-  padding: 1.5rem 2rem;
-  border-radius: 16px 16px 0 0;
+  padding: 1.75rem 2rem;
+  border-radius: 20px 20px 0 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.modalHeaderText {
-  /* intentionally empty — child elements handle text */
+  align-items: flex-start;
 }
 
 .modalOrg {
-  color: rgba(255,255,255,0.7);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .modalTitle {
   color: white;
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   margin: 0;
 }
 
 .modalCloseBtn {
-  background: rgba(255,255,255,0.15);
-  border: none;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
   color: white;
   border-radius: 8px;
-  padding: 6px 8px;
+  padding: 7px 9px;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
+.modalCloseBtn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Plan banner ── */
 .planBanner {
-  background: #faf5ff;
+  background: linear-gradient(135deg, #faf5ff, #ede9fe);
   border-bottom: 1px solid #e9d5ff;
-  padding: 0.9rem 2rem;
+  padding: 1rem 2rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.875rem;
 }
 
 .planBannerName {
-  font-weight: 700;
+  font-weight: 800;
   color: #4c1d95;
+  font-size: 1rem;
 }
 
 .planBannerPrice {
   color: #7c3aed;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   margin-left: 0.75rem;
+  background: rgba(124,58,237,0.1);
+  padding: 2px 10px;
+  border-radius: 99px;
 }
 
 .planBannerValidity {
   color: #94a3b8;
   font-size: 0.78rem;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
 }
 
-.form {
-  padding: 2rem;
-}
+/* ── Form ── */
+.form { padding: 2rem; }
 
 .grid2 {
   display: grid;
@@ -481,38 +538,41 @@
   margin-bottom: 1.5rem;
 }
 
-.formField {
-  /* container for label + input pairs */
-}
+.formField { /* container */ }
 
 .label {
   display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: #374151;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.01em;
 }
 
-.required {
-  color: #ef4444;
-}
+.required { color: #ef4444; }
 
 .input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.625rem 0.875rem;
   border: 1.5px solid #e2e8f0;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 0.875rem;
   color: #0f172a;
   outline: none;
   box-sizing: border-box;
   font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
 }
 
 .genderRow {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.35rem;
+  gap: 1.25rem;
+  margin-top: 0.4rem;
 }
 
 .genderOption {
@@ -520,13 +580,13 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   color: #374151;
 }
 
 .categoryRow {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
@@ -541,7 +601,7 @@
   border: 1.5px solid #e2e8f0;
   background: white;
   color: #374151;
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   font-weight: 600;
   transition: all 0.15s;
 }
@@ -550,35 +610,36 @@
   border-color: #7c3aed;
   background: #faf5ff;
   color: #4c1d95;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
 }
 
 /* ── Section title ── */
 .sectionTitle {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 0.9rem;
+  gap: 10px;
+  margin-bottom: 1.1rem;
+  padding: 0.625rem 0;
   border-bottom: 2px solid #f1f5f9;
-  padding-bottom: 0.5rem;
 }
 
 .sectionNum {
-  background: #1e3a5f;
+  background: linear-gradient(135deg, #1e3a5f, #2563eb);
   color: white;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   flex-shrink: 0;
 }
 
 .sectionName {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #1e3a5f;
 }
@@ -587,16 +648,16 @@
 .declaration {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
   margin-bottom: 1.5rem;
 }
 
 .declarationText {
   font-size: 0.82rem;
   color: #4b5563;
-  line-height: 1.6;
-  margin-bottom: 0.75rem;
+  line-height: 1.65;
+  margin-bottom: 0.875rem;
 }
 
 .declarationCheck {
@@ -609,50 +670,54 @@
   color: #1e3a5f;
 }
 
-.declarationCheckInput {
-  margin-top: 2px;
-  accent-color: #7c3aed;
-}
+.declarationCheckInput { margin-top: 2px; accent-color: #7c3aed; }
 
 .formNote {
   font-size: 0.75rem;
   color: #94a3b8;
   margin-bottom: 1.5rem;
   font-style: italic;
+  background: #fffbeb;
+  border-left: 3px solid #fbbf24;
+  padding: 0.6rem 0.875rem;
+  border-radius: 0 6px 6px 0;
 }
 
 .formActions {
   display: flex;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .cancelBtn {
   flex: 1;
-  padding: 0.75rem;
+  padding: 0.8rem;
   border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   background: white;
   color: #374151;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.925rem;
 }
+
+.cancelBtn:hover { background: #f8fafc; }
 
 .submitBtn {
   flex: 2;
-  padding: 0.75rem;
-  background: #7c3aed;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-size: 0.95rem;
+  transition: opacity 0.15s;
 }
 
-.submitBtn:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
+.submitBtn:disabled { opacity: 0.7; cursor: wait; }
