@@ -35,6 +35,7 @@ const NAV_GROUPS = [
   {
     label: 'Content',
     items: [
+      { to: '/admin/banners', label: 'Banners',  icon: Bell },
       { to: '/admin/blog',    label: 'Blog',    icon: MessageSquare },
       { to: '/admin/gallery', label: 'Gallery', icon: Image },
     ],
@@ -58,6 +59,7 @@ const PAGE_TITLES = {
   '/admin/volunteers':   'Volunteers',
   '/admin/courses':      'Courses',
   '/admin/fdp':          'FDP Programs',
+  '/admin/banners':      'Notification Banners',
   '/admin/blog':         'Blog Posts',
   '/admin/gallery':      'Gallery',
   '/admin/contacts':     'Contacts',

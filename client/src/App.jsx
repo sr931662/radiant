@@ -36,6 +36,7 @@ import AdminFDP from './pages/admin/FDP.jsx'
 import AdminContacts from './pages/admin/Contacts.jsx'
 import AdminDownloads from './pages/admin/Downloads.jsx'
 import AdminCertificates from './pages/admin/Certificates.jsx'
+import AdminBanners from './pages/admin/Banners.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -83,6 +84,7 @@ export default function App() {
           <Route path="volunteers" element={<AdminVolunteers />} />
           <Route path="courses" element={<AdminCourses />} />
           <Route path="fdp" element={<AdminFDP />} />
+          <Route path="banners" element={<AdminBanners />} />
           <Route path="blog" element={<AdminBlog />} />
           <Route path="gallery" element={<AdminGallery />} />
           <Route path="contacts" element={<AdminContacts />} />
