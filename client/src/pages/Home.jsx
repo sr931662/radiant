@@ -1,6 +1,7 @@
 import Hero from '../components/Hero/Hero.jsx'
 import DonationBar from '../components/DonationBar/DonationBar.jsx'
 import ImpactCounter from '../components/ImpactCounter/ImpactCounter.jsx'
+import ThematicAreas from '../components/ThematicAreas/ThematicAreas.jsx'
 import AdmissionsBanner from '../components/AdmissionsBanner/AdmissionsBanner.jsx'
 import Programs from '../components/Programs/Programs.jsx'
 import EnquiryForm from '../components/EnquiryForm/EnquiryForm.jsx'
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <DonationBar />
       <ImpactCounter />
+      <ThematicAreas />
       <AdmissionsBanner />
       <Programs />
       <EnquiryForm />
