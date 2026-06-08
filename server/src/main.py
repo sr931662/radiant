@@ -38,6 +38,8 @@ from src.routes import (
     admin_contact_router,
     download_router,
     admin_download_router,
+    banner_router,
+    admin_banner_router,
     dashboard_router,
     public_router,
 )
@@ -191,6 +193,8 @@ def create_app() -> FastAPI:
     app.include_router(admin_contact_router)
     app.include_router(download_router)
     app.include_router(admin_download_router)
+    app.include_router(banner_router)
+    app.include_router(admin_banner_router)
     app.include_router(dashboard_router)
     app.include_router(public_router)
 

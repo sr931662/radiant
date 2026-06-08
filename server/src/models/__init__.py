@@ -28,3 +28,4 @@ from .contact_inquiry import ContactInquiry
 from .download_item import DownloadItem
 from .audit_log import AuditLog
 from .notification import Notification
+from .banner import Banner
