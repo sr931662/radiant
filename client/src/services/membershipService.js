@@ -24,3 +24,13 @@ export async function renewMembership(membershipId) {
   const { data } = await api.post(`/api/v1/memberships/${membershipId}/renew`)
   return data.data ?? data
 }
+
+export async function createMembershipPaymentOrder(plan_id) {
+  const { data } = await api.post('/api/v1/memberships/payment-order', { plan_id })
+  return data.data ?? data
+}
+
+export async function verifyMembershipPayment(payload) {
+  const { data } = await api.post('/api/v1/memberships/verify-payment', payload)
+  return data.data ?? data
+}

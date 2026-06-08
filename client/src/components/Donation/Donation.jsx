@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import { Heart, ShieldCheck, Globe2, QrCode, TrendingUp, Users } from 'lucide-react'
+import { Heart, ShieldCheck, TrendingUp, Users } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { createOrder, verifyPayment, getReceipt, simulateDonation } from '../../services/donationService'
 import api from '../../lib/api'
-import DemoPaymentModal from '../ui/DemoPaymentModal'
 import styles from './Donation.module.css'
 
 async function getPublicStats() {
@@ -48,8 +47,6 @@ export default function Donation() {
   const [activeTab, setActiveTab]   = useState('once')
   const [selectedAmt, setSelectedAmt] = useState(2000)
   const [customAmt, setCustomAmt]   = useState(2000)
-  const [demoOrder, setDemoOrder]   = useState(null)
-
   const { data: stats } = useQuery({
     queryKey: ['public-stats'],
     queryFn: getPublicStats,
@@ -84,13 +81,6 @@ export default function Donation() {
   const orderMutation = useMutation({
     mutationFn: () => createOrder(customAmt || selectedAmt),
     onSuccess: async (order) => {
-      // Demo mode — show our own payment UI
-      if (order.demo || order.id?.startsWith('demo_')) {
-        setDemoOrder(order)
-        return
-      }
-
-      // Real Razorpay
       const loaded = await loadRazorpayScript()
       if (!loaded) { toast.error('Razorpay failed to load. Check your connection.'); return }
 
@@ -125,15 +115,6 @@ export default function Donation() {
     },
     onError: (err) => toast.error(err?.response?.data?.detail || 'Simulate failed.'),
   })
-
-  function handleDemoDonationSuccess() {
-    verifyMutation.mutate({
-      razorpay_order_id:   demoOrder.id,
-      razorpay_payment_id: `demo_pay_${Date.now()}`,
-      razorpay_signature:  'demo_signature',
-    })
-    setDemoOrder(null)
-  }
 
   const isLoading = orderMutation.isPending || verifyMutation.isPending || simulateMutation.isPending
 
@@ -219,13 +200,6 @@ export default function Donation() {
                 <ShieldCheck size={16} />
                 {isLoading ? 'Processing…' : 'Donate via Razorpay (UPI / Cards / Net Banking)'}
               </button>
-              <div className={styles.payRow2}>
-                <button className={styles.payAlt} disabled><Globe2 size={15} /> Stripe</button>
-                <button className={styles.payAlt} disabled>PayPal</button>
-              </div>
-              <button className={styles.payAltFull} disabled>
-                <QrCode size={15} /> Show UPI QR Code
-              </button>
             </div>
             {import.meta.env.DEV && (
               <button
@@ -241,13 +215,6 @@ export default function Donation() {
           </div>
         </div>
       </div>
-      <DemoPaymentModal
-        open={!!demoOrder}
-        amount={demoOrder?.amount || 0}
-        description="Donation — Education for Every Child"
-        onSuccess={handleDemoDonationSuccess}
-        onClose={() => setDemoOrder(null)}
-      />
     </section>
   )
 }

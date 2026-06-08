@@ -6,7 +6,7 @@ import {
   CheckCircle2, Award, Star, Users, BookOpen, Handshake,
   Shield, Heart, X, FileText, ChevronRight
 } from 'lucide-react'
-import { getPlans, applyMembership } from '../services/membershipService'
+import { getPlans, applyMembership, createMembershipPaymentOrder, verifyMembershipPayment } from '../services/membershipService'
 import { useAuth } from '../contexts/AuthContext'
 import Spinner from '../components/ui/Spinner'
 import styles from './Membership.module.css'
@@ -215,10 +215,22 @@ function MembershipFormModal({ plan, onClose, onSubmit, isPending }) {
   )
 }
 
+function loadRazorpay() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return }
+    const s = document.createElement('script')
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    s.onload = () => resolve(true)
+    s.onerror = () => resolve(false)
+    document.body.appendChild(s)
+  })
+}
+
 export default function Membership() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
   const [selectedPlan, setSelectedPlan] = useState(null)
+  const [payLoading, setPayLoading] = useState(false)
 
   const { data: plans = [], isLoading, isError } = useQuery({
     queryKey: ['membership-plans'],
@@ -256,13 +268,56 @@ export default function Membership() {
     setSelectedPlan(plan)
   }
 
-  function handleFormSubmit() {
+  async function handleFormSubmit() {
     if (!isAuthenticated) {
       toast.error('Session expired. Please login again.')
       navigate('/login')
       return
     }
-    applyMutation.mutate(selectedPlan.id)
+
+    // Free plans — apply directly
+    if (!selectedPlan.price || selectedPlan.price === 0) {
+      applyMutation.mutate(selectedPlan.id)
+      return
+    }
+
+    // Paid plans — Razorpay
+    setPayLoading(true)
+    try {
+      const order = await createMembershipPaymentOrder(selectedPlan.id)
+      const loaded = await loadRazorpay()
+      if (!loaded) { toast.error('Razorpay failed to load. Check your connection.'); return }
+
+      new window.Razorpay({
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency || 'INR',
+        order_id: order.order_id,
+        name: 'Radiant Education Trust',
+        description: `Membership: ${selectedPlan.name}`,
+        prefill: { name: user?.name || '', email: user?.email || '' },
+        theme: { color: '#7c3aed' },
+        handler: async (response) => {
+          try {
+            await verifyMembershipPayment({
+              plan_id: selectedPlan.id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            })
+            toast.success('Payment successful! Membership application submitted.')
+            setSelectedPlan(null)
+          } catch {
+            toast.error('Payment verification failed. Please contact support.')
+          }
+        },
+        modal: { ondismiss: () => toast('Payment cancelled.', { icon: 'ℹ️' }) },
+      }).open()
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Could not initiate payment. Please try again.')
+    } finally {
+      setPayLoading(false)
+    }
   }
 
   return (
@@ -404,7 +459,7 @@ export default function Membership() {
           plan={selectedPlan}
           onClose={() => setSelectedPlan(null)}
           onSubmit={handleFormSubmit}
-          isPending={applyMutation.isPending}
+          isPending={applyMutation.isPending || payLoading}
         />
       )}
     </div>

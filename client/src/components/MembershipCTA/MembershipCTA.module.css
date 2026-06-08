@@ -1,0 +1,320 @@
+.section {
+  padding: 5rem 0;
+  background: linear-gradient(160deg, #0f1f3d 0%, #1e3a5f 45%, #1e1b4b 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background glows */
+.glowLeft {
+  position: absolute;
+  top: -80px;
+  left: -120px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.glowRight {
+  position: absolute;
+  bottom: -60px;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(124,58,237,0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Layout ── */
+.inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 900px) {
+  .inner { grid-template-columns: 1.1fr 0.9fr; align-items: center; }
+}
+
+/* ── Left ── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124,58,237,0.2);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #c4b5fd;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 1.25rem;
+}
+
+.heading {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 900;
+  color: white;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.headingAccent {
+  background: linear-gradient(90deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sub {
+  color: rgba(255,255,255,0.68);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 0 0 2rem;
+  max-width: 48ch;
+}
+
+/* Perks list */
+.perks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.perkIcon {
+  width: 26px;
+  height: 26px;
+  background: rgba(124,58,237,0.2);
+  border: 1px solid rgba(124,58,237,0.35);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: white;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 6px 24px rgba(124,58,237,0.35);
+}
+
+.primaryBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.ghostBtn:hover { background: rgba(255,255,255,0.14); }
+
+.trust {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.78rem;
+}
+
+/* ── Right ── */
+.right {
+  position: relative;
+}
+
+.planStack {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  backdrop-filter: blur(8px);
+}
+
+.planLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin: 0 0 0.25rem;
+}
+
+/* Plan cards */
+.planCard {
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.18s;
+}
+
+.planCard:hover { transform: translateY(-2px); }
+
+.planCard:not(.planCardHighlight) {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.planCardHighlight {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  border: 1px solid #7c3aed;
+  box-shadow: 0 8px 28px rgba(124,58,237,0.3);
+}
+
+.popularTag {
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  color: #1e3a5f;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.planName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 2px;
+}
+
+.planNameLight { color: white; }
+
+.planDesc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.planDescLight { color: rgba(255,255,255,0.7); }
+
+/* Student card */
+.studentCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(8,145,178,0.1);
+  border: 1px solid rgba(8,145,178,0.25);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.studentName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+.studentDesc {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+}
+
+.seeAllBtn {
+  display: block;
+  text-align: center;
+  color: #a78bfa;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.13s;
+}
+
+.seeAllBtn:hover {
+  background: rgba(167,139,250,0.1);
+  color: #c4b5fd;
+}
+
+/* Floating stat */
+.statBubble {
+  position: absolute;
+  bottom: -18px;
+  right: -16px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 16px;
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(245,158,11,0.3);
+}
+
+.statNum {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #1e3a5f;
+  line-height: 1;
+}
+
+.statText {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  opacity: 0.75;
+  text-align: center;
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .statBubble { right: 8px; bottom: -14px; }
+}

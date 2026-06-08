@@ -38,25 +38,25 @@ const PG_COURSES = [
 ]
 
 const UG_COURSES = [
-  { program: 'BBA', specialization: 'Operation Management' },
-  { program: 'BBA', specialization: 'Financial Management' },
-  { program: 'BBA', specialization: 'Human Resource Management' },
-  { program: 'BBA', specialization: 'Marketing Management' },
-  { program: 'BBA', specialization: 'Data Analytics' },
-  { program: 'BBA', specialization: 'Finance/HR/Marketing/Supply Chain' },
-  { program: 'BBA', specialization: 'Business Analytics' },
-  { program: 'B.COM', specialization: 'International Finance & Accounting' },
-  { program: 'B.COM', specialization: 'Hons.' },
-  { program: 'B.COM', specialization: 'General' },
-  { program: 'BCA', specialization: 'Artificial Intelligence & Data Science' },
-  { program: 'BCA', specialization: 'Cloud Computing & Cyber Security' },
-  { program: 'BCA', specialization: 'Data Analytics' },
-  { program: 'BCA', specialization: 'Cloud Security' },
-  { program: 'BCA', specialization: 'General' },
-  { program: 'BCA', specialization: 'FinTech' },
-  { program: 'BA', specialization: 'General' },
-  { program: 'BA', specialization: 'JMC' },
-  { program: 'BA', specialization: 'Hindi' },
+  { sno: 1,  program: 'BBA', specialization: 'Operation Management' },
+  { sno: 2,  program: 'BBA', specialization: 'Financial Management' },
+  { sno: 3,  program: 'BBA', specialization: 'Human Resource Management' },
+  { sno: 4,  program: 'BBA', specialization: 'Marketing Management' },
+  { sno: 5,  program: 'BBA', specialization: 'Data Analytics' },
+  { sno: 6,  program: 'BBA', specialization: 'Finance/HR/Marketing/Supply Chain' },
+  { sno: 7,  program: 'BBA', specialization: 'Business Analytics' },
+  { sno: 8,  program: 'B.COM', specialization: 'International Finance & Accounting' },
+  { sno: 9,  program: 'B.COM', specialization: 'Hons.' },
+  { sno: 10, program: 'B.COM', specialization: 'General' },
+  { sno: 11, program: 'BCA', specialization: 'Artificial Intelligence & Data Science' },
+  { sno: 12, program: 'BCA', specialization: 'Cloud Computing & Cyber Security' },
+  { sno: 13, program: 'BCA', specialization: 'Data Analytics' },
+  { sno: 14, program: 'BCA', specialization: 'Cloud Security' },
+  { sno: 15, program: 'BCA', specialization: 'General' },
+  { sno: 16, program: 'BCA', specialization: 'FinTech' },
+  { sno: 17, program: 'BA', specialization: 'General' },
+  { sno: 18, program: 'BA', specialization: 'JMC' },
+  { sno: 19, program: 'BA', specialization: 'Hindi' },
 ]
 
 const PROGRAM_COLORS = {
@@ -100,7 +100,7 @@ export default function CourseCatalog() {
           <table className={styles.table}>
             <thead>
               <tr>
-                {activeTab === 'pg' && <th>S.No</th>}
+                <th>S.No</th>
                 <th>{activeTab === 'pg' ? 'PG Course' : 'UG Course'}</th>
                 <th>Specialisation</th>
                 <th>Action</th>
@@ -111,7 +111,7 @@ export default function CourseCatalog() {
                 const color = PROGRAM_COLORS[row.program] || '#374151'
                 return (
                   <tr key={i} className={styles.row}>
-                    {activeTab === 'pg' && <td className={styles.sno}>{row.sno}</td>}
+                    <td className={styles.sno}>{row.sno}</td>
                     <td>
                       <span className={styles.programBadge} style={{ background: color + '18', color }}>
                         {row.program}
