@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake, Users, Globe } from 'lucide-react'
+import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake } from 'lucide-react'
 import styles from './Hero.module.css'
 
 export default function Hero() {
@@ -75,31 +75,6 @@ export default function Hero() {
               alt="Children in a classroom learning"
               className={styles.image}
             />
-            <div className={styles.imageOverlay} />
-            <p className={styles.imageCaption}>
-              "Amina walked 9 km daily to study. Today she teaches science to 40 children."
-            </p>
-          </div>
-
-          {/* Floating cards */}
-          <div className={`${styles.floatCard} ${styles.floatBottom}`}>
-            <div className={styles.floatIcon} style={{ background: 'var(--clr-amber-100)', color: 'var(--clr-accent-dark)' }}>
-              <Users size={22} />
-            </div>
-            <div>
-              <p className={styles.floatStat}>1.2 Lakh+</p>
-              <p className={styles.floatLabel}>Children Educated</p>
-            </div>
-          </div>
-
-          <div className={`${styles.floatCard} ${styles.floatTop}`}>
-            <div className={styles.floatIcon} style={{ background: 'var(--clr-primary-bg)', color: 'var(--clr-primary)' }}>
-              <Globe size={22} />
-            </div>
-            <div>
-              <p className={styles.floatStat}>18+</p>
-              <p className={styles.floatLabel}>Countries Reached</p>
-            </div>
           </div>
         </div>
       </div>
