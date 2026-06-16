@@ -16,6 +16,7 @@ export default function Home() {
     <>
       <Hero />
       <DonationBar />
+      <RegistrationInfo />
       <ImpactCounter />
       <ThematicAreas />
       <AdmissionsBanner />
@@ -23,7 +24,6 @@ export default function Home() {
       <EnquiryForm />
       <Stories />
       <MembershipCTA />
-      <RegistrationInfo />
       <Sponsorship />
       <Partnership />
     </>

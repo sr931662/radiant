@@ -58,3 +58,20 @@ class MembershipCardResponse(BaseModel):
     plan_name: str
     valid_until: datetime | None
     qr_code: str | None = None  # base64 or URL
+
+
+class MembershipPaymentOrderRequest(BaseModel):
+    plan_id: uuid.UUID
+
+
+class MembershipPaymentOrderResponse(BaseModel):
+    order_id: str
+    amount: int
+    currency: str
+
+
+class MembershipVerifyPaymentRequest(BaseModel):
+    plan_id: uuid.UUID
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str

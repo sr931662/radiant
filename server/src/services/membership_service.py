@@ -4,6 +4,7 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Membership, MembershipPlan, User
+from src.services.payment_service import PaymentService
 from src.utils.id_generator import generate_member_id
 from src.utils.exceptions import NotFoundException, BadRequestException, ForbiddenException
 
@@ -100,6 +101,33 @@ class MembershipService:
             raise NotFoundException("Membership plan not found")
         plan.deleted_at = datetime.now(timezone.utc)
         await db.commit()
+
+    @staticmethod
+    async def create_payment_order(db: AsyncSession, plan_id: uuid.UUID) -> dict:
+        plan = await db.get(MembershipPlan, plan_id)
+        if not plan:
+            raise NotFoundException("Membership plan not found")
+        if not plan.price or plan.price <= 0:
+            raise BadRequestException("This plan is free — no payment required")
+        order = await PaymentService.create_razorpay_order(plan.price, receipt=f"mem_{plan_id.hex[:16]}")
+        return {
+            "order_id": order["id"],
+            "amount": order["amount"],
+            "currency": order.get("currency", "INR"),
+        }
+
+    @staticmethod
+    async def verify_and_apply(
+        db: AsyncSession,
+        user_id: uuid.UUID,
+        plan_id: uuid.UUID,
+        razorpay_order_id: str,
+        razorpay_payment_id: str,
+        razorpay_signature: str,
+    ) -> Membership:
+        if not PaymentService.verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
+            raise BadRequestException("Payment verification failed — signature mismatch")
+        return await MembershipService.apply(db, user_id, plan_id)
 
     # Admin
     @staticmethod

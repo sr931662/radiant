@@ -7,7 +7,8 @@ from src.dependencies import get_current_user, get_current_admin_user
 from src.schemas.membership import (
     MembershipApplyRequest, MembershipResponse, MembershipListResponse,
     ApproveMembershipRequest, MembershipCardResponse, MembershipPlanResponse,
-    MembershipPlanCreateRequest,
+    MembershipPlanCreateRequest, MembershipPaymentOrderRequest, MembershipPaymentOrderResponse,
+    MembershipVerifyPaymentRequest,
 )
 from src.schemas.common import APIResponse, PaginationQuery
 from src.services.membership_service import MembershipService
@@ -27,6 +28,27 @@ async def apply(
     current_user: dict = Depends(get_current_user),
 ) -> MembershipResponse:
     membership = await MembershipService.apply(db, current_user["sub"], data.plan_id)
+    return MembershipResponse.model_validate(membership)
+
+
+async def create_payment_order(
+    data: MembershipPaymentOrderRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+) -> MembershipPaymentOrderResponse:
+    order = await MembershipService.create_payment_order(db, data.plan_id)
+    return MembershipPaymentOrderResponse(**order)
+
+
+async def verify_payment(
+    data: MembershipVerifyPaymentRequest = Body(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+) -> MembershipResponse:
+    membership = await MembershipService.verify_and_apply(
+        db, current_user["sub"],
+        data.plan_id, data.razorpay_order_id, data.razorpay_payment_id, data.razorpay_signature,
+    )
     return MembershipResponse.model_validate(membership)
 
 

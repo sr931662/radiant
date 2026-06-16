@@ -1,4 +1,4 @@
-import { BookOpen, Phone, Mail, User, FileText } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import PhDGuidance from '../components/PhDGuidance/PhDGuidance.jsx'
 import EnquiryForm from '../components/EnquiryForm/EnquiryForm.jsx'
 import styles from './Courses.module.css'
@@ -31,9 +31,7 @@ export default function Courses() {
           </div>
 
           <div className={styles.heroContact}>
-            <span className={styles.heroContactItem}><User size={14} /> Mr. Santosh Upadhyay</span>
-            <span className={styles.heroContactItem}><Phone size={14} /> 8796278474 · 8512017549</span>
-            <span className={styles.heroContactItem}><Mail size={14} /> radianteducationtrust@gmail.com</span>
+            <span className={styles.heroContactItem}><FileText size={14} /> Registration No. 106 &nbsp;|&nbsp; Dated: 08-01-2008</span>
           </div>
         </div>
       </div>

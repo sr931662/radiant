@@ -143,11 +143,24 @@ const CERTIFICATIONS = [
   },
 ]
 
+const MISSION_POINTS = [
+  'To provide accessible and affordable quality education to learners across India.',
+  'To promote higher education, online learning, vocational training, and professional development programs.',
+  'To bridge the gap between education and employability through industry-oriented courses and skill development initiatives.',
+  'To support students, working professionals, and underprivileged communities in achieving their academic and career goals.',
+  'To collaborate with reputed universities, institutions, and industry partners for educational excellence and social impact.',
+  'To encourage innovation, entrepreneurship, leadership, and ethical values among learners.',
+]
+
 const VALUES = [
-  'Radical transparency in finances',
-  'Child-first safeguarding policy',
-  'Inclusive & gender-equal education',
-  'UN SDG 4 alignment',
+  'Excellence',
+  'Integrity',
+  'Empowerment',
+  'Inclusiveness',
+  'Innovation',
+  'Lifelong Learning',
+  'Social Responsibility',
+  'Student-Centric Approach',
 ]
 
 const SDGS = [
@@ -187,9 +200,9 @@ export default function About() {
             </div>
             <h3 className={styles.cardTitle}>Our Vision</h3>
             <p className={styles.cardText}>
-              A world where no child is denied education due to poverty, geography, gender,
-              or displacement. We envision communities transformed through learning — locally
-              rooted, globally connected.
+              To become a leading educational and social development organization that empowers
+              individuals through quality education, skill enhancement, innovation, and lifelong
+              learning, creating a knowledgeable, skilled, and socially responsible society.
             </p>
           </div>
 
@@ -199,11 +212,11 @@ export default function About() {
               <Target size={26} color="var(--clr-white)" />
             </div>
             <h3 className={`${styles.cardTitle} ${styles.titleWhite}`}>Our Mission</h3>
-            <p className={styles.cardTextLight}>
-              To build credibility, maximise donor impact, scale globally, and empower our
-              team with a platform that measures everything. Data-driven decisions over
-              guesswork. Transparency over opacity. Children over statistics.
-            </p>
+            <ol style={{ margin: 0, padding: '0 0 0 1.1rem', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+              {MISSION_POINTS.map((point, i) => (
+                <li key={i} className={styles.cardTextLight} style={{ margin: 0 }}>{point}</li>
+              ))}
+            </ol>
           </div>
 
           {/* Core Values */}
@@ -355,6 +368,12 @@ export default function About() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Trust Motto */}
+        <div style={{ textAlign: 'center', margin: '3rem 0 2rem', padding: '1.75rem 2rem', background: 'linear-gradient(135deg,#1d4ed8,#7c3aed)', borderRadius: '1rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem' }}>Trust Motto</p>
+          <p style={{ fontSize: '1.6rem', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '0.04em' }}>Educate &bull; Empower &bull; Transform</p>
         </div>
 
         {/* SDG Strip */}
