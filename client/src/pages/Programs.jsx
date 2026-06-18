@@ -45,33 +45,19 @@ export default function Programs() {
             ))}
           </div>
 
-          {/* Flyer card — click anywhere to open Google Form */}
-          <div style={{ maxWidth: '620px', margin: '0 auto 1.75rem', position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 64px rgba(124,58,237,0.18)', cursor: 'pointer' }}>
-            <object
-              data="/flyers/internship-2026.pdf"
-              type="application/pdf"
-              style={{ width: '100%', height: '860px', display: 'block', border: 'none', pointerEvents: 'none' }}
-              title="Summer Internship Program 2026 — Generative AI & Prompt Engineering"
-            >
-              {/* Fallback if PDF can't render */}
-              <div style={{ background: '#fff', padding: '3rem 2rem', textAlign: 'center', minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-                <p style={{ color: '#64748b', marginBottom: '0.5rem' }}>PDF preview unavailable in your browser.</p>
-                <a href={GOOGLE_FORM_URL} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#7c3aed', color: '#fff', padding: '0.7rem 1.5rem', borderRadius: '0.6rem', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
-                  <ExternalLink size={15} /> Register Now
-                </a>
-              </div>
-            </object>
-
-            {/* Transparent full-cover anchor — captures all clicks on the PDF viewer */}
-            <a
-              href={GOOGLE_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ position: 'absolute', inset: 0, zIndex: 10 }}
-              aria-label="Register for Summer Internship Program 2026"
+          {/* Flyer poster — click to open Google Form */}
+          <a
+            href={GOOGLE_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'block', maxWidth: '620px', margin: '0 auto 1.75rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 24px 64px rgba(124,58,237,0.18)', cursor: 'pointer', textDecoration: 'none' }}
+          >
+            <img
+              src="/flyers/internship-2026.png"
+              alt="Summer Internship Program 2026 — Generative AI & Prompt Engineering"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
             />
-          </div>
+          </a>
 
           {/* CTA button */}
           <div style={{ textAlign: 'center' }}>
