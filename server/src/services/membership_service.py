@@ -127,7 +127,25 @@ class MembershipService:
     ) -> Membership:
         if not PaymentService.verify_razorpay_signature(razorpay_order_id, razorpay_payment_id, razorpay_signature):
             raise BadRequestException("Payment verification failed — signature mismatch")
-        return await MembershipService.apply(db, user_id, plan_id)
+
+        # Create the membership record
+        membership = await MembershipService.apply(db, user_id, plan_id)
+
+        # Auto-approve immediately — Razorpay payment is already verified, no admin review needed
+        plan = await db.get(MembershipPlan, membership.plan_id)
+        now = datetime.now(timezone.utc)
+        membership.status = "APPROVED"
+        for _ in range(5):
+            try:
+                membership.member_id = generate_member_id()
+                break
+            except Exception:
+                continue
+        membership.start_date = now
+        membership.end_date = now + timedelta(days=plan.duration_days)
+        await db.commit()
+        await db.refresh(membership)
+        return membership
 
     # Admin
     @staticmethod

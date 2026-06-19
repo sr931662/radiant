@@ -58,8 +58,8 @@ class AuthService:
 
         try:
             await EmailService.send_verification_email(user.email, otp_code)
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.error("[AUTH] OTP email failed for %s: %s: %s", user.email, type(exc).__name__, exc)
 
         return await AuthService._generate_tokens(db, user)
 
@@ -131,6 +131,11 @@ class AuthService:
         otp_record.used = True
         user.is_email_verified = True
         await db.commit()
+
+        try:
+            await EmailService.send_welcome_email(user.email, user.name)
+        except Exception as exc:
+            logger.warning("[AUTH] Welcome email failed for %s: %s", user.email, exc)
 
     @staticmethod
     async def resend_otp(db: AsyncSession, email: str, purpose: str) -> None:
