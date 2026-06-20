@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import {
   CheckCircle2, Award, Star, Users, BookOpen, Handshake,
   Shield, Heart, X, FileText, ChevronRight
 } from 'lucide-react'
-import { getPlans, applyMembership, createMembershipPaymentOrder, verifyMembershipPayment } from '../services/membershipService'
+import { getPlans, applyMembership, createMembershipPaymentOrder, verifyMembershipPayment, getMyMemberships } from '../services/membershipService'
 import { useAuth } from '../contexts/AuthContext'
 import Spinner from '../components/ui/Spinner'
 import styles from './Membership.module.css'
@@ -229,6 +229,7 @@ function loadRazorpay() {
 export default function Membership() {
   const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
+  const qc = useQueryClient()
   const [selectedPlan, setSelectedPlan] = useState(null)
   const [payLoading, setPayLoading] = useState(false)
 
@@ -237,10 +238,17 @@ export default function Membership() {
     queryFn: getPlans,
   })
 
+  const { data: myMemberships = [] } = useQuery({
+    queryKey: ['my-memberships'],
+    queryFn: getMyMemberships,
+    enabled: isAuthenticated,
+  })
+
   const applyMutation = useMutation({
     mutationFn: (plan_id) => applyMembership(plan_id),
     onSuccess: () => {
       toast.success('Membership application submitted! We will review and approve shortly.')
+      qc.invalidateQueries({ queryKey: ['my-memberships'] })
       setSelectedPlan(null)
     },
     onError: (err) => {
@@ -306,6 +314,7 @@ export default function Membership() {
               razorpay_signature: response.razorpay_signature,
             })
             toast.success('Payment successful! Membership application submitted.')
+            qc.invalidateQueries({ queryKey: ['my-memberships'] })
             setSelectedPlan(null)
           } catch {
             toast.error('Payment verification failed. Please contact support.')
@@ -319,6 +328,8 @@ export default function Membership() {
       setPayLoading(false)
     }
   }
+
+  const currentMembership = myMemberships.find((item) => item.status === 'APPROVED' || item.status === 'PENDING') || null
 
   return (
     <div>
@@ -383,6 +394,18 @@ export default function Membership() {
                 ? (typeof plan.benefits === 'object' ? Object.values(plan.benefits) : [])
                 : []
               const isLife = plan.name?.toLowerCase().includes('life')
+              const planMembership = myMemberships.find((item) => item.plan?.id === plan.id)
+              const isApproved = planMembership?.status === 'APPROVED'
+              const isPendingMembership = planMembership?.status === 'PENDING'
+              const hasOtherActiveMembership = currentMembership && currentMembership.plan?.id !== plan.id
+              const isDisabled = isApproved || isPendingMembership || hasOtherActiveMembership
+              const buttonText = isApproved
+                ? 'Active Membership'
+                : isPendingMembership
+                  ? 'Approval Pending'
+                  : hasOtherActiveMembership
+                    ? 'Membership Already Active'
+                    : 'Apply Now'
               return (
                 <div
                   key={plan.id}
@@ -397,6 +420,16 @@ export default function Membership() {
                   <div className={`${styles.planPrice} ${isLife ? styles.planPriceLife : styles.planPriceRegular}`}>
                     {plan.price === 0 ? 'Free' : `₹${plan.price.toLocaleString('en-IN')}`}
                   </div>
+                  {isApproved && (
+                    <p className={`${styles.statusNote} ${isLife ? styles.statusNoteLife : styles.statusNoteRegular}`}>
+                      Your membership is active until {new Date(planMembership.end_date).toLocaleDateString('en-IN')}
+                    </p>
+                  )}
+                  {isPendingMembership && (
+                    <p className={`${styles.statusNote} ${isLife ? styles.statusNoteLife : styles.statusNoteRegular}`}>
+                      Your application is under review.
+                    </p>
+                  )}
                   {benefits.length > 0 && (
                     <ul className={styles.planBenefits}>
                       {benefits.map((b, i) => (
@@ -408,9 +441,10 @@ export default function Membership() {
                   )}
                   <button
                     onClick={() => handleApply(plan)}
-                    className={`${styles.applyBtn} ${isLife ? styles.applyBtnLife : styles.applyBtnRegular}`}
+                    disabled={isDisabled}
+                    className={`${styles.applyBtn} ${isLife ? styles.applyBtnLife : styles.applyBtnRegular} ${isDisabled ? styles.applyBtnDisabled : ''}`}
                   >
-                    Apply Now <ChevronRight size={16} />
+                    {buttonText} {!isDisabled && <ChevronRight size={16} />}
                   </button>
                 </div>
               )

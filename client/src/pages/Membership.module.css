@@ -303,6 +303,10 @@
 
 .applyBtn:hover { opacity: 0.9; }
 
+.applyBtn:disabled {
+  cursor: default;
+}
+
 .applyBtnRegular {
   background: linear-gradient(135deg, #7c3aed, #4f46e5);
   border: none;
@@ -311,6 +315,25 @@
 .applyBtnLife {
   background: rgba(255,255,255,0.18);
   border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+.applyBtnDisabled {
+  opacity: 0.7;
+}
+
+.statusNote {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.statusNoteRegular {
+  color: #059669;
+}
+
+.statusNoteLife {
+  color: rgba(255,255,255,0.88);
 }
 
 /* ── Benefits section ── */
