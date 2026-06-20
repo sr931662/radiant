@@ -7,6 +7,8 @@ const STATIC_EXTENSIONS = [
 
 function corsHeaders(origin) {
   const allowed = [
+    'https://www.radiandeducation.org',
+    'https://radiandeducation.org',
     'https://radiant-54m.pages.dev',
     'https://radiant.sr931662.workers.dev',
     'https://radianttrust.sr931662.workers.dev',

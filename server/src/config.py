@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = False
     environment: str = "production"  # development, staging, production
-    frontend_url: str = "https://radiant.sr931662.workers.dev"
+    frontend_url: str = "https://www.radiandeducation.org"
 
     # ── Database ──
     database_url: str
@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     # ── Email (Resend or SMTP) ──
     email_provider: str = "resend"  # resend or smtp
     resend_api_key: Optional[str] = None
-    email_from: str = "noreply@radianttrust.org"
+    email_from: str = "noreply@radiandeducation.org"
     smtp_host: Optional[str] = None
     smtp_port: Optional[int] = 587
     smtp_user: Optional[str] = None
@@ -65,6 +65,8 @@ class Settings(BaseSettings):
 
     # ── CORS ──
     cors_origins: list[str] = [
+        "https://www.radiandeducation.org",
+        "https://radiandeducation.org",
         "https://radiant-54m.pages.dev",
         "https://radiant.sr931662.workers.dev",
         "https://radianttrust.sr931662.workers.dev",
@@ -80,6 +82,8 @@ class Settings(BaseSettings):
     @classmethod
     def ensure_required_origins(cls, v: list[str]) -> list[str]:
         required = [
+            "https://www.radiandeducation.org",
+            "https://radiandeducation.org",
             "https://radiant-54m.pages.dev",
             "https://radiant.sr931662.workers.dev",
             "https://radianttrust.sr931662.workers.dev",

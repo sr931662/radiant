@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import select, func
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models import Membership, MembershipPlan, User
@@ -10,6 +11,18 @@ from src.utils.exceptions import NotFoundException, BadRequestException, Forbidd
 
 
 class MembershipService:
+    @staticmethod
+    async def _get_membership_with_plan(db: AsyncSession, membership_id: uuid.UUID) -> Membership:
+        result = await db.execute(
+            select(Membership)
+            .options(selectinload(Membership.plan))
+            .where(Membership.id == membership_id, Membership.deleted_at == None)
+        )
+        membership = result.scalar_one_or_none()
+        if not membership:
+            raise NotFoundException("Membership not found")
+        return membership
+
     @staticmethod
     async def get_plans(db: AsyncSession) -> list[MembershipPlan]:
         result = await db.execute(select(MembershipPlan).where(MembershipPlan.deleted_at == None))
@@ -39,13 +52,13 @@ class MembershipService:
         )
         db.add(membership)
         await db.commit()
-        await db.refresh(membership)
-        return membership
+        return await MembershipService._get_membership_with_plan(db, membership.id)
 
     @staticmethod
     async def my_memberships(db: AsyncSession, user_id: uuid.UUID) -> list[Membership]:
         result = await db.execute(
             select(Membership)
+            .options(selectinload(Membership.plan))
             .where(Membership.user_id == user_id, Membership.deleted_at == None)
             .order_by(Membership.created_at.desc())
         )
@@ -63,8 +76,7 @@ class MembershipService:
         membership.start_date = None
         membership.end_date = None
         await db.commit()
-        await db.refresh(membership)
-        return membership
+        return await MembershipService._get_membership_with_plan(db, membership.id)
 
     @staticmethod
     async def download_card(db: AsyncSession, user_id: uuid.UUID, membership_id: uuid.UUID) -> dict:
@@ -129,28 +141,55 @@ class MembershipService:
             raise BadRequestException("Payment verification failed — signature mismatch")
 
         # Create the membership record
-        membership = await MembershipService.apply(db, user_id, plan_id)
+        plan = await db.get(MembershipPlan, plan_id)
+        if not plan:
+            raise NotFoundException("Membership plan not found")
+
+        existing_stmt = (
+            select(Membership)
+            .where(
+                Membership.user_id == user_id,
+                Membership.plan_id == plan_id,
+                Membership.status.in_(["PENDING", "APPROVED"]),
+                Membership.deleted_at == None,
+            )
+            .order_by(Membership.created_at.desc())
+            .with_for_update()
+        )
+        existing_result = await db.execute(existing_stmt)
+        membership = existing_result.scalars().first()
+
+        if membership and membership.status == "APPROVED":
+            return await MembershipService._get_membership_with_plan(db, membership.id)
+
+        if not membership:
+            membership = Membership(
+                user_id=user_id,
+                plan_id=plan_id,
+                status="PENDING",
+            )
+            db.add(membership)
+            await db.flush()
 
         # Auto-approve immediately — Razorpay payment is already verified, no admin review needed
-        plan = await db.get(MembershipPlan, membership.plan_id)
         now = datetime.now(timezone.utc)
         membership.status = "APPROVED"
-        for _ in range(5):
-            try:
-                membership.member_id = generate_member_id()
-                break
-            except Exception:
-                continue
+        if not membership.member_id:
+            for _ in range(5):
+                try:
+                    membership.member_id = generate_member_id()
+                    break
+                except Exception:
+                    continue
         membership.start_date = now
         membership.end_date = now + timedelta(days=plan.duration_days)
         await db.commit()
-        await db.refresh(membership)
-        return membership
+        return await MembershipService._get_membership_with_plan(db, membership.id)
 
     # Admin
     @staticmethod
     async def list_all(db: AsyncSession, page: int, size: int, status: str | None = None) -> tuple[list[Membership], int]:
-        query = select(Membership).where(Membership.deleted_at == None)
+        query = select(Membership).options(selectinload(Membership.plan)).where(Membership.deleted_at == None)
         count_query = select(func.count(Membership.id)).where(Membership.deleted_at == None)
 
         if status:
@@ -171,13 +210,13 @@ class MembershipService:
 
         membership.status = status
         if status == "APPROVED":
-            # Retry on member_id collision (rare but possible with random IDs)
-            for _ in range(5):
-                try:
-                    membership.member_id = generate_member_id()
-                    break
-                except Exception:
-                    continue
+            if not membership.member_id:
+                for _ in range(5):
+                    try:
+                        membership.member_id = generate_member_id()
+                        break
+                    except Exception:
+                        continue
             membership.start_date = datetime.now(timezone.utc)
             plan = await db.get(MembershipPlan, membership.plan_id)
             if not plan:
@@ -186,12 +225,14 @@ class MembershipService:
             membership.approved_by = approver_id
 
         await db.commit()
-        await db.refresh(membership)
-        return membership
+        return await MembershipService._get_membership_with_plan(db, membership.id)
 
     @staticmethod
     async def export_data(db: AsyncSession) -> list[Membership]:
         result = await db.execute(
-            select(Membership).where(Membership.deleted_at == None).order_by(Membership.created_at.desc())
+            select(Membership)
+            .options(selectinload(Membership.plan))
+            .where(Membership.deleted_at == None)
+            .order_by(Membership.created_at.desc())
         )
         return list(result.scalars().all())
