@@ -199,8 +199,23 @@ class MembershipService:
         membership.end_date = now + timedelta(days=plan.duration_days)
         await db.commit()
         from src.services.certificate_service import CertificateService
+        from src.services.email_service import EmailService
 
         await CertificateService.ensure_certificate(db, "MEMBERSHIP", membership.id, membership.user_id)
+
+        user = await db.get(User, membership.user_id)
+        if user:
+            try:
+                await EmailService.send_membership_approved_email(
+                    email=user.email,
+                    name=user.name,
+                    plan_name=plan.name,
+                    member_id=membership.member_id or "",
+                    end_date=membership.end_date,
+                )
+            except Exception:
+                pass  # email failure must not roll back the approval
+
         return await MembershipService._get_membership_with_plan(db, membership.id)
 
     # Admin
@@ -244,8 +259,24 @@ class MembershipService:
         await db.commit()
         if status == "APPROVED":
             from src.services.certificate_service import CertificateService
+            from src.services.email_service import EmailService
 
             await CertificateService.ensure_certificate(db, "MEMBERSHIP", membership.id, membership.user_id)
+
+            user = await db.get(User, membership.user_id)
+            plan = await db.get(MembershipPlan, membership.plan_id)
+            if user and plan:
+                try:
+                    await EmailService.send_membership_approved_email(
+                        email=user.email,
+                        name=user.name,
+                        plan_name=plan.name,
+                        member_id=membership.member_id or "",
+                        end_date=membership.end_date,
+                    )
+                except Exception:
+                    pass  # email failure must not roll back the approval
+
         return await MembershipService._get_membership_with_plan(db, membership.id)
 
     @staticmethod

@@ -99,3 +99,13 @@ class EmailService:
     async def send_inquiry_reply(email: str, subject: str, reply: str) -> None:
         html = templates.get_template("inquiry_reply.html").render({"subject": subject, "reply": reply})
         await EmailService.send_email(email, f"Re: {subject} — Radiant Education Trust", html)
+
+    @staticmethod
+    async def send_membership_approved_email(email: str, name: str, plan_name: str, member_id: str, end_date) -> None:
+        html = templates.get_template("membership_approved.html").render({
+            "name": name,
+            "plan_name": plan_name,
+            "member_id": member_id,
+            "end_date": end_date.strftime("%d %B %Y") if end_date else "—",
+        })
+        await EmailService.send_email(email, "Membership Approved — Radiant Education Trust", html)
