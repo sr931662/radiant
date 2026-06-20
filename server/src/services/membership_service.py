@@ -12,6 +12,17 @@ from src.utils.exceptions import NotFoundException, BadRequestException, Forbidd
 
 class MembershipService:
     @staticmethod
+    async def has_active_membership(db: AsyncSession, user_id: uuid.UUID | str) -> bool:
+        result = await db.execute(
+            select(Membership.id).where(
+                Membership.user_id == user_id,
+                Membership.status == "APPROVED",
+                Membership.deleted_at == None,
+            )
+        )
+        return result.scalar_one_or_none() is not None
+
+    @staticmethod
     async def _get_membership_with_plan(db: AsyncSession, membership_id: uuid.UUID) -> Membership:
         result = await db.execute(
             select(Membership)
@@ -160,6 +171,9 @@ class MembershipService:
         membership = existing_result.scalars().first()
 
         if membership and membership.status == "APPROVED":
+            from src.services.certificate_service import CertificateService
+
+            await CertificateService.ensure_certificate(db, "MEMBERSHIP", membership.id, membership.user_id)
             return await MembershipService._get_membership_with_plan(db, membership.id)
 
         if not membership:
@@ -184,6 +198,9 @@ class MembershipService:
         membership.start_date = now
         membership.end_date = now + timedelta(days=plan.duration_days)
         await db.commit()
+        from src.services.certificate_service import CertificateService
+
+        await CertificateService.ensure_certificate(db, "MEMBERSHIP", membership.id, membership.user_id)
         return await MembershipService._get_membership_with_plan(db, membership.id)
 
     # Admin
@@ -225,6 +242,10 @@ class MembershipService:
             membership.approved_by = approver_id
 
         await db.commit()
+        if status == "APPROVED":
+            from src.services.certificate_service import CertificateService
+
+            await CertificateService.ensure_certificate(db, "MEMBERSHIP", membership.id, membership.user_id)
         return await MembershipService._get_membership_with_plan(db, membership.id)
 
     @staticmethod

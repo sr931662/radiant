@@ -9,9 +9,12 @@ from src.utils.exceptions import NotFoundException
 
 class DownloadService:
     @staticmethod
-    async def list_items(db: AsyncSession) -> list[DownloadItem]:
+    async def list_items(db: AsyncSession, access_levels: list[str] | None = None) -> list[DownloadItem]:
+        stmt = select(DownloadItem).where(DownloadItem.deleted_at == None)
+        if access_levels:
+            stmt = stmt.where(DownloadItem.access_level.in_(access_levels))
         result = await db.execute(
-            select(DownloadItem).where(DownloadItem.deleted_at == None).order_by(DownloadItem.created_at.desc())
+            stmt.order_by(DownloadItem.created_at.desc())
         )
         return list(result.scalars().all())
 

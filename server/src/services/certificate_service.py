@@ -10,6 +10,29 @@ from src.config import settings
 
 class CertificateService:
     @staticmethod
+    async def get_entity_certificate(
+        db: AsyncSession,
+        cert_type: str,
+        entity_id: uuid.UUID,
+        user_id: uuid.UUID | None = None,
+    ) -> Certificate | None:
+        stmt = select(Certificate).where(
+            Certificate.type == cert_type,
+            Certificate.deleted_at == None,
+        )
+        if user_id:
+            stmt = stmt.where(Certificate.user_id == user_id)
+
+        result = await db.execute(stmt)
+        certificates = list(result.scalars().all())
+        entity_id_str = str(entity_id)
+        for cert in certificates:
+            metadata = cert.extra_data or {}
+            if metadata.get("entity_id") == entity_id_str:
+                return cert
+        return None
+
+    @staticmethod
     async def verify(db: AsyncSession, unique_id: str) -> dict:
         stmt = select(Certificate).where(Certificate.unique_id == unique_id, Certificate.deleted_at == None)
         result = await db.execute(stmt)
@@ -53,6 +76,13 @@ class CertificateService:
         await db.commit()
         await db.refresh(certificate)
         return certificate
+
+    @staticmethod
+    async def ensure_certificate(db: AsyncSession, cert_type: str, entity_id: uuid.UUID, user_id: uuid.UUID) -> Certificate:
+        existing = await CertificateService.get_entity_certificate(db, cert_type, entity_id, user_id)
+        if existing:
+            return existing
+        return await CertificateService.generate_certificate(db, cert_type, entity_id, user_id)
 
     @staticmethod
     async def bulk_generate_for_fdp(db: AsyncSession, fdp_id: uuid.UUID, user_ids: list[uuid.UUID]) -> list[Certificate]:
