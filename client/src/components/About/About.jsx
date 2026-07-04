@@ -31,7 +31,7 @@ const TRUSTEES = [
     bg: '#faf5ff',
   },
   {
-    name: 'Mr. S.L Gupta',
+    name: 'Dr. S.L Gupta',
     role: 'Trustee',
     image: slguptaImg,
     color: '#1d4ed8',
