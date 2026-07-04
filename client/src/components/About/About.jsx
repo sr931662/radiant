@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import styles from './About.module.css'
 import seemaImg from '../../assets/seema.png'
-import utkarshImg from '../../assets/utkarsh.jpg'
+import slguptaImg from '../../assets/slgupta.png'
 import sanjeevImg from '../../assets/sanjeev.png'
 import santoshImg from '../../assets/santosh.png'
 
@@ -31,9 +31,9 @@ const TRUSTEES = [
     bg: '#faf5ff',
   },
   {
-    name: 'Mr. Utkarsh Gupta',
+    name: 'Mr. S.L Gupta',
     role: 'Trustee',
-    image: utkarshImg,
+    image: slguptaImg,
     color: '#1d4ed8',
     bg: '#eff6ff',
   },
