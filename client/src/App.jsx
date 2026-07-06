@@ -39,6 +39,8 @@ import AdminDownloads from './pages/admin/Downloads.jsx'
 import AdminCertificates from './pages/admin/Certificates.jsx'
 import AdminBanners from './pages/admin/Banners.jsx'
 import NotFound from './pages/NotFound.jsx'
+import RadiantEducationLanding from './pages/landing-page/RadiantEducationLanding.jsx'
+import LandingThankYou from './pages/landing-page/ThankYou.jsx'
 
 export default function App() {
   return (
@@ -69,6 +71,9 @@ export default function App() {
         <Route path="auth/forgot-password" element={<ForgotPassword />} />
         <Route path="auth/reset-password" element={<ResetPassword />} />
         <Route path="auth/verify-email" element={<VerifyEmail />} />
+
+        <Route path="landing-page" element={<RadiantEducationLanding />} />
+        <Route path="landing-page/thank-you" element={<LandingThankYou />} />
 
         <Route
           path="admin"

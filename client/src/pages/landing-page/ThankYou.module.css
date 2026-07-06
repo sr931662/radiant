@@ -1,0 +1,266 @@
+/* ─── Wrapper ─────────────────────────────────────────── */
+.wrapper {
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+  line-height: 1.6;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* ─── Navbar ──────────────────────────────────────────── */
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 14px 0;
+}
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #000;
+  text-decoration: none;
+}
+.logoImg { height: 50px; width: auto; }
+.logoTextWrap { display: flex; flex-direction: column; line-height: 1.1; }
+.logoTextWrap span { font-size: 22px; font-weight: 800; color: #000; }
+.logoTextWrap em { font-style: normal; color: #000; }
+.logoSub { font-size: 10px; font-weight: 600; color: #6d28d9; letter-spacing: 2px; text-transform: uppercase; }
+.homeBtn {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a3c6e;
+  text-decoration: none;
+  padding: 8px 18px;
+  border: 1.5px solid #1a3c6e;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.homeBtn:hover { background: #1a3c6e; color: #fff; }
+
+/* ─── Hero ────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #0f2847 0%, #1a3c6e 100%);
+  padding: 70px 24px 80px;
+  text-align: center;
+}
+.heroInner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.checkCircle {
+  width: 80px;
+  height: 80px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 0 12px rgba(34,197,94,0.2);
+}
+.checkCircle svg { width: 38px; height: 38px; }
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.subtitle {
+  font-size: 20px;
+  color: #f59e0b;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.desc {
+  font-size: 16px;
+  color: #cbd5e1;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.desc strong { color: #f59e0b; }
+.redirectNote {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+.countDown {
+  font-weight: 700;
+  color: #f59e0b;
+  font-size: 15px;
+}
+.homeLink {
+  display: inline-block;
+  background: #f59e0b;
+  color: #fff;
+  padding: 14px 36px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+.homeLink:hover { background: #d97706; transform: translateY(-2px); }
+
+/* ─── Shared ──────────────────────────────────────────── */
+.inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+.inner h2 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1a3c6e;
+  margin-bottom: 10px;
+}
+.inner h2 span { color: #f59e0b; }
+.sectionSub {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 40px;
+}
+
+/* ─── What Happens Next ───────────────────────────────── */
+.stepsSection {
+  padding: 70px 0;
+  background: #fff;
+}
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.stepCard {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 28px 20px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stepCard:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+.stepNum {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  background: #1a3c6e;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stepIcon { font-size: 36px; margin-bottom: 12px; margin-top: 8px; }
+.stepCard h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #1a3c6e; }
+.stepCard p { font-size: 13px; color: #64748b; }
+
+/* ─── While You Wait ──────────────────────────────────── */
+.whileSection {
+  padding: 60px 0;
+  background: #f0f4f8;
+}
+.courseChips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+.chip {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  color: #1a3c6e;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.chip:hover { background: #1a3c6e; color: #fff; border-color: #1a3c6e; }
+
+/* ─── Contact Bar ─────────────────────────────────────── */
+.contactBar {
+  background: #0f2847;
+  padding: 36px 0;
+  text-align: center;
+}
+.contactBar p {
+  color: #94a3b8;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.contactLinks {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.contactBtn, .contactBtnWa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.contactBtn { background: #f59e0b; color: #fff; }
+.contactBtnWa { background: #25d366; color: #fff; }
+.contactBtn:hover, .contactBtnWa:hover { transform: translateY(-2px); opacity: 0.92; }
+
+/* ─── Footer ──────────────────────────────────────────── */
+.footer {
+  background: #0c1b2e;
+  padding: 20px 24px;
+  text-align: center;
+  color: #475569;
+  font-size: 13px;
+}
+
+/* ─── Responsive ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero { padding: 50px 20px 60px; }
+  .hero h1 { font-size: 30px; }
+  .subtitle { font-size: 16px; }
+  .desc { font-size: 14px; }
+  .checkCircle { width: 64px; height: 64px; }
+  .checkCircle svg { width: 30px; height: 30px; }
+  .stepsGrid { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .stepsSection { padding: 50px 0; }
+  .whileSection { padding: 44px 0; }
+  .inner h2 { font-size: 24px; }
+  .navInner { padding: 0 16px; }
+  .logoImg { height: 36px; }
+  .logo { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .stepsGrid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 26px; }
+  .homeBtn { display: none; }
+}
