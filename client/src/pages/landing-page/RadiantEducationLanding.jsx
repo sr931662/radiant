@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './RadiantEducationLanding.module.css';
-import logoSrc from './assets/logo.svg';
-import studentImg from './assets/student.png';
-import studentsGroupImg from './assets/students-group.jpg';
+import logoSrc from '../landing-assets/RadiantEducation-Assets/logo.svg';
+import studentImg from '../landing-assets/RadiantEducation-Assets/student.png';
+import studentsGroupImg from '../landing-assets/RadiantEducation-Assets/students-group.jpg';
 
 const UG_COURSES = [
   'BA - General',
@@ -182,39 +182,39 @@ const STEPS = [
 ];
 
 const TESTIMONIALS = [
-  { img: new URL('./assets/testimonials/rohit.jpg', import.meta.url).href,   name: 'Rohit Kumar',    course: 'Online MBA, Manipal University',    text: '"I was confused between 5 universities for my MBA. Radiant\'s counsellor helped me compare fees, placements, and curriculum. Enrolled in Manipal Online within a week!"' },
-  { img: new URL('./assets/testimonials/priya.jpg', import.meta.url).href,   name: 'Priya Sharma',   course: 'Online BBA, Amity University',      text: '"The entire admission process was so smooth. They even helped me set up EMI for my fees. Highly recommend Radiant Education to working professionals."' },
-  { img: new URL('./assets/testimonials/amit.jpg', import.meta.url).href,    name: 'Amit Verma',     course: 'Online BCA, LPU',                   text: '"I\'m a working professional and needed a flexible BCA program. Radiant found the perfect fit for me at LPU Online. Their support team is excellent."' },
-  { img: new URL('./assets/testimonials/sneha.jpg', import.meta.url).href,   name: 'Sneha Patel',    course: 'Online MCA, Chandigarh University',  text: '"Radiant helped me switch from a non-IT background to MCA. The counsellor was patient, explained everything clearly, and the admission was done in 3 days!"' },
-  { img: new URL('./assets/testimonials/rahul.jpg', import.meta.url).href,   name: 'Rahul Singh',    course: 'Online MBA - Finance, NMIMS',        text: '"NMIMS online MBA with Finance specialization was my dream. Radiant made it possible within my budget. Their team is knowledgeable and very responsive."' },
-  { img: new URL('./assets/testimonials/anjali.jpg', import.meta.url).href,  name: 'Anjali Mehta',   course: 'Online B.Com, Amrita University',    text: '"Being a homemaker, I needed a flexible program. Radiant Education helped me find the perfect online B.Com course. Now I\'m pursuing my dream degree from home!"' },
-  { img: new URL('./assets/testimonials/arjun.jpg', import.meta.url).href,   name: 'Arjun Nair',     course: 'Online BBA - Marketing, Sharda University', text: '"I was skeptical about online degrees but Radiant cleared all my doubts. Got admitted to Sharda University\'s BBA Marketing in just 2 days. Super smooth process!"' },
-  { img: new URL('./assets/testimonials/divya.jpg', import.meta.url).href,   name: 'Divya Reddy',    course: 'Online MA - English, Amity University', text: '"Radiant Education guided me through the entire MA English admission process. The counsellor understood my needs and recommended the best university within my budget."' },
-  { img: new URL('./assets/testimonials/karan.jpg', import.meta.url).href,   name: 'Karan Malhotra', course: 'Online MBA - HR, Jain University',   text: '"The team at Radiant is amazing! They helped me choose between 4 universities for MBA-HR and got me the best fee structure. Highly recommend to anyone looking for online degrees."' },
-  { img: new URL('./assets/testimonials/neha.jpg', import.meta.url).href,    name: 'Neha Gupta',     course: 'Online M.Sc Data Science, LPU',      text: '"I wanted to upskill in Data Science while working full-time. Radiant found LPU\'s online M.Sc program for me — perfect timing, perfect fees. Couldn\'t be happier!"' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/rohit.jpg', import.meta.url).href,   name: 'Rohit Kumar',    course: 'Online MBA, Manipal University',    text: '"I was confused between 5 universities for my MBA. Radiant\'s counsellor helped me compare fees, placements, and curriculum. Enrolled in Manipal Online within a week!"' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/priya.jpg', import.meta.url).href,   name: 'Priya Sharma',   course: 'Online BBA, Amity University',      text: '"The entire admission process was so smooth. They even helped me set up EMI for my fees. Highly recommend Radiant Education to working professionals."' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/amit.jpg', import.meta.url).href,    name: 'Amit Verma',     course: 'Online BCA, LPU',                   text: '"I\'m a working professional and needed a flexible BCA program. Radiant found the perfect fit for me at LPU Online. Their support team is excellent."' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/sneha.jpg', import.meta.url).href,   name: 'Sneha Patel',    course: 'Online MCA, Chandigarh University',  text: '"Radiant helped me switch from a non-IT background to MCA. The counsellor was patient, explained everything clearly, and the admission was done in 3 days!"' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/rahul.jpg', import.meta.url).href,   name: 'Rahul Singh',    course: 'Online MBA - Finance, NMIMS',        text: '"NMIMS online MBA with Finance specialization was my dream. Radiant made it possible within my budget. Their team is knowledgeable and very responsive."' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/anjali.jpg', import.meta.url).href,  name: 'Anjali Mehta',   course: 'Online B.Com, Amrita University',    text: '"Being a homemaker, I needed a flexible program. Radiant Education helped me find the perfect online B.Com course. Now I\'m pursuing my dream degree from home!"' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/arjun.jpg', import.meta.url).href,   name: 'Arjun Nair',     course: 'Online BBA - Marketing, Sharda University', text: '"I was skeptical about online degrees but Radiant cleared all my doubts. Got admitted to Sharda University\'s BBA Marketing in just 2 days. Super smooth process!"' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/divya.jpg', import.meta.url).href,   name: 'Divya Reddy',    course: 'Online MA - English, Amity University', text: '"Radiant Education guided me through the entire MA English admission process. The counsellor understood my needs and recommended the best university within my budget."' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/karan.jpg', import.meta.url).href,   name: 'Karan Malhotra', course: 'Online MBA - HR, Jain University',   text: '"The team at Radiant is amazing! They helped me choose between 4 universities for MBA-HR and got me the best fee structure. Highly recommend to anyone looking for online degrees."' },
+  { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/neha.jpg', import.meta.url).href,    name: 'Neha Gupta',     course: 'Online M.Sc Data Science, LPU',      text: '"I wanted to upskill in Data Science while working full-time. Radiant found LPU\'s online M.Sc program for me — perfect timing, perfect fees. Couldn\'t be happier!"' },
 ];
 
 const UNIVERSITIES = [
-  { name: 'Chandigarh University', logo: new URL('./assets/universities/chandigarh.png', import.meta.url).href },
-  { name: 'Amity University', logo: new URL('./assets/universities/amity.png', import.meta.url).href },
-  { name: 'Sharda University', logo: new URL('./assets/universities/sharda.png', import.meta.url).href },
-  { name: 'Manipal University', logo: new URL('./assets/universities/manipal.png', import.meta.url).href },
-  { name: 'Kurukshetra University', logo: new URL('./assets/universities/kurukshetra.png', import.meta.url).href },
-  { name: 'LPU', logo: new URL('./assets/universities/lpu.png', import.meta.url).href },
-  { name: 'UPES', logo: new URL('./assets/universities/upes.png', import.meta.url).href },
-  { name: 'Vivekanand Global University', logo: new URL('./assets/universities/vgu.png', import.meta.url).href },
-  { name: 'SRM University Sikkim', logo: new URL('./assets/universities/srm-sikkim.png', import.meta.url).href },
-  { name: 'Sikkim Manipal University', logo: new URL('./assets/universities/sikkim-manipal.png', import.meta.url).href },
-  { name: 'Amrita University', logo: new URL('./assets/universities/amrita.png', import.meta.url).href },
-  { name: 'Shoolini University', logo: new URL('./assets/universities/shoolini.png', import.meta.url).href },
-  { name: 'Andhra University', logo: new URL('./assets/universities/andhra.png', import.meta.url).href },
-  { name: 'NMIMS', logo: new URL('./assets/universities/nmims.png', import.meta.url).href },
-  { name: 'DY Patil (Navi Mumbai)', logo: new URL('./assets/universities/dypatil-navimumbai.png', import.meta.url).href },
-  { name: 'GLA University', logo: new URL('./assets/universities/gla.png', import.meta.url).href },
-  { name: 'Parul University', logo: new URL('./assets/universities/parul.png', import.meta.url).href },
-  { name: 'Alliance University', logo: new URL('./assets/universities/alliance.png', import.meta.url).href },
-  { name: 'Christ University', logo: new URL('./assets/universities/christ.png', import.meta.url).href },
-  { name: 'Assam Down Town University', logo: new URL('./assets/universities/assam-downtown.png', import.meta.url).href },
+  { name: 'Chandigarh University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/chandigarh.png', import.meta.url).href },
+  { name: 'Amity University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/amity.png', import.meta.url).href },
+  { name: 'Sharda University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/sharda.png', import.meta.url).href },
+  { name: 'Manipal University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/manipal.png', import.meta.url).href },
+  { name: 'Kurukshetra University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/kurukshetra.png', import.meta.url).href },
+  { name: 'LPU', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/lpu.png', import.meta.url).href },
+  { name: 'UPES', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/upes.png', import.meta.url).href },
+  { name: 'Vivekanand Global University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/vgu.png', import.meta.url).href },
+  { name: 'SRM University Sikkim', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/srm-sikkim.png', import.meta.url).href },
+  { name: 'Sikkim Manipal University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/sikkim-manipal.png', import.meta.url).href },
+  { name: 'Amrita University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/amrita.png', import.meta.url).href },
+  { name: 'Shoolini University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/shoolini.png', import.meta.url).href },
+  { name: 'Andhra University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/andhra.png', import.meta.url).href },
+  { name: 'NMIMS', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/nmims.png', import.meta.url).href },
+  { name: 'DY Patil (Navi Mumbai)', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/dypatil-navimumbai.png', import.meta.url).href },
+  { name: 'GLA University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/gla.png', import.meta.url).href },
+  { name: 'Parul University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/parul.png', import.meta.url).href },
+  { name: 'Alliance University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/alliance.png', import.meta.url).href },
+  { name: 'Christ University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/christ.png', import.meta.url).href },
+  { name: 'Assam Down Town University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/assam-downtown.png', import.meta.url).href },
 ];
 
 export default function RadiantEducationLanding() {

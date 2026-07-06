@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './ThankYou.module.css';
-import logoSrc from './assets/logo.svg';
+import logoSrc from '../landing-assets/RadiantEducation-Assets/logo.svg';
 
 const STEPS = [
   { icon: '📞', title: 'Counsellor Call', desc: 'Our expert will call you within 24 hours' },
