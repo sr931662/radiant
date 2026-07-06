@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm install --no-package-lock && vite build",
+    "build": "npm install --no-package-lock && vite build && npm run copy:worker",
+    "copy:worker": "node -e \"require('fs').copyFileSync('worker.js','dist/_worker.js')\"",
     "preview": "vite preview",
     "cf:deploy": "wrangler pages deploy dist",
     "cf:dev": "wrangler pages dev dist"
