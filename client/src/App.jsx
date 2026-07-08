@@ -38,6 +38,7 @@ import AdminContacts from './pages/admin/Contacts.jsx'
 import AdminDownloads from './pages/admin/Downloads.jsx'
 import AdminCertificates from './pages/admin/Certificates.jsx'
 import AdminBanners from './pages/admin/Banners.jsx'
+import AdminLandingLeads from './pages/admin/LandingLeads.jsx'
 import NotFound from './pages/NotFound.jsx'
 import RadiantEducationLanding from './pages/landing-page/RadiantEducationLanding.jsx'
 import LandingThankYou from './pages/landing-page/ThankYou.jsx'
@@ -95,6 +96,7 @@ export default function App() {
           <Route path="blog" element={<AdminBlog />} />
           <Route path="gallery" element={<AdminGallery />} />
           <Route path="contacts" element={<AdminContacts />} />
+          <Route path="landing-leads" element={<AdminLandingLeads />} />
           <Route path="downloads" element={<AdminDownloads />} />
           <Route path="certificates" element={<AdminCertificates />} />
         </Route>

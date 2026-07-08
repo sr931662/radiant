@@ -1,9 +1,11 @@
 import Hero from '../components/Hero/Hero.jsx'
+import LandingLeadForm from '../components/LandingLeadForm/LandingLeadForm.jsx'
 import DonationBar from '../components/DonationBar/DonationBar.jsx'
 import ImpactCounter from '../components/ImpactCounter/ImpactCounter.jsx'
 import ThematicAreas from '../components/ThematicAreas/ThematicAreas.jsx'
 import AdmissionsBanner from '../components/AdmissionsBanner/AdmissionsBanner.jsx'
 import Programs from '../components/Programs/Programs.jsx'
+import GuidanceBanner from '../components/GuidanceBanner/GuidanceBanner.jsx'
 import EnquiryForm from '../components/EnquiryForm/EnquiryForm.jsx'
 import Stories from '../components/Stories/Stories.jsx'
 import MembershipCTA from '../components/MembershipCTA/MembershipCTA.jsx'
@@ -15,12 +17,14 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <LandingLeadForm />
       <DonationBar />
       <RegistrationInfo />
       <ImpactCounter />
       <ThematicAreas />
       <AdmissionsBanner />
       <Programs />
+      <GuidanceBanner />
       <EnquiryForm />
       <Stories />
       <MembershipCTA />

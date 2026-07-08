@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, FileText, Heart, MessageSquare,
   LogOut, Sun, BookOpen, Image, HandHeart, BadgeCheck,
   GraduationCap, Mail, Download, Award, ExternalLink,
-  Bell, Menu, X, ChevronRight,
+  Bell, Menu, X, ChevronRight, UserPlus,
 } from 'lucide-react'
 import styles from './AdminLayout.module.css'
 
@@ -44,6 +44,7 @@ const NAV_GROUPS = [
     label: 'Support',
     items: [
       { to: '/admin/contacts',     label: 'Contacts',     icon: Mail },
+      { to: '/admin/landing-leads', label: 'Landing Leads', icon: UserPlus },
       { to: '/admin/downloads',    label: 'Downloads',    icon: Download },
       { to: '/admin/certificates', label: 'Certificates', icon: Award },
     ],
@@ -63,6 +64,7 @@ const PAGE_TITLES = {
   '/admin/blog':         'Blog Posts',
   '/admin/gallery':      'Gallery',
   '/admin/contacts':     'Contacts',
+  '/admin/landing-leads': 'Landing Page Leads',
   '/admin/downloads':    'Downloads',
   '/admin/certificates': 'Certificates',
 }
