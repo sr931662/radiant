@@ -51,7 +51,7 @@ export default function LandingLeadForm() {
                 <input type="text" name="name" placeholder="Enter your full name" required value={formData.name} onChange={handleChange} />
               </div>
               <div className={styles.formGroup}>
-                <input type="tel" name="phone" placeholder="Enter your mobile number" required pattern="[0-9]{10}" value={formData.phone} onChange={handleChange} />
+                <input type="tel" name="phone" placeholder="Enter 10-digit mobile number (e.g. 9876543210)" required pattern="[0-9]{10}" maxLength={10} value={formData.phone} onChange={handleChange} />
               </div>
               <div className={styles.formGroup}>
                 <select name="state" required value={formData.state} onChange={handleChange}>

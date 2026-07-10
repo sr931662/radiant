@@ -3,8 +3,7 @@
   z-index: 20;
   display: flex;
   justify-content: center;
-  padding: 0 var(--px);
-  margin-top: 3rem;
+  width: 100%;
 }
 
 .card {

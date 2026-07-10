@@ -68,19 +68,11 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── Right Image ── */}
-        <div className={styles.imageWrapper}>
-          <div className={styles.imageCard}>
-            <img
-              src="https://theindianschool.in/uploads/posts/L-16972674476964-pre-primary-magic-years-main.jpg"
-              alt="Children in a classroom learning"
-              className={styles.image}
-            />
-          </div>
+        {/* ── Right: Lead Form ── */}
+        <div className={styles.formWrapper}>
+          <LandingLeadForm />
         </div>
       </div>
-
-      <LandingLeadForm />
     </section>
   )
 }

@@ -159,6 +159,12 @@
   color: var(--clr-slate-500);
 }
 
+/* Lead form column */
+.formWrapper {
+  display: flex;
+  justify-content: center;
+}
+
 /* Image */
 .imageWrapper {
   position: relative;
