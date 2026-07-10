@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake } from 'lucide-react'
+import LandingLeadForm from '../LandingLeadForm/LandingLeadForm.jsx'
 import styles from './Hero.module.css'
 
 export default function Hero() {
@@ -78,6 +79,8 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      <LandingLeadForm />
     </section>
   )
 }

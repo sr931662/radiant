@@ -2,7 +2,7 @@
   position: relative;
   background: var(--clr-white);
   padding-top: var(--sp-16);
-  padding-bottom: var(--sp-24);
+  padding-bottom: var(--sp-16);
   overflow: hidden;
 }
 
