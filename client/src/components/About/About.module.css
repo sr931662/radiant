@@ -14,6 +14,15 @@
   text-align: center;
 }
 
+/* Objectives */
+.objectivesCard {
+  background: var(--clr-slate-50);
+  border: 1px solid var(--clr-slate-100);
+  border-radius: var(--r-2xl);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
 /* Cards */
 .cards {
   display: grid;

@@ -1,4 +1,5 @@
 import Hero from '../components/Hero/Hero.jsx'
+import ObjectivesModal from '../components/ObjectivesModal/ObjectivesModal.jsx'
 import DonationBar from '../components/DonationBar/DonationBar.jsx'
 import ImpactCounter from '../components/ImpactCounter/ImpactCounter.jsx'
 import ThematicAreas from '../components/ThematicAreas/ThematicAreas.jsx'
@@ -15,6 +16,7 @@ import Partnership from '../components/Partnership/Partnership.jsx'
 export default function Home() {
   return (
     <>
+      <ObjectivesModal />
       <Hero />
       <DonationBar />
       <RegistrationInfo />

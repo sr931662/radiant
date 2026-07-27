@@ -1,6 +1,7 @@
 import {
   Telescope,
   Target,
+  Compass,
   ShieldCheck,
   CheckCircle2,
   Award,
@@ -11,10 +12,14 @@ import {
   BookOpen,
   Leaf,
   Users,
-  GraduationCap,
   HeartPulse,
-  Scale,
-  Trees
+  Baby,
+  Laptop,
+  Home,
+  Briefcase,
+  HeartHandshake,
+  Landmark,
+  Megaphone
 } from 'lucide-react'
 import styles from './About.module.css'
 import seemaImg from '../../assets/seema.png'
@@ -55,46 +60,64 @@ const TRUSTEES = [
 
 const THEMATIC_AREAS = [
   {
-    label: 'Literacy & Education',
+    label: 'Education and Learning Support',
     icon: BookOpen,
     color: '#2563eb',
     bg: '#eff6ff',
   },
   {
-    label: 'Skill Development',
-    icon: GraduationCap,
+    label: 'Child Development and Holistic Learning',
+    icon: Baby,
     color: '#7c3aed',
     bg: '#faf5ff',
   },
   {
-    label: 'Health Care',
+    label: 'Digital and Technology-Enabled Education',
+    icon: Laptop,
+    color: '#0891b2',
+    bg: '#ecfeff',
+  },
+  {
+    label: 'Community-Based Education Initiatives',
+    icon: Home,
+    color: '#059669',
+    bg: '#f0fdf4',
+  },
+  {
+    label: 'Skill Development and Career Guidance',
+    icon: Briefcase,
+    color: '#d97706',
+    bg: '#fffbeb',
+  },
+  {
+    label: 'Women and Vulnerable Community Empowerment',
+    icon: HeartHandshake,
+    color: '#db2777',
+    bg: '#fdf2f8',
+  },
+  {
+    label: 'Health, Nutrition and Well-Being',
     icon: HeartPulse,
     color: '#dc2626',
     bg: '#fef2f2',
   },
   {
-    label: 'Environment Conservation & Sustainability',
-    icon: Trees,
-    color: '#059669',
+    label: 'Government Scheme and Institutional Linkages',
+    icon: Landmark,
+    color: '#1d4ed8',
+    bg: '#eff6ff',
+  },
+  {
+    label: 'Community Development and Social Awareness',
+    icon: Megaphone,
+    color: '#9333ea',
+    bg: '#faf5ff',
+  },
+  {
+    label: 'Environmental Awareness',
+    icon: Leaf,
+    color: '#16a34a',
     bg: '#f0fdf4',
-  },
-  {
-    label: 'Legal Aid',
-    icon: Scale,
-    color: '#d97706',
-    bg: '#fffbeb',
-  },
-  {
-    label: 'Women Empowerment',
-    icon: Users,
-    color: '#db2777',
-    bg: '#fdf2f8',
-  },
-  {
-    label: 'Rural Education & Scholarship',
-    icon: BookOpen,
-    color: '#0891b2',
-    bg: '#ecfeff',
   },
 ]
 
@@ -152,15 +175,20 @@ const MISSION_POINTS = [
   'To encourage innovation, entrepreneurship, leadership, and ethical values among learners.',
 ]
 
+const OBJECTIVES_TEXT =
+  "The objectives of Radiant Education Trust include promoting access to education, supporting children and underserved communities, strengthening learning opportunities, and undertaking initiatives for social and community development in accordance with the Trust's registered objectives and programme areas."
+
 const VALUES = [
-  'Excellence',
-  'Integrity',
-  'Empowerment',
-  'Inclusiveness',
-  'Innovation',
-  'Lifelong Learning',
-  'Social Responsibility',
-  'Student-Centric Approach',
+  'Education for All',
+  'Child-Centred Development',
+  'Inclusion and Equal Opportunity',
+  'Empowerment and Self-Reliance',
+  'Dignity and Respect',
+  'Community Participation',
+  'Integrity and Accountability',
+  'Collaboration and Partnership',
+  'Innovation and Continuous Learning',
+  'Sustainable Social Development',
 ]
 
 const SDGS = [
@@ -189,6 +217,15 @@ export default function About() {
           <div className={styles.memorialNote}>
             In memory of <strong>Jagnath Rai</strong> and <strong>Balu Ram Jalan</strong>
           </div>
+        </div>
+
+        {/* Objectives */}
+        <div className={styles.objectivesCard}>
+          <div className={styles.iconBox}>
+            <Compass size={26} color="var(--clr-primary)" />
+          </div>
+          <h3 className={styles.cardTitle}>Objectives</h3>
+          <p className={styles.cardText}>{OBJECTIVES_TEXT}</p>
         </div>
 
         {/* Cards */}

@@ -1,0 +1,66 @@
+.section {
+  margin-bottom: 1.25rem;
+}
+
+.section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--clr-slate-900, #0f172a);
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.text {
+  color: var(--clr-slate-600, #475569);
+  line-height: 1.65;
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.valuesList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.55rem 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.valueItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--clr-slate-700, #334155);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.valueIcon {
+  color: var(--clr-green-500, #16a34a);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.link {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--clr-primary, #4f46e5);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .valuesList {
+    grid-template-columns: 1fr;
+  }
+}
