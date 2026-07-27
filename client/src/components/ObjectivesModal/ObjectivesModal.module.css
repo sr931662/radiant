@@ -63,23 +63,31 @@
 .uniLogos {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .uniLogoItem {
-  background: var(--clr-slate-50, #f8fafc);
+  background: var(--clr-white, #fff);
   border: 1px solid var(--clr-slate-200, #e2e8f0);
-  border-radius: var(--r-md, 8px);
-  padding: 0.4rem 0.7rem;
+  border-radius: var(--r-md, 10px);
+  padding: 0.6rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: box-shadow 0.2s;
+}
+
+.uniLogoItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .uniLogoItem img {
-  height: 28px;
+  height: 44px;
   width: auto;
-  max-width: 88px;
+  max-width: 110px;
   object-fit: contain;
 }
 
@@ -217,8 +225,12 @@
     padding: 0.6rem 0.75rem;
   }
 
+  .uniLogoItem {
+    padding: 0.45rem 0.7rem;
+  }
+
   .uniLogoItem img {
-    height: 22px;
-    max-width: 68px;
+    height: 32px;
+    max-width: 80px;
   }
 }

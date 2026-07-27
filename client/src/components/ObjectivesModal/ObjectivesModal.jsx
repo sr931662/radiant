@@ -84,7 +84,8 @@ export default function ObjectivesModal() {
       </div>
 
       <div className={styles.section}>
-        <h4 className={styles.heading}>Our University Partners</h4>
+        <h4 className={styles.heading}>Our Trusted University Partners</h4>
+        <p className={styles.text}>UGC-approved degrees from NAAC A+ universities. Study online, get a degree recognized everywhere.</p>
         <div className={styles.uniLogos}>
           {UNIVERSITIES.map((u) => (
             <div key={u.name} className={styles.uniLogoItem}>
