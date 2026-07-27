@@ -60,6 +60,29 @@
   margin-top: 2px;
 }
 
+.uniLogos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.uniLogoItem {
+  background: var(--clr-slate-50, #f8fafc);
+  border: 1px solid var(--clr-slate-200, #e2e8f0);
+  border-radius: var(--r-md, 8px);
+  padding: 0.4rem 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uniLogoItem img {
+  height: 28px;
+  width: auto;
+  max-width: 88px;
+  object-fit: contain;
+}
+
 .link {
   display: inline-block;
   font-weight: 600;
@@ -192,5 +215,10 @@
   .input {
     font-size: 16px; /* prevents iOS Safari auto-zoom on focus */
     padding: 0.6rem 0.75rem;
+  }
+
+  .uniLogoItem img {
+    height: 22px;
+    max-width: 68px;
   }
 }

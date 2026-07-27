@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import Modal from '../ui/Modal.jsx'
 import { submitLandingLead } from '../../services/landingLeadService'
 import { UG_COURSES, PG_COURSES, INDIAN_STATES } from '../../constants/courseOptions'
+import { UNIVERSITIES } from '../../constants/universities'
 import Logo from '../../assets/image.svg'
 import styles from './ObjectivesModal.module.css'
 
@@ -80,6 +81,17 @@ export default function ObjectivesModal() {
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className={styles.section}>
+        <h4 className={styles.heading}>Our University Partners</h4>
+        <div className={styles.uniLogos}>
+          {UNIVERSITIES.map((u) => (
+            <div key={u.name} className={styles.uniLogoItem}>
+              <img src={u.logo} alt={u.name} title={u.name} />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={styles.formSection}>

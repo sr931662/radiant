@@ -5,6 +5,7 @@ import logoSrc from '../landing-assets/RadiantEducation-Assets/logo.svg';
 import studentImg from '../landing-assets/RadiantEducation-Assets/student.png';
 import studentsGroupImg from '../landing-assets/RadiantEducation-Assets/students-group.jpg';
 import { UG_COURSES, PG_COURSES, INDIAN_STATES } from '../../constants/courseOptions';
+import { UNIVERSITIES } from '../../constants/universities';
 
 const COURSE_CARDS = [
   { icon: '🎓', bg: '#eff6ff', color: '#2563eb', title: 'Online MBA', type: 'PG', desc: '#1 Trending — Specializations in Marketing, Finance, HR, IT, Operations & more. 2-year program.', tags: ['🔥 Most Popular', 'PG Course'] },
@@ -66,29 +67,6 @@ const TESTIMONIALS = [
   { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/divya.jpg', import.meta.url).href,   name: 'Divya Reddy',    course: 'Online MA - English, Amity University', text: '"Radiant Education guided me through the entire MA English admission process. The counsellor understood my needs and recommended the best university within my budget."' },
   { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/karan.jpg', import.meta.url).href,   name: 'Karan Malhotra', course: 'Online MBA - HR, Jain University',   text: '"The team at Radiant is amazing! They helped me choose between 4 universities for MBA-HR and got me the best fee structure. Highly recommend to anyone looking for online degrees."' },
   { img: new URL('../landing-assets/RadiantEducation-Assets/testimonials/neha.jpg', import.meta.url).href,    name: 'Neha Gupta',     course: 'Online M.Sc Data Science, LPU',      text: '"I wanted to upskill in Data Science while working full-time. Radiant found LPU\'s online M.Sc program for me — perfect timing, perfect fees. Couldn\'t be happier!"' },
-];
-
-const UNIVERSITIES = [
-  { name: 'Chandigarh University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/chandigarh.png', import.meta.url).href },
-  { name: 'Amity University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/amity.png', import.meta.url).href },
-  { name: 'Sharda University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/sharda.png', import.meta.url).href },
-  { name: 'Manipal University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/manipal.png', import.meta.url).href },
-  { name: 'Kurukshetra University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/kurukshetra.png', import.meta.url).href },
-  { name: 'LPU', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/lpu.png', import.meta.url).href },
-  { name: 'UPES', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/upes.png', import.meta.url).href },
-  { name: 'Vivekanand Global University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/vgu.png', import.meta.url).href },
-  { name: 'SRM University Sikkim', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/srm-sikkim.png', import.meta.url).href },
-  { name: 'Sikkim Manipal University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/sikkim-manipal.png', import.meta.url).href },
-  { name: 'Amrita University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/amrita.png', import.meta.url).href },
-  { name: 'Shoolini University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/shoolini.png', import.meta.url).href },
-  { name: 'Andhra University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/andhra.png', import.meta.url).href },
-  { name: 'NMIMS', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/nmims.png', import.meta.url).href },
-  { name: 'DY Patil (Navi Mumbai)', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/dypatil-navimumbai.png', import.meta.url).href },
-  { name: 'GLA University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/gla.png', import.meta.url).href },
-  { name: 'Parul University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/parul.png', import.meta.url).href },
-  { name: 'Alliance University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/alliance.png', import.meta.url).href },
-  { name: 'Christ University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/christ.png', import.meta.url).href },
-  { name: 'Assam Down Town University', logo: new URL('../landing-assets/RadiantEducation-Assets/universities/assam-downtown.png', import.meta.url).href },
 ];
 
 export default function RadiantEducationLanding() {
