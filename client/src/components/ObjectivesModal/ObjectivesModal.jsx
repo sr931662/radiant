@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import Modal from '../ui/Modal.jsx'
 import { submitLandingLead } from '../../services/landingLeadService'
 import { UG_COURSES, PG_COURSES, INDIAN_STATES } from '../../constants/courseOptions'
+import Logo from '../../assets/image.svg'
 import styles from './ObjectivesModal.module.css'
 
 const OBJECTIVES_TEXT =
@@ -54,33 +55,23 @@ export default function ObjectivesModal() {
     }))
   }
 
-  // Opens once per session, right after the visitor scrolls past the Hero section (#home).
+  // Opens once per session, shortly after the page loads.
   useEffect(() => {
     if (sessionStorage.getItem(SESSION_KEY)) return
 
-    const heroEl = document.getElementById('home')
-    if (!heroEl) {
+    const timer = setTimeout(() => {
       setOpen(true)
       sessionStorage.setItem(SESSION_KEY, '1')
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          setOpen(true)
-          sessionStorage.setItem(SESSION_KEY, '1')
-          observer.disconnect()
-        }
-      },
-      { threshold: 0 }
-    )
-    observer.observe(heroEl)
-    return () => observer.disconnect()
+    }, 800)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} title="Who We Are" width={560}>
+      <div className={styles.logoWrap}>
+        <img src={Logo} alt="Radiant Education Trust" className={styles.logoImg} />
+      </div>
+
       <div className={styles.section}>
         <h4 className={styles.heading}>Objectives</h4>
         <p className={styles.text}>{OBJECTIVES_TEXT}</p>

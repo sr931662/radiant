@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake } from 'lucide-react'
-import LandingLeadForm from '../LandingLeadForm/LandingLeadForm.jsx'
 import styles from './Hero.module.css'
 
 export default function Hero() {
@@ -66,11 +65,6 @@ export default function Hero() {
               SDG Aligned
             </span>
           </div>
-        </div>
-
-        {/* ── Right: Lead Form ── */}
-        <div className={styles.formWrapper}>
-          <LandingLeadForm />
         </div>
       </div>
     </section>

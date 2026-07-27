@@ -31,7 +31,6 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 4rem;
   position: relative;
   z-index: 1;
   align-items: center;
@@ -40,6 +39,8 @@
 /* Content */
 .content {
   text-align: center;
+  max-width: 46rem;
+  margin-inline: auto;
 }
 
 .badge {
@@ -159,12 +160,6 @@
   color: var(--clr-slate-500);
 }
 
-/* Lead form column */
-.formWrapper {
-  display: flex;
-  justify-content: center;
-}
-
 /* Image */
 .imageWrapper {
   position: relative;
@@ -264,17 +259,6 @@
 }
 
 /* Responsive */
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-  }
-  .content { text-align: left; }
-  .sub { margin-left: 0; }
-  .ctaGrid { margin-inline: 0; }
-  .trustRow { justify-content: flex-start; }
-}
-
 @media (max-width: 640px) {
   .ctaGrid { grid-template-columns: 1fr; max-width: 100%; }
   .floatBottom, .floatTop { display: none; }

@@ -1,3 +1,16 @@
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.logoImg {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
 .section {
   margin-bottom: 1.25rem;
 }
