@@ -25,8 +25,6 @@ const CORE_VALUES = [
   'Sustainable Social Development',
 ]
 
-const SESSION_KEY = 'radiant_objectives_modal_shown'
-
 export default function ObjectivesModal() {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({ name: '', phone: '', state: '', courseType: '', course: '' })
@@ -55,14 +53,9 @@ export default function ObjectivesModal() {
     }))
   }
 
-  // Opens once per session, shortly after the page loads.
+  // Opens every time the page loads or is reloaded.
   useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY)) return
-
-    const timer = setTimeout(() => {
-      setOpen(true)
-      sessionStorage.setItem(SESSION_KEY, '1')
-    }, 800)
+    const timer = setTimeout(() => setOpen(true), 800)
     return () => clearTimeout(timer)
   }, [])
 
