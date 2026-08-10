@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { to: '/',             label: 'Home',       end: true },
   { to: '/about',        label: 'About' },
   { to: '/programs',     label: 'Programs' },
-  // { to: '/journal',      label: 'Journal' },
+  { href: 'https://radiantjournals.com', label: 'Journal', external: true },
   { to: '/membership',   label: 'Membership', highlight: true },
   { to: '/blog',         label: 'Stories' },
   { to: '/contact',      label: 'Contact' },
@@ -85,8 +85,12 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className={styles.desktopMenu}>
-          {NAV_LINKS.map(({ to, label, end, highlight }) => (
-            highlight ? (
+          {NAV_LINKS.map(({ to, href, label, end, highlight, external }) => (
+            external ? (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className={styles.navLink}>
+                {label}
+              </a>
+            ) : highlight ? (
               <NavLink key={to} to={to} end={end}
                 className={({ isActive }) => `${styles.membershipLink} ${isActive ? styles.membershipLinkActive : ''}`}>
                 <Award size={13} /> {label}
@@ -124,17 +128,25 @@ export default function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          {NAV_LINKS.map(({ to, label, end, highlight }) => (
-            <NavLink key={to} to={to} end={end}
-              className={({ isActive }) =>
-                highlight
-                  ? `${styles.mobileMembershipLink} ${isActive ? styles.mobileMembershipLinkActive : ''}`
-                  : `${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ''}`
-              }
-              onClick={() => setMenuOpen(false)}>
-              {highlight && <Award size={14} style={{ display: 'inline', marginRight: 5 }} />}
-              {label}
-            </NavLink>
+          {NAV_LINKS.map(({ to, href, label, end, highlight, external }) => (
+            external ? (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                className={styles.mobileLink}
+                onClick={() => setMenuOpen(false)}>
+                {label}
+              </a>
+            ) : (
+              <NavLink key={to} to={to} end={end}
+                className={({ isActive }) =>
+                  highlight
+                    ? `${styles.mobileMembershipLink} ${isActive ? styles.mobileMembershipLinkActive : ''}`
+                    : `${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ''}`
+                }
+                onClick={() => setMenuOpen(false)}>
+                {highlight && <Award size={14} style={{ display: 'inline', marginRight: 5 }} />}
+                {label}
+              </NavLink>
+            )
           ))}
           <div className={styles.mobileDivider} />
           <Link to="/donate" className={styles.mobileSponsorBtn} onClick={() => setMenuOpen(false)}>
