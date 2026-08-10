@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, HeartPulse, Trees, Scale, Users, Leaf } from 'lucide-react'
+import { BookOpen, GraduationCap, HeartPulse, HeartHandshake, Scale, Users, Leaf } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import styles from './ThematicAreas.module.css'
 
@@ -14,7 +14,7 @@ const AREAS = [
   },
   {
     label: 'Skill Development',
-    desc: 'Vocational training and UG/PG academic programmes that prepare youth for careers in a changing economy.',
+    desc: 'Vocational training, research publication and academic mentoring through IJRM and IJAQC that prepare youth for careers in a changing economy.',
     icon: GraduationCap,
     color: '#7c3aed',
     bg: '#faf5ff',
@@ -40,13 +40,14 @@ const AREAS = [
     sdg: 'SDG 3',
   },
   {
-    label: 'Environment & Sustainability',
-    desc: 'Tree plantation drives, eco-literacy, and green campus initiatives aligned with global sustainability goals.',
-    icon: Trees,
+    label: 'Old Age Home Welfare Scheme',
+    desc: 'Safe, dignified residential care for senior citizens in Delhi/NCR — nutrition, medical care, recreation and protection from neglect.',
+    icon: HeartHandshake,
     color: '#059669',
     bg: '#f0fdf4',
     border: '#bbf7d0',
-    sdg: 'SDG 13',
+    sdg: 'SDG 3',
+    to: '/old-age-home-welfare',
   },
   {
     label: 'Rural Education & Scholarship',
@@ -81,22 +82,26 @@ export default function ThematicAreas() {
         </div>
 
         <div className={styles.grid}>
-          {AREAS.map(({ label, desc, icon: Icon, color, bg, border, sdg }) => (
-            <div
-              key={label}
-              className={styles.card}
-              style={{ '--c': color, '--bg': bg, '--border': border }}
-            >
-              <div className={styles.iconWrap}>
-                <Icon size={24} color={color} />
-              </div>
-              <div className={styles.body}>
-                <h3 className={styles.cardTitle}>{label}</h3>
-                <p className={styles.cardDesc}>{desc}</p>
-              </div>
-              <span className={styles.sdgChip}>{sdg}</span>
-            </div>
-          ))}
+          {AREAS.map(({ label, desc, icon: Icon, color, bg, border, sdg, to }) => {
+            const Card = to ? Link : 'div'
+            return (
+              <Card
+                key={label}
+                {...(to ? { to } : {})}
+                className={styles.card}
+                style={{ '--c': color, '--bg': bg, '--border': border }}
+              >
+                <div className={styles.iconWrap}>
+                  <Icon size={24} color={color} />
+                </div>
+                <div className={styles.body}>
+                  <h3 className={styles.cardTitle}>{label}</h3>
+                  <p className={styles.cardDesc}>{desc}</p>
+                </div>
+                <span className={styles.sdgChip}>{sdg}</span>
+              </Card>
+            )
+          })}
         </div>
 
         <div className={styles.footer}>

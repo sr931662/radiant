@@ -8,6 +8,9 @@ import Programs from './pages/Programs.jsx'
 import Volunteer from './pages/Volunteer.jsx'
 import Donate from './pages/Donate.jsx'
 import Transparency from './pages/Transparency.jsx'
+import PrivacyPolicy from './pages/PrivacyPolicy.jsx'
+import TermsAndConditions from './pages/TermsAndConditions.jsx'
+import OldAgeHomeWelfare from './pages/OldAgeHomeWelfare.jsx'
 import Contact from './pages/Contact.jsx'
 import Gallery from './pages/Gallery.jsx'
 import Blog from './pages/Blog.jsx'
@@ -61,6 +64,9 @@ export default function App() {
           <Route path="volunteer" element={<Volunteer />} />
           <Route path="donate" element={<Donate />} />
           <Route path="transparency" element={<Transparency />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="old-age-home-welfare" element={<OldAgeHomeWelfare />} />
           <Route path="contact" element={<Contact />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="blog" element={<Blog />} />

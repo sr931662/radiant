@@ -1,0 +1,232 @@
+.hero {
+  background: linear-gradient(135deg, #0f766e, #1e3a5f 55%, #7c3aed);
+  padding: 4rem 0 3.5rem;
+  text-align: center;
+  color: var(--clr-white);
+}
+
+.heroLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.65);
+  margin-bottom: 0.75rem;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1.85rem, 5vw, 2.9rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.heroRegion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.9);
+  background: rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: var(--r-full);
+  padding: 0.35rem 1rem;
+}
+
+.heroSub {
+  margin: 1rem auto 0;
+  max-width: 46rem;
+  font-size: 0.95rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--clr-white);
+  border: 1px solid var(--clr-slate-200);
+  border-radius: var(--r-lg);
+  border-top: 3px solid var(--c);
+  padding: 1.75rem 1.9rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.1rem;
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--r-md);
+  background: var(--bg);
+}
+
+.cardNum {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--clr-slate-400);
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--clr-slate-900);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.cardIntro {
+  font-size: 0.92rem;
+  color: var(--clr-slate-600);
+  margin: 0 0 0.9rem;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  color: var(--clr-slate-700);
+}
+
+/* Two-column list on wide cards */
+.itemsTwoCol {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem 1.5rem;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--c);
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+  border-radius: var(--r-full);
+  padding: 0.35rem 0.85rem;
+}
+
+.chipDanger {
+  color: var(--clr-red-600);
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.ctaCard {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+  border-radius: var(--r-lg);
+  padding: 2rem 2.25rem;
+  color: var(--clr-white);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.ctaTitle {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+}
+
+.ctaSub {
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 0.82);
+  margin: 0;
+  max-width: 34rem;
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--clr-primary-dark);
+  background: var(--clr-white);
+  border-radius: var(--r-sm);
+  padding: 0.65rem 1.2rem;
+  transition: opacity 0.2s;
+}
+
+.ctaBtnGhost {
+  color: var(--clr-white);
+  background: rgb(255 255 255 / 0.14);
+  border: 1px solid rgb(255 255 255 / 0.3);
+}
+
+.ctaBtn:hover {
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cardWide {
+    grid-column: 1 / -1;
+  }
+
+  .itemsTwoCol {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 2rem 0 3rem;
+  }
+
+  .card {
+    padding: 1.35rem 1.25rem;
+  }
+
+  .ctaCard {
+    padding: 1.5rem 1.35rem;
+  }
+}

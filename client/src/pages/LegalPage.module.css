@@ -1,0 +1,216 @@
+.hero {
+  background: linear-gradient(135deg, #1e3a5f, #7c3aed);
+  padding: 4rem 0 3.5rem;
+  text-align: center;
+  color: var(--clr-white);
+}
+
+.heroLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.65);
+  margin-bottom: 0.75rem;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.heroSub {
+  margin: 0.85rem auto 0;
+  max-width: 44rem;
+  font-size: 0.95rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.updated {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgb(255 255 255 / 0.85);
+  background: rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: var(--r-full);
+  padding: 0.3rem 0.9rem;
+}
+
+.body {
+  max-width: 52rem;
+  margin: 3rem auto 4rem;
+  background: var(--clr-white);
+  border: 1px solid var(--clr-slate-200);
+  border-radius: var(--r-lg);
+  padding: 2.75rem 3rem;
+  box-shadow: var(--shadow-md);
+}
+
+.intro {
+  font-size: 1rem;
+  color: var(--clr-slate-600);
+  padding-bottom: 1.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--clr-slate-200);
+}
+
+.clause {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--clr-slate-100);
+}
+
+.clause:last-of-type {
+  border-bottom: none;
+}
+
+.clauseHead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.clauseNum {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--clr-primary);
+  background: var(--clr-primary-bg);
+  border: 1px solid var(--clr-primary-border);
+  border-radius: var(--r-sm);
+  min-width: 1.75rem;
+  text-align: center;
+  padding: 0.15rem 0.35rem;
+  line-height: 1.4;
+}
+
+.clauseTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--clr-slate-900);
+  margin: 0;
+}
+
+.clauseText {
+  font-size: 0.94rem;
+  color: var(--clr-slate-600);
+  margin: 0 0 0.75rem;
+}
+
+.clauseText:last-child {
+  margin-bottom: 0;
+}
+
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0.85rem 0 0;
+}
+
+.bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  color: var(--clr-slate-700);
+}
+
+.bulletDot {
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: var(--r-full);
+  background: var(--clr-primary-light);
+  margin-top: 0.55rem;
+}
+
+.contactCard {
+  margin-top: 2.5rem;
+  background: var(--clr-primary-bg);
+  border: 1px solid var(--clr-primary-border);
+  border-radius: var(--r-md);
+  padding: 1.5rem 1.75rem;
+}
+
+.contactTitle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clr-slate-900);
+  margin: 0 0 0.85rem;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--clr-slate-700);
+}
+
+.contactItem a:hover {
+  color: var(--clr-primary-dark);
+  text-decoration: underline;
+}
+
+.downloadRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--clr-slate-200);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--clr-primary-dark);
+  background: var(--clr-white);
+  border: 1px solid var(--clr-primary-border);
+  border-radius: var(--r-sm);
+  padding: 0.6rem 1.1rem;
+  transition: background 0.2s;
+}
+
+.downloadBtn:hover {
+  background: var(--clr-primary-bg);
+}
+
+.downloadNote {
+  font-size: 0.8rem;
+  color: var(--clr-slate-400);
+}
+
+@media (max-width: 640px) {
+  .body {
+    padding: 1.75rem 1.35rem;
+    margin: 2rem 1rem 3rem;
+  }
+
+  .clauseHead {
+    gap: 0.55rem;
+  }
+
+  .clauseTitle {
+    font-size: 1rem;
+  }
+}

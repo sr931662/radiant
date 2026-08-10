@@ -9,16 +9,22 @@ const EXPLORE_LINKS = [
   { to: '/courses',      label: 'Courses' },
   { to: '/membership',   label: 'Become a Member' },
   { to: '/volunteer',    label: 'Volunteer / Careers' },
-  { to: '/contact',      label: 'Partner With Us' },
+  { to: '/volunteer',    label: 'Become a Volunteer' },
 ]
 
 const RESOURCE_LINKS = [
-  { to: '/transparency', label: 'Annual Reports' },
-  { to: '/transparency', label: 'Audited Financials' },
-  { to: '/transparency', label: 'Fund Utilisation' },
-  { to: '/transparency', label: 'Legal Certificates' },
-  { to: '/gallery',      label: 'Media Hub' },
-  { to: '/admin',        label: 'Admin Panel', highlight: true },
+  { to: '/transparency',          label: 'Annual Reports' },
+  { to: '/transparency',          label: 'Audited Financials' },
+  { to: '/transparency',          label: 'Fund Utilisation' },
+  { to: '/privacy-policy',        label: 'Legal Privacy Policy' },
+  { to: '/terms-and-conditions',  label: 'Legal Terms and Conditions' },
+  { to: '/admin',                 label: 'Admin Panel', highlight: true },
+]
+
+const LEGAL_LINKS = [
+  { to: '/privacy-policy',       label: 'Privacy Policy' },
+  { to: '/terms-and-conditions', label: 'Terms and Conditions' },
+  { to: '/old-age-home-welfare', label: 'Old Age Home Welfare Scheme' },
 ]
 
 export default function Footer() {
@@ -118,10 +124,10 @@ export default function Footer() {
             </span>
           </p>
           <div className={styles.legalLinks}>
-            {['Privacy Policy', 'Terms of Service', 'Refund Policy', 'Child Safety'].map((l) => (
-              <button key={l} type="button" className={styles.legalLink}>
-                {l}
-              </button>
+            {LEGAL_LINKS.map(({ to, label }) => (
+              <Link key={label} to={to} className={styles.legalLink}>
+                {label}
+              </Link>
             ))}
           </div>
         </div>

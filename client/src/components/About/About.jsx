@@ -21,6 +21,7 @@ import {
   Landmark,
   Megaphone
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import styles from './About.module.css'
 import seemaImg from '../../assets/seema.png'
 import slguptaImg from '../../assets/slgupta.png'
@@ -114,10 +115,11 @@ const THEMATIC_AREAS = [
     bg: '#faf5ff',
   },
   {
-    label: 'Environmental Awareness',
-    icon: Leaf,
+    label: 'Old Age Home Welfare Scheme',
+    icon: HeartHandshake,
     color: '#16a34a',
     bg: '#f0fdf4',
+    to: '/old-age-home-welfare',
   },
 ]
 
@@ -395,15 +397,19 @@ export default function About() {
             </p>
           </div>
           <div className={styles.thematicGrid}>
-            {THEMATIC_AREAS.map(({ label, icon: Icon, color, bg }) => (
-              <div key={label} className={`${styles.thematicCard} ${styles.thematicFeatured}`}
-                style={{ borderColor: color, '--th-color': color, '--th-bg': bg }}>
-                <div className={styles.thematicIcon} style={{ background: bg }}>
-                  <Icon size={20} color={color} />
-                </div>
-                <span className={styles.thematicLabel} style={{ color }}>{label}</span>
-              </div>
-            ))}
+            {THEMATIC_AREAS.map(({ label, icon: Icon, color, bg, to }) => {
+              const Card = to ? Link : 'div'
+              return (
+                <Card key={label} {...(to ? { to } : {})}
+                  className={`${styles.thematicCard} ${styles.thematicFeatured}`}
+                  style={{ borderColor: color, '--th-color': color, '--th-bg': bg }}>
+                  <div className={styles.thematicIcon} style={{ background: bg }}>
+                    <Icon size={20} color={color} />
+                  </div>
+                  <span className={styles.thematicLabel} style={{ color }}>{label}</span>
+                </Card>
+              )
+            })}
           </div>
         </div>
 
