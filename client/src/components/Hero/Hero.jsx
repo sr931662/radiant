@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom'
-import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Award, CheckCircle2, Heart, HandHelping, UserCheck, Handshake, HeartHandshake, ArrowRight } from 'lucide-react'
 import styles from './Hero.module.css'
 
 export default function Hero() {
@@ -49,6 +49,21 @@ export default function Hero() {
               Partner With Us
             </button>
           </div>
+
+          {/* Old Age Home Welfare Scheme highlight */}
+          <Link to="/old-age-home-welfare" className={styles.schemeStrip}>
+            <span className={styles.schemeIcon}>
+              <HeartHandshake size={18} color="#059669" />
+            </span>
+            <span className={styles.schemeText}>
+              <span className={styles.schemeTag}>New Initiative</span>
+              <span className={styles.schemeTitle}>Old Age Home Welfare Scheme</span>
+              <span className={styles.schemeSub}>
+                Safe, dignified residential care for senior citizens across Delhi / NCR
+              </span>
+            </span>
+            <ArrowRight size={17} className={styles.schemeArrow} />
+          </Link>
 
           {/* Trust badges */}
           <div className={styles.trustRow}>
